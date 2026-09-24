@@ -8,7 +8,7 @@ import { ISSUE_IDS, NEITHER, sideGuide, toPosition, type IssueId, type Position 
 // and nothing is published until a person reviews the file.
 
 export const RESEARCH_MODEL = process.env.RESEARCH_MODEL || 'anthropic/claude-sonnet-5';
-const MAX_SOURCE_CHARS = 60_000;
+const MAX_SOURCE_CHARS = 20_000;
 
 export interface Source {
   url: string;

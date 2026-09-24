@@ -66,7 +66,7 @@ function Why({ contest, prefs, ranked, onReport }: { contest: Contest; prefs: Pr
               return (
                 <li key={choice.id}>
                   <b>{longName(choice)}:</b> {s.text} <Src url={s.sourceUrl} />
-                  {s.agreement && <span className="agree">{s.agreement.replace('/', ' of ')} research checks agree</span>}
+                  {s.agreement && <span className="agree" title="Independent research agents, on models from different AI companies, that found this same position.">found by {s.agreement.replace('/', ' of ')} independent checks</span>}
                   <button className="notright" onClick={() => onReport(choice.name, ex.decisive!)}>Not right?</button>
                 </li>
               );

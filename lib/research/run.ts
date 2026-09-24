@@ -37,7 +37,7 @@ export async function researchWithConsensus(
   if (runs.length < FIRST_ROUND) runs = runs.concat(await runMany(FIRST_ROUND, FIRST_ROUND - runs.length, base, log));
   if (needsEscalation(opts.issues, runs)) {
     log(`    agents disagree on some issues; running ${FULL_ROUND - runs.length} more`);
-    runs = runs.concat(await runMany(FULL_ROUND, FULL_ROUND - runs.length, base, log));
+    runs = runs.concat(await runMany(runs.length, FULL_ROUND - runs.length, base, log));
   }
   const decisions: CandidateResearch['decisions'] = {};
   const split: IssueId[] = [];
