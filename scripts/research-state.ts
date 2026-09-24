@@ -18,6 +18,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import { z } from 'zod';
 import { contestKey, nameKey, POSITIONS_DIR } from '../lib/ballot/positions';
+import { gateway, generateText, isStepCount, Output } from 'ai';
 import { runCli } from '../lib/research/backends';
 import { canonicalOffice, divisionFor, levelFor, type Level } from '../lib/research/divisions';
 
@@ -44,10 +45,28 @@ Reply with ONLY this JSON, no other text:
 {"sourceUrl":"<the official list>","contests":[{"office":"<e.g. U.S. Representative>","district":"<e.g. District 10, or omit for statewide>","candidates":[{"name":"...","party":"..."}]}]}`;
 }
 
+/** Reads the list with an API model and web search, when a subscription is out of usage. */
+async function listViaGateway(state: string, level: Level): Promise<z.infer<typeof Contests>> {
+  const { output } = await generateText({
+    model: (process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra').replace(/^gateway:/, ''),
+    abortSignal: AbortSignal.timeout(10 * 60 * 1000),
+    tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5, maxTokensPerPage: 2048, maxTokens: 12000, country: 'US' }) },
+    stopWhen: isStepCount(8),
+    output: Output.object({ schema: Contests }),
+    prompt: listPrompt(state, level),
+  });
+  return output;
+}
+
 async function listContests(state: string, level: Level) {
-  const [a, b] = await Promise.all([runCli('claude-code', listPrompt(state, level)), runCli('codex', listPrompt(state, level))]);
   const parse = (t: string) => Contests.parse(JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)));
-  const [la, lb] = [parse(a), parse(b)];
+  const read = async (backend: 'claude-code' | 'codex') => {
+    try { return parse(await runCli(backend, listPrompt(state, level))); } catch (e) {
+      console.log(`  ${backend} unavailable (${(e as Error).message.slice(0, 80)}); reading the list via the API instead`);
+      return listViaGateway(state, level);
+    }
+  };
+  const [la, lb] = await Promise.all([read('claude-code'), read('codex')]);
   // Several statewide offices share a division, so the office name is part of the key.
   const key = (c: { office: string; district?: string }) => `${divisionFor(state, c.office, c.district) ?? contestKey(c.office, c.district)}|${canonicalOffice(c.office)}`;
   const byKey = new Map(lb.contests.map((c) => [key(c), c]));

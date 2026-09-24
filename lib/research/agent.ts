@@ -52,8 +52,20 @@ Search, then read pages to confirm they actually state positions. Return up to 6
 /** Runs one full agent: its own search, its own reading, verified quotes only. */
 export async function runAgent(opts: { name: string; office: string; issues: IssueId[]; run: number; isMeasure?: boolean; seedUrls?: string[] }): Promise<AgentResult> {
   const backend = modelFor(opts.run);
-  if (backend === 'claude-code' || backend === 'codex') return runCliAgent(backend, opts);
-  const model = backend.replace(/^gateway:/, '');
+  if (backend === 'claude-code' || backend === 'codex') {
+    try {
+      return await runCliAgent(backend, opts);
+    } catch (e) {
+      // Subscription out of usage (or CLI trouble): keep going on the API fallback.
+      const fallback = process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-luna';
+      console.log(`    ${backend} unavailable (${(e as Error).message.slice(0, 80)}); using ${fallback}`);
+      return runGatewayAgent(fallback.replace(/^gateway:/, ''), opts);
+    }
+  }
+  return runGatewayAgent(backend.replace(/^gateway:/, ''), opts);
+}
+
+async function runGatewayAgent(model: string, opts: { name: string; office: string; issues: IssueId[]; isMeasure?: boolean; seedUrls?: string[] }): Promise<AgentResult> {
   const urls = await findSources({ ...opts, model });
   const sources: Source[] = [];
   for (const u of urls) {
