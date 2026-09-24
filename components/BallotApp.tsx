@@ -31,7 +31,7 @@ function longDate(date: string) {
 export function BallotApp({ initialBallot, friend = null }: { initialBallot: Ballot; friend?: Prefs | null }) {
   const [ballot, setBallot] = useState(initialBallot);
   const [prefs, setPrefs] = useState<Prefs>(EMPTY);
-  const [tab, setTab] = useState<'words' | 'dials'>('words');
+  const [tab, setTab] = useState<'words' | 'dials'>('dials');
   const [flash, setFlash] = useState<IssueId | null>(null);
   const [showParty, setShowParty] = useState(false);
   const [address, setAddress] = useState('');
@@ -200,8 +200,8 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
             <ComparePanel mine={prefs} theirs={friend} onAdd={addFromBallot} onClose={() => setShowCompare(false)} />
           )}
           <div className="tabs" role="tablist">
-            <button role="tab" aria-selected={tab === 'words'} onClick={() => setTab('words')}>In your own words</button>
             <button role="tab" aria-selected={tab === 'dials'} onClick={() => setTab('dials')}>Pick issues and set dials</button>
+            <button role="tab" aria-selected={tab === 'words'} onClick={() => setTab('words')}>In your own words</button>
           </div>
           <div hidden={tab !== 'words'}>
             <WordsInput onApply={applyInterpretation} onDone={() => setTab('dials')} />
