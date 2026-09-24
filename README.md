@@ -42,9 +42,7 @@ npm run build
 
 1. Write a contest file listing each candidate's source URLs (see [data/research/example.json](data/research/example.json)).
 2. `npm run research -- data/research/your-contest.json`
-3. Open the new file in `data/positions/`. Check every claim against its quote and source, fix or delete anything wrong, then set `"reviewed": true`.
-
-Only reviewed files are shown on the site. `SHOW_UNREVIEWED=1` shows unreviewed ones locally.
+3. Commit the new file in `data/positions/`. It publishes once merged: claims already passed agent agreement and word-for-word quote checks. If a person has also checked it, set `"reviewed": true`; the ballot shows which races a person reviewed.
 
 ## Deploy
 

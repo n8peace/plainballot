@@ -4,7 +4,7 @@ import { issuesForOffice } from './offices';
 import { contestKey, fileToContest, loadPositions, nameKey, slug } from './positions';
 
 // Ballot contents by address from the Google Civic Information API (voterinfo).
-// Positions come only from our own reviewed research files; a contest we haven't
+// Positions come only from our own research files; a contest we haven't
 // researched is shown with its candidates and marked "not researched yet".
 
 interface CivicCandidate { name: string; party?: string; candidateUrl?: string }
@@ -72,6 +72,7 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
       issues: found?.issues ?? [],
       choices: found ? fileToContest(found).choices : [],
       researched: !!found,
+      reviewedByPerson: found?.reviewed,
       sources: found?.sources,
     };
   }
@@ -98,6 +99,7 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
     issues,
     choices,
     researched: !!found,
+    reviewedByPerson: found?.reviewed,
     sources: found?.sources,
   };
 }

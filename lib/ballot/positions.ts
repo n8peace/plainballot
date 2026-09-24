@@ -5,7 +5,8 @@ import { ISSUE_IDS, NEITHER, issueById, toPosition, type IssueId, type Position 
 import type { Contest } from '../types';
 
 // Researched positions live as reviewable JSON files in data/positions/, written by
-// `npm run research` and checked by a person before `reviewed` is set to true.
+// `npm run research`. They publish once independent agents agree and every quote
+// verifies; `reviewed: true` marks files a person has also checked (shown to voters).
 
 // In the files, a stance names its side in words (the dial's short label), so a
 // person writing or reviewing research can't put someone on the wrong end by
@@ -66,11 +67,10 @@ export const nameKey = (name: string) => slug(name).split('-').filter((p) => p.l
 
 let cache: Map<string, PositionsFile> | null = null;
 
-/** Loads reviewed positions keyed by contest. Unreviewed files load only when SHOW_UNREVIEWED=1. */
+/** Loads all research files keyed by contest. */
 export async function loadPositions(): Promise<Map<string, PositionsFile>> {
   if (cache) return cache;
   const out = new Map<string, PositionsFile>();
-  const showUnreviewed = process.env.SHOW_UNREVIEWED === '1';
   let files: string[] = [];
   try {
     files = (await readdir(POSITIONS_DIR)).filter((f) => f.endsWith('.json') && !f.startsWith('_'));
@@ -83,7 +83,7 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
       console.warn(`Skipping ${f}: ${parsed.error.message}`);
       continue;
     }
-    if (parsed.data.reviewed || showUnreviewed) out.set(contestKey(parsed.data.office, parsed.data.district), parsed.data);
+    out.set(contestKey(parsed.data.office, parsed.data.district), parsed.data);
   }
   cache = out;
   return out;
@@ -106,6 +106,7 @@ export function fileToContest(f: PositionsFile): Contest {
     sub: [f.district, measure ? 'Yes or No' : 'Vote for one'].filter(Boolean).join(' · '),
     issues: f.issues,
     researched: true,
+    reviewedByPerson: f.reviewed,
     sources: f.sources,
     choices: f.choices.map((ch) => ({
       id: slug(ch.name),

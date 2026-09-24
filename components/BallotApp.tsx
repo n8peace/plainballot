@@ -223,7 +223,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           <div className="step-head"><h3 id="s5">How we stay fair</h3></div>
           <div className="principles">
             <div><h4>No opinions of our own</h4><p>Every match comes from the issues you pick and the dials you set. Two people with the same answers get the same ballot.</p></div>
-            <div><h4>Every claim has a source</h4><p>Votes, rulings, questionnaires and public statements, each linked. A person checks every claim before it’s published.</p></div>
+            <div><h4>Every claim has a source</h4><p>Votes, rulings, questionnaires and public statements, each linked. Every quote is checked word for word against its source.</p></div>
             <div><h4>We say when we don’t know</h4><p>If a candidate hasn’t taken a position, we leave that issue out rather than guess, and tell you we did.</p></div>
             <div><h4>Judges are matched on the record only</h4><p>Judges can’t promise how they’ll rule, so we use what they’ve already done: written opinions and sentencing data.</p></div>
           </div>

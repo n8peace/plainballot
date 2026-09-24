@@ -52,3 +52,4 @@ docs/cost-estimate.md
 review.html
 recheck-summary.md
 pr-body.md
+*.tmp.mts

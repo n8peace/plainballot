@@ -5,7 +5,7 @@
 //
 // Reads the structured block the report form wrote, runs fresh independent agents
 // on just that claim (3, escalating to 10 on disagreement), and updates the
-// research file if the result changed. A person reviews the resulting pull request.
+// research file if the result changed; the workflow publishes it.
 // The voter's free-text words are never given to the agents; only their link.
 
 import { readdir, readFile, writeFile } from 'node:fs/promises';
@@ -34,7 +34,7 @@ async function findFile(r: ReportBlock): Promise<string | null> {
   for (const f of files) {
     const d = JSON.parse(await readFile(path.join(POSITIONS_DIR, f), 'utf8'));
     const key = contestKey(d.office, d.district);
-    if (key === r.contestId || key === contestKey(r.office, r.district) || contestKey(d.office) === contestKey(r.office)) return f;
+    if (key === r.contestId || key === contestKey(r.office, r.district)) return f;
   }
   return null;
 }
@@ -94,7 +94,7 @@ async function main() {
   PositionsFileSchema.parse(raw); // never write an invalid file
   raw.checkedAt = new Date().toISOString().slice(0, 10);
   await writeFile(fullPath, JSON.stringify(raw, null, 2) + '\n');
-  summary.push('', 'The recheck changed this position. A pull request with the fix is open for a person to review.');
+  summary.push('', 'The recheck changed this position.');
   await done();
 }
 

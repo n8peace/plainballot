@@ -26,9 +26,9 @@ export default function Methodology() {
       <ul>
         <li><b>Reading your words.</b> If you describe your priorities in your own words, a small model ({INTERPRET_MODEL}) turns them into dial settings, quoting the phrase each came from. You can see and change every one. Your text isn’t stored, and the model provider keeps no copy.</li>
         <li><b>Researching candidates.</b> Three independent research agents, each running on a different AI model ({RESEARCH_MODELS.join(', ')}), search the web, read the candidate’s own sources and record positions with exact quotes. If all three agree on an issue, that’s the answer. If they don’t, seven more agents run, and a position is published only if at least 6 of the 10 agree. Without a majority, the issue is left blank. The same process confirms who is on the ballot.</li>
-        <li><b>Checking the quotes.</b> Every quote is fetched from its source and must appear there word for word, or the claim is thrown out. A person then reviews every claim before it’s published.</li>
-        <li><b>Fixing mistakes.</b> Anyone can tap “Not right?” on a claim. The report is public, and it starts a fresh recheck with new agents. If the result changes, a correction is proposed and a person approves it.</li>
-        <li><b>Not used for matching.</b> No model decides your matches or writes your explanations. Those are computed from the reviewed data.</li>
+        <li><b>Checking the quotes.</b> Every quote is fetched from its source and must appear there word for word, or the claim is thrown out. Claims publish automatically once the agents agree and the quotes check out; the ballot says whether a person has also reviewed a race. Every night, every published quote is checked again.</li>
+        <li><b>Fixing mistakes.</b> Anyone can tap “Not right?” on a claim. The report is public, and it starts a fresh recheck with new agents. If the result changes, the correction is published.</li>
+        <li><b>Not used for matching.</b> No model decides your matches or writes your explanations. Those are computed from the research data.</li>
       </ul>
 
       <h2>The dials, word for word</h2>

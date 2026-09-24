@@ -36,6 +36,8 @@ export interface Contest {
   choices: Choice[];
   /** False when we have the contest but haven't researched positions yet. */
   researched: boolean;
+  /** A person checked this research in addition to the agents. */
+  reviewedByPerson?: boolean;
   sources?: string;
   /** Retention only: the judge's record on the one issue we can measure, plus facts to weigh. */
   record?: { issue: IssueId; stance: Stance; facts: Fact[] };

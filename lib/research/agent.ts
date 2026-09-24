@@ -9,7 +9,8 @@ import { issueById, type IssueId } from '../issues';
 import type { AgentResult } from './consensus';
 import { runCliAgent } from './backends';
 
-const DEFAULT_MODELS = 'anthropic/claude-sonnet-5,openai/gpt-5.6-terra,google/gemini-3.8-flash';
+// Server default (GitHub Actions rechecks): cheap models, verified against approved research.
+const DEFAULT_MODELS = 'gateway:openai/gpt-5.6-luna,gateway:google/gemini-3.8-flash,gateway:openai/gpt-5.6-terra';
 /** Read on each call so scripts can switch models at runtime. */
 export const researchModels = () => (process.env.RESEARCH_MODELS || DEFAULT_MODELS).split(',').map((s) => s.trim()).filter(Boolean);
 export const RESEARCH_MODELS = researchModels();

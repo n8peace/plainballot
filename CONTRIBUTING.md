@@ -18,7 +18,7 @@ Every contest starts as "not researched yet." Here's how to fill one in:
    - `quote`: an exact passage from the source, copied character for character.
    - `sourceUrl`: where the quote is.
 4. Open a pull request. Our automated check fetches every source and confirms every quote is really there.
-5. A reviewer checks each claim and, once it passes, sets `"reviewed": true`. Only reviewed research appears on the site.
+5. Once merged, it's live. If a person has checked every claim, set `"reviewed": true` and the ballot will say so.
 
 **Rules that keep it fair:**
 - No quote, no position. Leaving an issue out is always better than guessing.

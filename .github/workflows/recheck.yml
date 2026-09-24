@@ -33,19 +33,16 @@ jobs:
       - run: npm ci
       - name: Recheck with independent agents
         run: npm run recheck -- "$ISSUE"
-      - name: Open a pull request if anything changed
+      - name: Publish the correction if anything changed
         run: |
-          if git diff --quiet -- data/positions; then
-            gh issue comment "$ISSUE" --body-file recheck-summary.md
-            gh issue edit "$ISSUE" --add-label rechecked
-            exit 0
+          if ! git diff --quiet -- data/positions; then
+            git config user.name "plainballot-bot"
+            git config user.email "plainballot-bot@users.noreply.github.com"
+            git add data/positions
+            git commit -m "Recheck #$ISSUE: correction from independent agents"
+            git push origin HEAD:main
+            printf '\nThe correction is live.\n' >> recheck-summary.md
           fi
-          git config user.name "plainballot-bot"
-          git config user.email "plainballot-bot@users.noreply.github.com"
-          git switch -c "recheck/$ISSUE"
-          git add data/positions
-          git commit -m "Recheck #$ISSUE"
-          git push -u origin "recheck/$ISSUE"
-          { cat recheck-summary.md; printf '\nCloses #%s\n' "$ISSUE"; } > pr-body.md
-          gh pr create --title "Recheck #$ISSUE: proposed correction" --body-file pr-body.md --label rechecked
           gh issue comment "$ISSUE" --body-file recheck-summary.md
+          gh issue edit "$ISSUE" --add-label rechecked
+          gh issue close "$ISSUE"

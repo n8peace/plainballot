@@ -202,6 +202,7 @@ export function ContestCard({ contest, prefs, showParty, place, onAdd }: { conte
             <Why contest={contest} prefs={prefs} ranked={ranked} onReport={(candidate, issue) => setReport({ candidate, issue })} />
           )}
           {contest.sources && <p className="src">Sources: {contest.sources} <Link href="/methodology">How matching works</Link></p>}
+          <p className="src">{contest.reviewedByPerson ? 'Researched by independent AI agents and reviewed by a person.' : 'Researched by independent AI agents; not reviewed by a person.'} Every quote is checked against its source.</p>
           {reportUi}
         </div>
       </div>

@@ -73,7 +73,7 @@ export function ReportForm({ contest, onClose, initial }: { contest: Contest; on
       {state.error && <p className="err" role="alert">{state.error}</p>}
       <div className="row">
         <button className="btn small" type="submit" disabled={state.busy}>{state.busy ? 'Sending…' : 'Send report'}</button>
-        <span className="hint">Reports are public, with no name or email attached. Independent research agents recheck it, and a person approves any fix.</span>
+        <span className="hint">Reports are public, with no name or email attached. Fresh research agents recheck it right away, and any correction is public.</span>
       </div>
     </form>
   );
