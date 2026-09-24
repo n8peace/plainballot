@@ -9,10 +9,12 @@ import { issueById, type IssueId } from '../issues';
 import type { AgentResult } from './consensus';
 import { runCliAgent } from './backends';
 
-export const RESEARCH_MODELS = (process.env.RESEARCH_MODELS || 'anthropic/claude-sonnet-5,openai/gpt-5.6-terra,google/gemini-3.8-flash')
-  .split(',').map((s) => s.trim()).filter(Boolean);
+const DEFAULT_MODELS = 'anthropic/claude-sonnet-5,openai/gpt-5.6-terra,google/gemini-3.8-flash';
+/** Read on each call so scripts can switch models at runtime. */
+export const researchModels = () => (process.env.RESEARCH_MODELS || DEFAULT_MODELS).split(',').map((s) => s.trim()).filter(Boolean);
+export const RESEARCH_MODELS = researchModels();
 
-export const modelFor = (run: number) => RESEARCH_MODELS[run % RESEARCH_MODELS.length];
+export const modelFor = (run: number) => { const m = researchModels(); return m[run % m.length]; };
 
 const SourceList = z.object({
   sources: z.array(z.object({ url: z.string(), issues: z.array(z.string()) })),

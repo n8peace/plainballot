@@ -14,7 +14,8 @@
     "check:research": "node --import tsx scripts/check-positions.ts",
     "review": "node --import tsx scripts/review-sheet.ts",
     "recheck": "node --env-file-if-exists=.env.local --import tsx scripts/recheck.ts",
-    "research:state": "node --env-file-if-exists=.env.local --import tsx scripts/research-state.ts"
+    "research:state": "node --env-file-if-exists=.env.local --import tsx scripts/research-state.ts",
+    "compare-models": "node --env-file-if-exists=.env.local --import tsx scripts/compare-models.ts"
   },
   "dependencies": {
     "ai": "^7.0.113",
