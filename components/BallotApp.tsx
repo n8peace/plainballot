@@ -40,6 +40,8 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   const [days, setDays] = useState<number | null>(null);
   const [jump, setJump] = useState(false);
   const [showCompare, setShowCompare] = useState(!!friend);
+  const [askStuck, setAskStuck] = useState(false);
+  const askRef = useRef<HTMLElement>(null);
   const dialsRef = useRef<HTMLElement>(null);
   const ballotRef = useRef<HTMLElement>(null);
 
@@ -57,6 +59,14 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   useEffect(() => {
     try { localStorage.setItem(STORE_KEY, encodePrefs(prefs)); } catch {}
   }, [prefs]);
+
+  // Once the star/follow box scrolls away, keep its two buttons pinned to the top.
+  useEffect(() => {
+    if (!('IntersectionObserver' in window) || !askRef.current) return;
+    const o = new IntersectionObserver(([e]) => setAskStuck(!e.isIntersecting && e.boundingClientRect.top < 0));
+    o.observe(askRef.current);
+    return () => o.disconnect();
+  }, []);
 
   // Phone: while the dials are on screen and the ballot isn't, offer a jump to it.
   useEffect(() => {
@@ -144,6 +154,17 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           <p>Tell us your priorities in your own words, or pick the issues you care about and set the dials. We’ll go through your whole ballot, from Congress to school board, and show why each choice fits you better than the others. <em>We don’t take sides. You do.</em></p>
         </section>
 
+        <section className="ask" aria-labelledby="askH" ref={askRef}>
+          <div>
+            <h3 id="askH">Free, and open source.</h3>
+            <p>No ads, no account, no data sold. Every line of code, every dial’s wording and every source is public, so anyone can check our work. If this helped, the only thing we ask is a star or a follow.</p>
+          </div>
+          <div className="ask-btns">
+            <a className="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">★ Star the code on GitHub</a>
+            <a className="btn ghost" href={X_URL} target="_blank" rel="noopener noreferrer">Follow @n8peace on X</a>
+          </div>
+        </section>
+
         <section className="step" aria-labelledby="s1">
           <div className="step-head"><span className="step-num">1</span><h3 id="s1">Where you vote</h3></div>
           <form className="addr" onSubmit={lookup}>
@@ -208,17 +229,6 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           <SharePanel picks={picks} prefs={prefs} electionDate={ballot.electionDate} />
         </section>
 
-        <section className="ask" aria-labelledby="askH">
-          <div>
-            <h3 id="askH">Free, and open source.</h3>
-            <p>No ads, no account, no data sold. Every line of code, every dial’s wording and every source is public, so anyone can check our work. If this helped, the only thing we ask is a star or a follow.</p>
-          </div>
-          <div className="ask-btns">
-            <a className="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">★ Star the code on GitHub</a>
-            <a className="btn ghost" href={X_URL} target="_blank" rel="noopener noreferrer">Follow @n8peace on X</a>
-          </div>
-        </section>
-
         <section className="step" aria-labelledby="s5">
           <div className="step-head"><h3 id="s5">How we stay fair</h3></div>
           <div className="principles">
@@ -233,6 +243,13 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           <span>Plain Ballot · Nonpartisan · Free</span>
           <span><a href={GITHUB_URL}>Open source</a> · <Link href="/methodology">Methodology</Link> · <a href={`${GITHUB_URL}/issues`}>Report a problem</a></span>
         </footer>
+      </div>
+      <div className={`askbar ${askStuck ? 'on' : ''}`} aria-hidden={!askStuck}>
+        <span className="askbar-name">Plain Ballot <span>· free and open source</span></span>
+        <span className="askbar-btns">
+          <a className="btn small" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" tabIndex={askStuck ? 0 : -1}>★ Star on GitHub</a>
+          <a className="btn small ghost" href={X_URL} target="_blank" rel="noopener noreferrer" tabIndex={askStuck ? 0 : -1}>Follow @n8peace</a>
+        </span>
       </div>
       <div className={`jump ${jump ? 'on' : ''}`} aria-hidden={!jump}>
         <span><b>{prefs.sel.length} issues</b> · {picks.filter((p) => p.pick).length} of {picks.length} contests matched</span>

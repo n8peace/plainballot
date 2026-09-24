@@ -306,3 +306,12 @@ img{max-width:100%}
 .report select,.report input,.report textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);padding:8px 10px;border-radius:0}
 .report textarea{min-height:80px;resize:vertical}
 .report-done{margin:0}
+.hero + .ask{margin-top:28px}
+.askbar{position:fixed;left:0;right:0;top:0;z-index:6;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:calc(8px + env(safe-area-inset-top, 0px)) 16px 8px;background:var(--paper);border-bottom:1px solid var(--rule-strong);transform:translateY(-110%);transition:transform .2s ease}
+.askbar.on{transform:none}
+.askbar-name{font-family:var(--serif);font-size:18px;font-weight:500;white-space:nowrap}
+.askbar-name span{font-family:var(--sans);font-size:12px;font-weight:400;color:var(--ink-3)}
+.askbar-btns{display:flex;gap:8px;flex-wrap:nowrap}
+.askbar .btn{text-decoration:none;white-space:nowrap}
+@media (max-width:560px){.askbar-name span{display:none}.askbar .btn.small{padding:7px 10px;font-size:12px}}
+@media (prefers-reduced-motion:reduce){.askbar{transition:none}}
