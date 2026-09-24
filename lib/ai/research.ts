@@ -51,10 +51,11 @@ export function htmlToText(html: string): string {
 }
 
 export async function fetchSource(url: string): Promise<Source> {
-  const res = await fetch(url, { headers: { 'user-agent': 'PlainBallotResearch/0.1 (+https://plainballot.com/methodology)' } });
+  // A hard time limit: one slow site must never stall a whole research run.
+  const res = await fetch(url, { headers: { 'user-agent': 'PlainBallotResearch/0.1 (+https://plainballot.com/methodology)' }, signal: AbortSignal.timeout(20_000) });
   if (!res.ok) throw new Error(`${url} returned ${res.status}`);
   const type = res.headers.get('content-type') ?? '';
-  const body = await res.text();
+  const body = await Promise.race([res.text(), new Promise<string>((_, rej) => setTimeout(() => rej(new Error('read timed out')), 20_000))]);
   return { url, text: (type.includes('html') ? htmlToText(body) : body).slice(0, MAX_SOURCE_CHARS) };
 }
 
@@ -80,6 +81,7 @@ export async function researchChoice(opts: {
   const subject = opts.isMeasure ? `a "${opts.name}" vote on ${opts.office}` : `${opts.name}, candidate for ${opts.office}`;
 
   const { output } = await generateText({
+    abortSignal: AbortSignal.timeout(5 * 60 * 1000),
     model: opts.model ?? RESEARCH_MODEL,
     instructions: `You are a nonpartisan researcher. From the sources provided, record where ${subject} stands on each issue below.
 

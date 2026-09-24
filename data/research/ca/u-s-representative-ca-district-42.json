@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 42",
+  "division": "ca/cd-42",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Robert Garcia",
+      "party": "Democratic"
+    },
+    {
+      "name": "Brian Burley",
+      "party": "Republican"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 43",
+  "division": "ca/cd-43",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Maxine Waters",
+      "party": "Democratic"
+    },
+    {
+      "name": "Cristian Morales",
+      "party": "Republican"
+    }
+  ]
+}

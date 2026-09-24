@@ -103,7 +103,9 @@ async function main() {
       const file = queue.shift()!;
       const name = path.basename(file, '.json');
       try {
-        await run('node', ['--env-file-if-exists=.env.local', '--import', 'tsx', 'scripts/research.ts', file], { maxBuffer: 50 * 1024 * 1024, timeout: 90 * 60 * 1000 });
+        // Each contest gets its own log, and a hard cap so one stuck contest can't stall the batch.
+        const { stdout, stderr } = await run('node', ['--env-file-if-exists=.env.local', '--import', 'tsx', 'scripts/research.ts', file], { maxBuffer: 50 * 1024 * 1024, timeout: 45 * 60 * 1000 });
+        await writeFile(path.join(dir, `${name}.log`), stdout + stderr);
         console.log(`  ✓ ${name} (${++done} done, ${queue.length} left)`);
       } catch (e) {
         console.log(`  ✗ ${name}: ${(e as Error).message.split('\n').slice(-2).join(' ')}`);

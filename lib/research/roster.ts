@@ -15,6 +15,7 @@ async function oneRoster(office: string, district: string | undefined, election:
   const backend = modelFor(run);
   const model = backend.startsWith('gateway:') ? backend.slice(8) : backend.includes('/') ? backend : 'google/gemini-3.8-flash';
   const { output } = await generateText({
+    abortSignal: AbortSignal.timeout(5 * 60 * 1000),
     model,
     tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5, maxTokensPerPage: 512, maxTokens: 3000, country: 'US' }) },
     stopWhen: isStepCount(5),

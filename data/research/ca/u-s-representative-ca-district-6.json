@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 6",
+  "division": "ca/cd-6",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Kevin Kiley",
+      "party": "No party preference"
+    },
+    {
+      "name": "Richard Pan",
+      "party": "Democratic"
+    }
+  ]
+}

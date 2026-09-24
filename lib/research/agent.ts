@@ -24,6 +24,7 @@ const SourceList = z.object({
 export async function findSources(opts: { name: string; office: string; issues: IssueId[]; model: string; seedUrls?: string[] }): Promise<string[]> {
   const topics = opts.issues.map((id) => issueById[id].name).join(', ');
   const { output } = await generateText({
+    abortSignal: AbortSignal.timeout(5 * 60 * 1000),
     model: opts.model,
     tools: {
       // Tight limits: search results are re-sent to the model on every step, so they drive cost.

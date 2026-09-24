@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 47",
+  "division": "ca/cd-47",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Jenny Rae Le Roux",
+      "party": "Republican"
+    },
+    {
+      "name": "Dave Min",
+      "party": "Democratic"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 50",
+  "division": "ca/cd-50",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Scott Peters",
+      "party": "Democratic"
+    },
+    {
+      "name": "Steve Cohen",
+      "party": "Republican"
+    }
+  ]
+}

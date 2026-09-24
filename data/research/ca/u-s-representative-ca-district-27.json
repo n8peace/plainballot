@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 27",
+  "division": "ca/cd-27",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Jason Gibbs",
+      "party": "Republican"
+    },
+    {
+      "name": "George Whitesides",
+      "party": "Democratic"
+    }
+  ]
+}

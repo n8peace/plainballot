@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 18",
+  "division": "ca/cd-18",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Zoe Lofgren",
+      "party": "Democratic"
+    },
+    {
+      "name": "Shane Lewis",
+      "party": "Republican"
+    }
+  ]
+}

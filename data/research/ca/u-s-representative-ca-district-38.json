@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 38",
+  "division": "ca/cd-38",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Pedro Antonio Casas",
+      "party": "Republican"
+    },
+    {
+      "name": "Hilda Solis",
+      "party": "Democratic"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 21",
+  "division": "ca/cd-21",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Jim Costa",
+      "party": "Democratic"
+    },
+    {
+      "name": "Kyle Kirkland",
+      "party": "Republican"
+    }
+  ]
+}

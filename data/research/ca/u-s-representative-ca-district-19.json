@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 19",
+  "division": "ca/cd-19",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Jimmy Panetta",
+      "party": "Democratic"
+    },
+    {
+      "name": "Peter Coe Verbica",
+      "party": "Republican"
+    }
+  ]
+}

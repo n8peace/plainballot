@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 34",
+  "division": "ca/cd-34",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Jimmy Gomez",
+      "party": "Democratic"
+    },
+    {
+      "name": "Angela Gonzales-Torres",
+      "party": "Democratic"
+    }
+  ]
+}

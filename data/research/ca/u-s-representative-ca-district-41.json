@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 41",
+  "division": "ca/cd-41",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Linda Sánchez",
+      "party": "Democratic"
+    },
+    {
+      "name": "Mitch Clemmons",
+      "party": "Republican"
+    }
+  ]
+}

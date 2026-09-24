@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 32",
+  "division": "ca/cd-32",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Brad Sherman",
+      "party": "Democratic"
+    },
+    {
+      "name": "Larry Thompson",
+      "party": "Republican"
+    }
+  ]
+}

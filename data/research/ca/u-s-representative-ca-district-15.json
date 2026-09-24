@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 15",
+  "division": "ca/cd-15",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Kevin Mullin",
+      "party": "Democratic"
+    },
+    {
+      "name": "Charles Hoelter",
+      "party": "Republican"
+    }
+  ]
+}

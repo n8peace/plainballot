@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 40",
+  "division": "ca/cd-40",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Ken Calvert",
+      "party": "Republican"
+    },
+    {
+      "name": "Young Kim",
+      "party": "Republican"
+    }
+  ]
+}

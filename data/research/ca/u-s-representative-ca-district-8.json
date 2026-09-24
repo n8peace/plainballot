@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 8",
+  "division": "ca/cd-8",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "John Garamendi",
+      "party": "Democratic"
+    },
+    {
+      "name": "Rudy Recile",
+      "party": "Republican"
+    }
+  ]
+}

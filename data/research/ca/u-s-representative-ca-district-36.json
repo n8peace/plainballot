@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 36",
+  "division": "ca/cd-36",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Ted Lieu",
+      "party": "Democratic"
+    },
+    {
+      "name": "Houston Brignano",
+      "party": "Republican"
+    }
+  ]
+}

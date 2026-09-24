@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 22",
+  "division": "ca/cd-22",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "David G. Valadao",
+      "party": "Republican"
+    },
+    {
+      "name": "Randy Villegas",
+      "party": "Democratic"
+    }
+  ]
+}

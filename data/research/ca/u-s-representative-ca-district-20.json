@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 20",
+  "division": "ca/cd-20",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Vince Fong",
+      "party": "Republican"
+    },
+    {
+      "name": "Sandra Van Scotter",
+      "party": "Democratic"
+    }
+  ]
+}

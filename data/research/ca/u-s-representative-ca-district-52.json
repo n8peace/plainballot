@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 52",
+  "division": "ca/cd-52",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Juan Vargas",
+      "party": "Democratic"
+    },
+    {
+      "name": "Jeff Belle",
+      "party": "Republican"
+    }
+  ]
+}

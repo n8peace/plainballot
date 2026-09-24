@@ -1,0 +1,16 @@
+{
+  "office": "U.S. Representative",
+  "district": "CA District 49",
+  "division": "ca/cd-49",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Mike Levin",
+      "party": "Democratic"
+    },
+    {
+      "name": "Armen Kurdian",
+      "party": "Republican"
+    }
+  ]
+}
