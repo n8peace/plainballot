@@ -1,53 +1,74 @@
+<div align="center">
+
 # Plain Ballot
 
-Every race on your ballot, matched to what you care about, with the reasons shown. Free, open source and nonpartisan.
+**Every race on your ballot, matched to what you care about. With a source for every claim.**
 
-You pick the issues that matter to you and set a dial for each, or describe your priorities in your own words. Plain Ballot goes through your whole ballot, from Congress to school board, judges and ballot measures, and shows the closest match in each contest, the main reason for it, and what would change it.
+[plainballot.com](https://plainballot.com) · [How it works](https://plainballot.com/methodology) · [Research your state](CONTRIBUTING.md)
 
-## How it stays fair
+[![CI](https://github.com/n8peace/plainballot/actions/workflows/ci.yml/badge.svg)](https://github.com/n8peace/plainballot/actions/workflows/ci.yml)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-black)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/n8peace/plainballot?style=social)](https://github.com/n8peace/plainballot/stargazers)
 
-- **Matching is arithmetic, not AI.** It runs in the voter's browser: weighted distance between their dials and each candidate's sourced positions ([lib/match.ts](lib/match.ts)). The same answers always produce the same ballot.
-- **The dial wording is public** ([lib/issues.ts](lib/issues.ts)). Each end is worded the way its own supporters would say it.
-- **No guessing.** If a candidate has no sourced position on an issue, that issue is left out and the voter is told.
-- **Judges** are matched only on their record: written opinions or sentencing data.
-- **Every claim is checked.** Research output is thrown away unless its quote appears word for word in the source, and a person reviews each file before it's published.
+<img src="docs/img/preview.png" alt="Plain Ballot" width="720">
 
-## Where AI is used
+</div>
 
-| Step | When | Model (default) | Cost |
-|---|---|---|---|
-| Turn a voter's words into dial settings ([lib/ai/interpret.ts](lib/ai/interpret.ts)) | Per voter, only if they type | `anthropic/claude-haiku-4.5` | ~$0.003 |
-| Research candidate positions from sources ([lib/ai/research.ts](lib/ai/research.ts)) | Once per contest, offline | `anthropic/claude-sonnet-5` | ~$0.05 per candidate |
+Pick the issues you care about and set a dial for each. Enter your address. Plain Ballot goes through your whole ballot, from Congress to the Assembly to the propositions, and shows who fits you, why, and where that came from. Party labels stay hidden until you ask for them.
 
-Both calls go through [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) with zero data retention requested. Nothing a voter types is stored.
+Free. No ads, no account, nothing stored. Covering California for Nov 3, 2026.
+
+## AI that has to show its work
+
+Chatbots get voting facts wrong. Plain Ballot is built so no single model's word ever reaches a voter.
+
+- **Agents have to agree.** Every candidate is researched by independent agents on different models (Claude Code, Codex, GPT-5.6 Luna), each searching and reading on its own. A position is published only when they agree: 2 of 3 with no conflict, or a clear majority of 10 when they don't.
+- **Every quote is verified.** Each claim carries an exact quote, fetched from its source and matched word for word, or it's thrown out. A nightly job rechecks every published quote.
+- **No guessing.** An agent not finding a source never counts as a vote. No majority means the issue stays blank, and the ballot says so.
+- **Matching isn't AI.** It's plain, deterministic arithmetic in your browser ([lib/match.ts](lib/match.ts)). Same answers, same ballot, every time.
+- **Voters can push back.** "Not right?" on any claim files a public issue and reruns the research with fresh agents. Corrections are public.
+- **Every word is public.** The dial wording ([lib/issues.ts](lib/issues.ts)), the agreement rules ([lib/research/consensus.ts](lib/research/consensus.ts)) and every researched position ([data/positions](data/positions)) live in this repo.
+
+## Research your state with your own subscription
+
+The research runs on your own Claude or ChatGPT plan, so anyone can add coverage without paying for API credits.
+
+```bash
+npm install
+cp .env.example .env.local        # add AI_GATEWAY_API_KEY for the fallback model
+npm run research:state -- CA      # reads the state's certified candidate list, then researches every race
+```
+
+It shells out to `claude -p` and `codex exec`, verifies every quote itself, and falls back to an API model when your plan hits its usage limit. Open a pull request with the results; CI refetches every source and fails any quote it can't find. There are [51 "research your state" issues](https://github.com/n8peace/plainballot/issues?q=is%3Aopen+label%3Aresearch) open, one per state.
 
 ## Run it locally
 
 ```bash
 npm install
-cp .env.example .env.local   # then add your keys
-npm run dev                  # http://localhost:3000
+cp .env.example .env.local
+npm run dev                        # http://localhost:3000
 ```
 
-Without any keys the site runs on a fictional sample ballot and the dials work. Add `AI_GATEWAY_API_KEY` to turn on "In your own words", and `GOOGLE_CIVIC_API_KEY` to look up real ballots by address.
+Without keys, it runs on a fictional sample ballot and the dials still work. Keys turn on typed priorities (`AI_GATEWAY_API_KEY`), real ballot lookup (`GOOGLE_CIVIC_API_KEY`) and address suggestions (`GOOGLE_PLACES_API_KEY`).
 
 ```bash
-npm test          # matching, quote checks, sharing, abuse limits
-npm run eval      # checks the AI puts people on the right side of each dial (calls the model)
-npm run typecheck
-npm run build
+npm test               # matching, agreement rules, quote checks, sharing, abuse limits
+npm run eval           # does the AI put people on the right side of each dial? (calls the model)
+npm run check:research # refetch every source and verify every quote
 ```
 
-## Research a contest
+## How it's built
 
-1. Write a contest file listing each candidate's source URLs (see [data/research/example.json](data/research/example.json)).
-2. `npm run research -- data/research/your-contest.json`
-3. Commit the new file in `data/positions/`. It publishes once merged: claims already passed agent agreement and word-for-word quote checks. If a person has also checked it, set `"reviewed": true`; the ballot shows which races a person reviewed.
+Next.js on Vercel. The Census geocoder finds a voter's districts. Researched races are JSON files in `data/positions`, matched to voters by district. BotID, rate limits and a spending cap protect the paid endpoints ([docs/security.md](docs/security.md)).
 
-## Deploy
+## Contributing
 
-The site is built for Vercel: import the repo and set `AI_GATEWAY_API_KEY` and `GOOGLE_CIVIC_API_KEY` in the project's environment variables. Abuse and DDoS protection is layered: platform DDoS mitigation, WAF rate limits, BotID, per-visitor limits and a spending cap. See [docs/security.md](docs/security.md).
+The most useful help is research and checking research, and neither needs code. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-AGPL-3.0. Anyone may run their own copy, but a hosted copy must publish its changes, so nobody can quietly run a biased version.
+AGPL-3.0. Anyone can run their own copy, but a hosted copy has to publish its changes, so nobody can quietly run a biased version.
+
+## Star history
+
+[![Star history](https://api.star-history.com/svg?repos=n8peace/plainballot&type=Date)](https://star-history.com/#n8peace/plainballot&Date)
