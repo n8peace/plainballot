@@ -41,6 +41,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   const [jump, setJump] = useState(false);
   const [showCompare, setShowCompare] = useState(!!friend);
   const [askStuck, setAskStuck] = useState(false);
+  const [sampleDismissed, setSampleDismissed] = useState(false);
   const [stars, setStars] = useState<number | null>(null);
   const askRef = useRef<HTMLElement>(null);
   const dialsRef = useRef<HTMLElement>(null);
@@ -221,14 +222,43 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
         </section>
 
         <section className="step" aria-labelledby="s3" ref={ballotRef}>
-          <div className="step-head"><span className="step-num">3</span><h3 id="s3">Your ballot</h3></div>
+          <div className="step-head">
+            <span className="step-num">3</span><h3 id="s3">{ballot.sample ? 'Sample ballot' : 'Your ballot'}</h3>
+            {ballot.sample && <span className="sample-tag">Fictional candidates</span>}
+          </div>
           <div className="ballot-tools">
             <label className="switch"><input type="checkbox" id="showParty" checked={showParty} onChange={(e) => setShowParty(e.target.checked)} /> Show party labels</label>
             <span className="hint">Hidden by default, so you see the issues before the party.</span>
           </div>
-          {ballot.contests.map((c) => (
-            <ContestCard key={c.id} contest={c} prefs={prefs} showParty={showParty} place={ballot.place} onAdd={addFromBallot} />
-          ))}
+          <div className={`ballot-stack ${ballot.sample && !sampleDismissed ? 'blurred' : ''}`}>
+            {ballot.sample && !sampleDismissed && (
+              <form className="sample-gate" onSubmit={lookup} aria-labelledby="gateH">
+                <p className="label">Sample ballot</p>
+                <h4 id="gateH">{ballot.needsResearch ? 'Your ballot isn’t covered yet' : 'This is a sample. Find your real ballot.'}</h4>
+                <p className="gate-text">
+                  {ballot.needsResearch
+                    ? ballot.notice
+                    : 'The races below are made up, to show how it works. Enter your address to see the races and candidates on your own ballot.'}
+                </p>
+                {!ballot.needsResearch && (
+                  <div className="addr">
+                    <div className="field">
+                      <label className="label" htmlFor="gate-address">Street address and ZIP code</label>
+                      <AddressInput id="gate-address" value={address} onChange={setAddress} onPick={(a) => lookup(undefined, a)} />
+                    </div>
+                    <button className="btn" type="submit" disabled={looking || address.trim().length < 5}>{looking ? 'Finding…' : 'Find my ballot'}</button>
+                  </div>
+                )}
+                {lookupError && <p className="err" role="alert">{lookupError}</p>}
+                <button type="button" className="rm" onClick={() => setSampleDismissed(true)}>Explore the sample ballot instead</button>
+              </form>
+            )}
+            <div aria-hidden={ballot.sample && !sampleDismissed} className="ballot-cards">
+              {ballot.contests.map((c) => (
+                <ContestCard key={c.id} contest={c} prefs={prefs} showParty={showParty} place={ballot.place} onAdd={addFromBallot} />
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="step" aria-labelledby="s4">

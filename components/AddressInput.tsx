@@ -3,16 +3,18 @@
 import { useEffect, useId, useRef, useState } from 'react';
 
 // Address field with suggestions as you type (an accessible combobox).
-export function AddressInput({ value, onChange, onPick }: { value: string; onChange: (v: string) => void; onPick: (v: string) => void }) {
+export function AddressInput({ value, onChange, onPick, id = 'address' }: { value: string; onChange: (v: string) => void; onPick: (v: string) => void; id?: string }) {
   const [items, setItems] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const picked = useRef<string | null>(null);
+  // The page has two address boxes sharing one value; only the one being typed in suggests.
+  const focused = useRef(false);
   const listId = useId();
 
   useEffect(() => {
     const q = value.trim();
-    if (q.length < 4 || q === picked.current) return;
+    if (!focused.current || q.length < 4 || q === picked.current) return;
     const ctrl = new AbortController();
     const t = setTimeout(async () => {
       try {
@@ -49,7 +51,7 @@ export function AddressInput({ value, onChange, onPick }: { value: string; onCha
   return (
     <div className="combo">
       <input
-        id="address"
+        id={id}
         role="combobox"
         aria-expanded={showList}
         aria-controls={listId}
@@ -60,8 +62,8 @@ export function AddressInput({ value, onChange, onPick }: { value: string; onCha
         placeholder="Start typing your street address"
         onChange={(e) => { picked.current = null; onChange(e.target.value); if (e.target.value.trim().length < 4) setOpen(false); }}
         onKeyDown={onKeyDown}
-        onBlur={() => setTimeout(() => setOpen(false), 150)}
-        onFocus={() => items.length && setOpen(true)}
+        onBlur={() => { focused.current = false; setTimeout(() => setOpen(false), 150); }}
+        onFocus={() => { focused.current = true; if (items.length) setOpen(true); }}
       />
       {showList && (
         <ul id={listId} role="listbox" className="combo-list">
