@@ -26,7 +26,7 @@ export const ISSUES = [
   { id: 'immigration', g: 2, name: 'Immigration', left: 'Stricter enforcement and more deportations', right: 'More legal pathways and protections', l: 'stricter enforcement', r: 'more legal pathways' },
   { id: 'guns', g: 2, name: 'Guns', left: 'Stricter gun laws, like universal background checks', right: 'Fewer restrictions on gun owners', l: 'stricter gun laws', r: 'fewer restrictions' },
   { id: 'abortion', g: 3, name: 'Abortion', left: 'Protect legal access to abortion', right: 'Restrict abortion to protect unborn life', l: 'protecting access', r: 'restricting abortion' },
-  { id: 'lgbtq', g: 3, name: 'LGBTQ policy', left: 'Stronger religious-liberty exemptions', right: 'Stronger legal protections for LGBTQ people', l: 'religious-liberty exemptions', r: 'LGBTQ protections' },
+  { id: 'gender', g: 3, name: 'Gender identity in sports and schools', left: 'Rules based on sex at birth', right: 'Rules based on gender identity', l: 'rules based on sex at birth', r: 'rules based on gender identity' },
   { id: 'cannabis', g: 3, name: 'Marijuana', left: 'Keep it illegal', right: 'Legalize and regulate it', l: 'keeping it illegal', r: 'legalizing it' },
   { id: 'health', g: 4, name: 'Health care', left: 'Expand public coverage, like Medicare and Medicaid', right: 'More private insurance and competition', l: 'public coverage', r: 'private insurance' },
   { id: 'energy', g: 4, name: 'Energy & climate', left: 'Keep energy cheap and protect current jobs', right: 'Cut emissions faster, even if it costs more', l: 'cheaper energy', r: 'faster emissions cuts' },

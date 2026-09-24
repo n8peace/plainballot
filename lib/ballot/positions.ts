@@ -90,6 +90,8 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
 /** Researched contests for a voter's districts, used before official candidate lists are published. */
 export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
   const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
+  // Same order as the voter's districts: statewide, U.S. House, legislature, county, city, schools.
+  files.sort((a, b) => keys.indexOf(a.division!) - keys.indexOf(b.division!));
   return files.map((f) => fileToContest(f));
 }
 

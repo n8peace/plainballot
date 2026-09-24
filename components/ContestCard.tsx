@@ -8,7 +8,8 @@ import type { Choice, Contest, Prefs } from '@/lib/types';
 
 const lower = (id: IssueId) => issueById[id].name.toLowerCase();
 const isYesNo = (c: Choice) => c.name === 'Yes' || c.name === 'No';
-const shortName = (c: Choice) => (isYesNo(c) ? `“${c.name}”` : c.name.split(' ').pop());
+// Full names: last-word shortening breaks multi-word surnames (e.g. Avila Farias).
+const shortName = (c: Choice) => (isYesNo(c) ? `“${c.name}”` : c.name);
 const longName = (c: Choice) => (isYesNo(c) ? `A ${c.name.toLowerCase()} vote` : c.name);
 
 function Meter({ value }: { value: number | null }) {

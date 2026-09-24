@@ -2,8 +2,8 @@ import type { IssueId } from '../issues';
 
 // Which issues an office actually decides. Used to decide which dials count for
 // a contest, and which issues the research step looks for.
-const FEDERAL: IssueId[] = ['tax', 'wages', 'trade', 'debt', 'housing', 'schools', 'safety', 'immigration', 'guns', 'abortion', 'lgbtq', 'cannabis', 'health', 'energy', 'voting'];
-const STATEWIDE: IssueId[] = ['tax', 'wages', 'housing', 'schools', 'safety', 'sentencing', 'immigration', 'guns', 'abortion', 'lgbtq', 'cannabis', 'health', 'energy', 'voting'];
+const FEDERAL: IssueId[] = ['tax', 'wages', 'trade', 'debt', 'housing', 'schools', 'safety', 'immigration', 'guns', 'abortion', 'gender', 'cannabis', 'health', 'energy', 'voting'];
+const STATEWIDE: IssueId[] = ['tax', 'wages', 'housing', 'schools', 'safety', 'sentencing', 'immigration', 'guns', 'abortion', 'gender', 'cannabis', 'health', 'energy', 'voting'];
 const COUNTY: IssueId[] = ['tax', 'housing', 'safety', 'transit', 'immigration'];
 const CITY: IssueId[] = ['tax', 'housing', 'safety', 'transit'];
 

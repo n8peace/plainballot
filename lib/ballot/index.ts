@@ -44,7 +44,7 @@ export async function getBallot(address: string): Promise<Ballot> {
       sample: false,
       districts,
       contests: researched,
-      notice: 'The official candidate list for your address isn’t published yet. These are the races volunteers have researched for your districts so far.',
+      notice: 'The official candidate list for your address isn’t published yet. These are the races we’ve researched for your districts so far.',
     };
   }
 

@@ -24,7 +24,7 @@ export const SAMPLE_BALLOT: Ballot = {
   contests: [
     {
       id: 'us-house-7', kind: 'candidate', office: 'U.S. House', sub: 'District 7 · Vote for one', researched: true,
-      issues: ['tax', 'wages', 'trade', 'debt', 'housing', 'schools', 'safety', 'immigration', 'guns', 'abortion', 'lgbtq', 'cannabis', 'health', 'energy', 'voting'],
+      issues: ['tax', 'wages', 'trade', 'debt', 'housing', 'schools', 'safety', 'immigration', 'guns', 'abortion', 'gender', 'cannabis', 'health', 'energy', 'voting'],
       sources: 'Congressional roll-call votes 2023–26 · 2026 candidate questionnaire · campaign platforms.',
       choices: [
         choice('Dana Whitfield', 'Democratic', {
@@ -38,7 +38,7 @@ export const SAMPLE_BALLOT: Ballot = {
           immigration: [1, 'Supports a path to citizenship paired with more border staffing.'],
           guns: [-2, 'Co-sponsored universal background checks and a limit on high-capacity magazines.'],
           abortion: [-2, 'Co-sponsored a bill to restore nationwide abortion access.'],
-          lgbtq: [2, 'Co-sponsored the Equality Act.'],
+          gender: [2, 'Voted against a 2025 bill limiting girls’ school sports to students whose sex at birth is female.'],
           cannabis: [1, 'Voted to remove marijuana from the federal controlled-substances list.'],
           health: [-2, 'Supports letting anyone 55 or older buy into Medicare.'],
           energy: [2, 'Voted to extend clean-energy tax credits.'],
@@ -55,7 +55,7 @@ export const SAMPLE_BALLOT: Ballot = {
           immigration: [-2, 'Supports finishing the border wall and expanding deportations.'],
           guns: [2, 'A-rated by the NRA and opposes universal background checks.'],
           abortion: [2, 'Supports a national 15-week limit with exceptions.'],
-          lgbtq: [-2, 'Voted against the Equality Act, citing religious-liberty concerns.'],
+          gender: [-2, 'Co-sponsored a 2025 bill limiting girls’ school sports to students whose sex at birth is female.'],
           cannabis: [-1, 'Opposes federal legalization and would leave medical use to states.'],
           health: [2, 'Wants to expand health savings accounts and allow insurance sales across state lines.'],
           energy: [-2, 'Supports expanding oil and gas leasing on federal land.'],
@@ -71,7 +71,7 @@ export const SAMPLE_BALLOT: Ballot = {
           immigration: [0, 'Supports more border agents and more work visas in the same bill.'],
           guns: [-1, 'Supports universal background checks and opposes an assault-weapons ban.'],
           abortion: [-1, 'Would restore access up to viability, with exceptions after.'],
-          lgbtq: [1, 'Supports federal protections in employment and housing.'],
+          gender: [1, 'Supports gender-identity protections in federal civil-rights law, with sports rules left to states.'],
           cannabis: [2, 'Supports full federal legalization.'],
           health: [0, 'Supports a public option alongside private plans.'],
           energy: [0, 'Supports an “all of the above” energy plan with no emissions target.'],
@@ -81,7 +81,7 @@ export const SAMPLE_BALLOT: Ballot = {
     },
     {
       id: 'state-senate-14', kind: 'candidate', office: 'State Senate', sub: 'District 14 · Vote for one', researched: true,
-      issues: ['tax', 'wages', 'housing', 'schools', 'safety', 'sentencing', 'immigration', 'guns', 'abortion', 'lgbtq', 'cannabis', 'health', 'energy', 'voting'],
+      issues: ['tax', 'wages', 'housing', 'schools', 'safety', 'sentencing', 'immigration', 'guns', 'abortion', 'gender', 'cannabis', 'health', 'energy', 'voting'],
       sources: 'State legislature votes 2023–25 · 2026 candidate questionnaire.',
       choices: [
         choice('Priya Raman', 'Democratic', {
@@ -94,7 +94,7 @@ export const SAMPLE_BALLOT: Ballot = {
           immigration: [1, 'Voted against requiring local police to join federal immigration enforcement.'],
           guns: [-2, 'Sponsored the state red-flag bill.'],
           abortion: [-2, 'Supports a constitutional amendment protecting abortion access.'],
-          lgbtq: [2, 'Voted against the 2025 bathroom bill.'],
+          gender: [2, 'Voted against the 2025 bill requiring school restrooms be used by sex at birth.'],
           cannabis: [1, 'Voted to expand the medical marijuana program.'],
           health: [-2, 'Supports expanding Medicaid.'],
           energy: [1, 'Supports the state target of a clean power grid by 2040.'],
@@ -110,7 +110,7 @@ export const SAMPLE_BALLOT: Ballot = {
           immigration: [-2, 'Wrote the bill requiring county jails to work with federal immigration agents.'],
           guns: [2, 'Voted for permitless carry.'],
           abortion: [1, 'Supports the current ban, but voted to clarify medical exceptions.'],
-          lgbtq: [-1, 'Voted for the 2025 bathroom bill.'],
+          gender: [-1, 'Voted for the 2025 bill requiring school restrooms be used by sex at birth.'],
           health: [1, 'Opposes Medicaid expansion and supports a state reinsurance program.'],
           energy: [-1, 'Opposes the 2040 clean-grid target as too costly.'],
           voting: [1, 'Voted for more frequent voter-roll reviews.'],
