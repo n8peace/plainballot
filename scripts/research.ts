@@ -10,8 +10,8 @@ import path from 'node:path';
 import { z } from 'zod';
 import { fetchSource, researchChoice, RESEARCH_MODEL } from '../lib/ai/research';
 import { issuesForOffice } from '../lib/ballot/offices';
-import { contestKey, POSITIONS_DIR, type PositionsFile } from '../lib/ballot/positions';
-import { ISSUE_IDS } from '../lib/issues';
+import { contestKey, POSITIONS_DIR, type PositionsFileInput } from '../lib/ballot/positions';
+import { ISSUE_IDS, issueById, NEITHER, type IssueId } from '../lib/issues';
 
 const Input = z.object({
   office: z.string(),
@@ -31,7 +31,7 @@ async function main() {
   const issues = input.issues ?? issuesForOffice(input.office);
   console.log(`Researching ${input.office}${input.district ? ` (${input.district})` : ''} with ${RESEARCH_MODEL}`);
 
-  const choices: PositionsFile['choices'] = [];
+  const choices: PositionsFileInput['choices'] = [];
   const allUrls = new Set<string>();
   for (const ch of input.choices) {
     const sources = [];
@@ -57,10 +57,20 @@ async function main() {
     });
     console.log(`  ${ch.name}: ${Object.keys(stances).length} sourced positions, ${dropped.length} dropped`);
     dropped.forEach((d) => console.log(`    dropped ${d}`));
-    choices.push({ name: ch.name, party: ch.party, stances });
+    choices.push({
+      name: ch.name,
+      party: ch.party,
+      stances: Object.fromEntries(
+        Object.entries(stances).map(([id, s]) => {
+          const i = issueById[id as IssueId];
+          const toward = s!.pos === 0 ? NEITHER : s!.pos < 0 ? i.l : i.r;
+          return [id, { toward, strength: Math.abs(s!.pos) === 2 ? 'strong' : 'lean', text: s!.text, quote: s!.quote, sourceUrl: s!.sourceUrl }];
+        }),
+      ),
+    });
   }
 
-  const out: PositionsFile = {
+  const out: PositionsFileInput = {
     office: input.office,
     district: input.district,
     kind: input.kind,

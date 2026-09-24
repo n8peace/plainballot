@@ -1,16 +1,35 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
-import { ISSUE_IDS } from '../issues';
+import { ISSUE_IDS, NEITHER, issueById, toPosition, type IssueId, type Position } from '../issues';
 
 // Researched positions live as reviewable JSON files in data/positions/, written by
 // `npm run research` and checked by a person before `reviewed` is set to true.
 
+// In the files, a stance names its side in words (the dial's short label), so a
+// person writing or reviewing research can't put someone on the wrong end by
+// flipping a sign. It's converted to a number when loaded.
 const StanceSchema = z.object({
-  pos: z.union([z.literal(-2), z.literal(-1), z.literal(0), z.literal(1), z.literal(2)]),
-  text: z.string(),
-  quote: z.string(),
+  toward: z.string(),
+  strength: z.enum(['lean', 'strong']),
+  text: z.string().min(10).max(240),
+  quote: z.string().min(12),
   sourceUrl: z.url(),
+});
+
+const StancesSchema = z.partialRecord(z.enum(ISSUE_IDS), StanceSchema).transform((rec, ctx) => {
+  const out: Partial<Record<IssueId, { pos: Position; text: string; quote: string; sourceUrl: string }>> = {};
+  for (const [id, s] of Object.entries(rec) as [IssueId, z.infer<typeof StanceSchema>][]) {
+    if (!s) continue;
+    const pos = toPosition(id, s.toward, s.strength);
+    if (pos === null) {
+      const i = issueById[id];
+      ctx.addIssue({ code: 'custom', path: [id, 'toward'], message: `"${s.toward}" isn't a side of ${i.name}. Use "${i.l}", "${i.r}" or "${NEITHER}".` });
+      continue;
+    }
+    out[id] = { pos, text: s.text, quote: s.quote, sourceUrl: s.sourceUrl };
+  }
+  return out;
 });
 
 export const PositionsFileSchema = z.object({
@@ -22,7 +41,7 @@ export const PositionsFileSchema = z.object({
     z.object({
       name: z.string(),
       party: z.string().optional(),
-      stances: z.partialRecord(z.enum(ISSUE_IDS), StanceSchema),
+      stances: StancesSchema,
     }),
   ),
   sources: z.string().optional(),
@@ -30,7 +49,9 @@ export const PositionsFileSchema = z.object({
   reviewed: z.boolean(),
 });
 
-export type PositionsFile = z.infer<typeof PositionsFileSchema>;
+export type PositionsFile = z.output<typeof PositionsFileSchema>;
+/** The on-disk shape (sides named in words). */
+export type PositionsFileInput = z.input<typeof PositionsFileSchema>;
 
 export const POSITIONS_DIR = path.join(process.cwd(), 'data', 'positions');
 
@@ -47,7 +68,7 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
   const showUnreviewed = process.env.SHOW_UNREVIEWED === '1';
   let files: string[] = [];
   try {
-    files = (await readdir(POSITIONS_DIR)).filter((f) => f.endsWith('.json'));
+    files = (await readdir(POSITIONS_DIR)).filter((f) => f.endsWith('.json') && !f.startsWith('_'));
   } catch {
     // No research yet.
   }

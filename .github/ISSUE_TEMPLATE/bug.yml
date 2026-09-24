@@ -1,0 +1,15 @@
+name: Something's wrong
+description: A bug, a wrong fact, or something confusing on the site.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: For a wrong fact, include the contest, candidate, and a source showing the correct information.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where? (page, contest, device)
