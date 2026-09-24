@@ -5,7 +5,7 @@
 // Subscription backends are for research you run yourself on your own machine.
 // Automated jobs (voter rechecks, anything on a server) use the gateway.
 
-import { execFile } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -15,6 +15,18 @@ import { fetchSource, quoteIsInSource, type ResearchedStance, type Source } from
 import { ISSUE_IDS, NEITHER, sideGuide, toPosition, type IssueId } from '../issues';
 
 const run = promisify(execFile);
+
+/** Runs a CLI with stdin closed (Codex otherwise waits for more input) and a hard timeout. */
+function runClosed(cmd: string, args: string[], cwd: string, timeoutMs: number): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, { cwd, stdio: ['ignore', 'ignore', 'pipe'] });
+    let err = '';
+    child.stderr.on('data', (d) => { err = (err + d).slice(-2000); });
+    const t = setTimeout(() => { child.kill('SIGKILL'); reject(new Error(`${cmd} timed out`)); }, timeoutMs);
+    child.on('error', (e) => { clearTimeout(t); reject(e); });
+    child.on('close', (code) => { clearTimeout(t); code === 0 ? resolve() : reject(new Error(`${cmd} exited ${code}: ${err.trim().split('\n').pop()}`)); });
+  });
+}
 
 const Result = z.object({
   stances: z.array(z.object({
@@ -69,11 +81,7 @@ async function viaCodex(prompt: string): Promise<string> {
   const dir = await mkdtemp(path.join(tmpdir(), 'pb-codex-'));
   try {
     const last = path.join(dir, 'last.txt');
-    await run('codex', ['exec', '--skip-git-repo-check', '--sandbox', 'read-only', '-c', 'web_search="live"', '--output-last-message', last, prompt], {
-      cwd: dir,
-      maxBuffer: 20 * 1024 * 1024,
-      timeout: 10 * 60 * 1000,
-    });
+    await runClosed('codex', ['exec', '--skip-git-repo-check', '--sandbox', 'read-only', '-c', 'web_search="live"', '--output-last-message', last, prompt], dir, 10 * 60 * 1000);
     return await readFile(last, 'utf8');
   } finally {
     await rm(dir, { recursive: true, force: true });
