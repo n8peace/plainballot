@@ -42,6 +42,8 @@ export const PositionsFileSchema = z.object({
   /** Which voters see this contest, e.g. "ca/cd-10" or "ca/county-contra-costa". See lib/address/census.ts. */
   division: z.string().regex(/^[a-z]{2}\/[a-z0-9-]+$/, 'Use a division key like "ca/cd-10" or "ca/county-contra-costa"').optional(),
   kind: z.enum(['candidate', 'measure', 'retention']).default('candidate'),
+  /** Measures: a plain one-sentence description of what it does. */
+  summary: z.string().max(400).optional(),
   issues: z.array(z.enum(ISSUE_IDS)),
   choices: z.array(
     z.object({
@@ -104,6 +106,7 @@ export function fileToContest(f: PositionsFile): Contest {
     kind: measure ? 'measure' : 'candidate',
     office: f.office,
     sub: [f.district, measure ? 'Yes or No' : 'Vote for one'].filter(Boolean).join(' · '),
+    summary: f.summary,
     issues: f.issues,
     researched: true,
     reviewedByPerson: f.reviewed,

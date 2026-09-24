@@ -25,6 +25,7 @@ const Input = z.object({
   district: z.string().optional(),
   division: z.string().optional(),
   kind: z.enum(['candidate', 'measure', 'retention']).default('candidate'),
+  summary: z.string().optional(),
   issues: z.array(z.enum(ISSUE_IDS)).optional(),
   choices: z.array(z.object({ name: z.string(), party: z.string().optional(), sources: z.array(z.url()).optional() })).optional(),
 });
@@ -79,6 +80,7 @@ async function main() {
     district: input.district,
     division: input.division,
     kind: input.kind,
+    summary: input.summary,
     issues,
     choices,
     sources: [...hosts].join(' · '),

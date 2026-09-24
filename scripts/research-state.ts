@@ -1,7 +1,7 @@
 // Research every federal, statewide and legislative contest in one state.
 //
 //   npm run research:state -- CA                  # everything not yet researched
-//   npm run research:state -- CA --only federal   # federal | statewide | legislature
+//   npm run research:state -- CA --only federal   # federal | statewide | legislature | measures
 //   npm run research:state -- CA --list           # just build the contest list
 //
 // 1. Two independent agents (Claude Code and Codex, on your subscriptions) each read
@@ -20,6 +20,7 @@ import { z } from 'zod';
 import { contestKey, nameKey, POSITIONS_DIR } from '../lib/ballot/positions';
 import { gateway, generateText, isStepCount, Output } from 'ai';
 import { runCli } from '../lib/research/backends';
+import { ISSUE_IDS, sideGuide } from '../lib/issues';
 import { canonicalOffice, divisionFor, levelFor, type Level } from '../lib/research/divisions';
 
 const run = promisify(execFile);
@@ -33,20 +34,20 @@ const Contests = z.object({
   sourceUrl: z.string().optional(),
 });
 
-const LEVEL_TEXT: Record<Level, string> = {
+const LEVEL_TEXT: Record<Exclude<Level, 'measures'>, string> = {
   federal: 'U.S. Senate and U.S. House',
   statewide: 'statewide executive offices (Governor, Lieutenant Governor, Attorney General, Secretary of State, Treasurer, Controller or Comptroller, and similar)',
   legislature: 'state legislature (both chambers)',
 };
 
-function listPrompt(state: string, level: Level) {
+function listPrompt(state: string, level: Exclude<Level, 'measures'>) {
   return `Find the official certified list of candidates for the November 3, 2026 general election in ${state} (usually published by the Secretary of State or state elections board). From it, list every contest for ${LEVEL_TEXT[level]} and the candidates who will appear on the general-election ballot. For top-two or runoff systems, only the finalists. Skip uncontested seats only if the list marks them unopposed; otherwise include them. Use names as they appear on the ballot.
 Reply with ONLY this JSON, no other text:
 {"sourceUrl":"<the official list>","contests":[{"office":"<e.g. U.S. Representative>","district":"<e.g. District 10, or omit for statewide>","candidates":[{"name":"...","party":"..."}]}]}`;
 }
 
 /** Reads the list with an API model and web search, when a subscription is out of usage. */
-async function listViaGateway(state: string, level: Level): Promise<z.infer<typeof Contests>> {
+async function listViaGateway(state: string, level: Exclude<Level, 'measures'>): Promise<z.infer<typeof Contests>> {
   const { output } = await generateText({
     model: (process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra').replace(/^gateway:/, ''),
     abortSignal: AbortSignal.timeout(10 * 60 * 1000),
@@ -58,7 +59,7 @@ async function listViaGateway(state: string, level: Level): Promise<z.infer<type
   return output;
 }
 
-async function listContests(state: string, level: Level) {
+async function listContests(state: string, level: Exclude<Level, 'measures'>) {
   const parse = (t: string) => Contests.parse(JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)));
   const read = async (backend: 'claude-code' | 'codex') => {
     try { return parse(await runCli(backend, listPrompt(state, level))); } catch (e) {
@@ -86,11 +87,48 @@ async function listContests(state: string, level: Level) {
   return agreed;
 }
 
+// ---- Statewide ballot measures (propositions) ----
+
+const Measures = z.object({
+  measures: z.array(z.object({ number: z.string(), title: z.string(), summary: z.string(), issues: z.array(z.string()) })),
+  sourceUrl: z.string().optional(),
+});
+
+function measuresPrompt(state: string) {
+  return `Find the official list of statewide ballot measures (propositions) on the November 3, 2026 general election ballot in ${state}, from the Secretary of State or the official voter guide. For each: its number, its official short title, a one-sentence neutral summary of what a Yes vote does (no adjectives that praise or criticize), and which of these issue ids it directly decides (only ones that clearly apply, possibly none):
+${sideGuide(ISSUE_IDS)}
+Reply with ONLY this JSON, no other text:
+{"sourceUrl":"<official list>","measures":[{"number":"<e.g. 50>","title":"...","summary":"A Yes vote ...","issues":["<issue id>"]}]}`;
+}
+
+async function listMeasures(state: string) {
+  const parse = (t: string) => Measures.parse(JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)));
+  const read = async (backend: 'claude-code' | 'codex') => {
+    try { return parse(await runCli(backend, measuresPrompt(state))); } catch (e) {
+      console.log(`  ${backend} unavailable for measures (${(e as Error).message.slice(0, 80)}); skipping that reader`);
+      return null;
+    }
+  };
+  const [a, b] = await Promise.all([read('claude-code'), read('codex')]);
+  if (!a || !b) { console.log('  measures: need two independent readers; skipped'); return []; }
+  const byNum = new Map(b.measures.map((m) => [m.number.replace(/\D/g, ''), m]));
+  const valid = (ids: string[]) => ids.filter((id) => (ISSUE_IDS as readonly string[]).includes(id));
+  const agreed = a.measures.flatMap((m) => {
+    const other = byNum.get(m.number.replace(/\D/g, ''));
+    if (!other) { console.log(`  ? only one agent listed Proposition ${m.number}; skipped`); return []; }
+    // Issues: only the ones both readers tied to this measure.
+    const issues = valid(m.issues).filter((id) => valid(other.issues).includes(id));
+    return [{ ...m, number: m.number.replace(/\D/g, ''), issues }];
+  });
+  console.log(`  measures: ${agreed.length} agreed (${a.measures.length} and ${b.measures.length} listed) · ${a.sourceUrl ?? b.sourceUrl ?? ''}`);
+  return agreed;
+}
+
 async function main() {
   const state = process.argv[2]?.toUpperCase();
   if (!state || !/^[A-Z]{2}$/.test(state)) throw new Error('Usage: npm run research:state -- CA [--only federal|statewide|legislature] [--list]');
   const only = process.argv.includes('--only') ? (process.argv[process.argv.indexOf('--only') + 1] as Level) : null;
-  const levels: Level[] = only ? [only] : ['federal', 'statewide', 'legislature'];
+  const levels: Level[] = only ? [only] : ['federal', 'statewide', 'legislature', 'measures'];
   const dir = path.join(process.cwd(), 'data', 'research', state.toLowerCase());
   await mkdir(dir, { recursive: true });
 
@@ -102,6 +140,23 @@ async function main() {
   }
   const queue: string[] = [];
   for (const level of levels) {
+    if (level === 'measures') {
+      for (const m of await listMeasures(state)) {
+        const office = `Proposition ${m.number}`;
+        const division = `${state.toLowerCase()}/state`;
+        const input = { office, district: m.title, division, kind: 'measure', summary: m.summary, issues: m.issues, choices: [{ name: 'Yes' }, { name: 'No' }] };
+        const file = path.join(dir, `${contestKey(office, m.title)}.json`);
+        await writeFile(file, JSON.stringify(input, null, 2) + '\n');
+        if (!m.issues.length) {
+          // Still show it on the ballot with its summary, just without a match.
+          const posFile = path.join(POSITIONS_DIR, `${contestKey(office, m.title)}.json`);
+          await writeFile(posFile, JSON.stringify({ ...input, choices: [{ name: 'Yes', stances: {} }, { name: 'No', stances: {} }], checkedAt: new Date().toISOString().slice(0, 10), reviewed: false }, null, 2) + '\n');
+          console.log(`  Proposition ${m.number}: no dial applies; listed with its summary, no match`);
+        }
+        if (m.issues.length && !covered.has(`${division}|${canonicalOffice(office)}`)) queue.push(file);
+      }
+      continue;
+    }
     for (const c of await listContests(state, level)) {
       const division = divisionFor(state, c.office, c.district);
       if (!division || levelFor(c.office) !== level) continue;

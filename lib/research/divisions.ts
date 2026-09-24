@@ -2,7 +2,7 @@
 // matched by (see lib/address/census.ts), e.g. "U.S. Representative, District 10"
 // in CA → "ca/cd-10".
 
-export type Level = 'federal' | 'statewide' | 'legislature';
+export type Level = 'federal' | 'statewide' | 'legislature' | 'measures';
 
 const num = (s: string) => /(\d+)/.exec(s)?.[1];
 
