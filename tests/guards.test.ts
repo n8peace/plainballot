@@ -150,5 +150,7 @@ describe('research consensus', () => {
     expect(decide('guns', [...many(5, -1), ...many(1, 1), ...none(4)])).toMatchObject({ outcome: 'l', agreement: '5/10' });
     expect(decide('guns', [...many(3, -1), ...many(3, 1), ...none(4)])).toBeNull();
     expect(decide('guns', [...many(2, -1), ...none(8)])).toBeNull();
+    // An agent failed, so only 9 ran: still the full-round rule, so 2 finds aren't enough.
+    expect(decide('guns', [...many(2, -1), ...none(7)])).toBeNull();
   });
 });

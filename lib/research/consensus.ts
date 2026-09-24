@@ -41,7 +41,8 @@ export function decide(issue: IssueId, runs: AgentResult[]): Decision | null {
   for (const s of found) tally.set(outcomeOf(s), [...(tally.get(outcomeOf(s)) ?? []), s]);
   const [top, winners] = [...tally.entries()].sort((a, b) => b[1].length - a[1].length)[0];
   const others = found.length - winners.length;
-  const full = runs.length >= FULL_ROUND;
+  // Any run past the first round uses the full-round rule, even if an agent failed.
+  const full = runs.length > FIRST_ROUND;
   const settled = full ? winners.length >= 3 && winners.length > found.length / 2 : winners.length >= 2 && others === 0;
   if (!settled) return null;
   // Strength: "strong" only if most agreeing agents said strong.

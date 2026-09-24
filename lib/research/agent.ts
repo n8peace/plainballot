@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { fetchSource, researchChoice, type Source } from '../ai/research';
 import { issueById, type IssueId } from '../issues';
 import type { AgentResult } from './consensus';
+import { runCliAgent } from './backends';
 
 export const RESEARCH_MODELS = (process.env.RESEARCH_MODELS || 'anthropic/claude-sonnet-5,openai/gpt-5.6-terra,google/gemini-3.8-flash')
   .split(',').map((s) => s.trim()).filter(Boolean);
@@ -46,7 +47,9 @@ Search, then read pages to confirm they actually state positions. Return up to 6
 
 /** Runs one full agent: its own search, its own reading, verified quotes only. */
 export async function runAgent(opts: { name: string; office: string; issues: IssueId[]; run: number; isMeasure?: boolean; seedUrls?: string[] }): Promise<AgentResult> {
-  const model = modelFor(opts.run);
+  const backend = modelFor(opts.run);
+  if (backend === 'claude-code' || backend === 'codex') return runCliAgent(backend, opts);
+  const model = backend.replace(/^gateway:/, '');
   const urls = await findSources({ ...opts, model });
   const sources: Source[] = [];
   for (const u of urls) {
