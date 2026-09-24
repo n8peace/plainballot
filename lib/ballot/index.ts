@@ -6,6 +6,9 @@ import { SAMPLE_BALLOT } from './sample';
 
 export { BallotLookupError } from './google-civic';
 
+/** States we research for this election. Others get a clear notice and a sample ballot. */
+export const COVERED_STATES = (process.env.COVERED_STATES || 'CA').split(',').map((s) => s.trim().toUpperCase());
+
 const ELECTION = { electionName: 'General Election', electionDate: process.env.ELECTION_DATE || SAMPLE_BALLOT.electionDate };
 
 /**
@@ -25,6 +28,15 @@ export async function getBallot(address: string): Promise<Ballot> {
     throw new BallotLookupError('We couldn’t find that address. Pick it from the suggestions, or check the street number and ZIP code.');
   }
   const districts = loc?.districts ?? [];
+  if (loc && !COVERED_STATES.includes(loc.state)) {
+    const stateName = districts.find((d) => d.key.endsWith('/state'))?.label ?? loc.state;
+    return {
+      ...SAMPLE_BALLOT,
+      districts,
+      needsResearch: true,
+      notice: `Plain Ballot covers California for the November 2026 election. ${stateName} isn’t covered yet, so here’s a sample ballot with fictional candidates. Want your state next? Tell us, or help research it on GitHub.`,
+    };
+  }
   const place = districts.find((d) => d.key.includes('/place-'))?.label ?? loc?.state ?? '';
   const key = process.env.GOOGLE_CIVIC_API_KEY;
 
