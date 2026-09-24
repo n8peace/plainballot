@@ -1,0 +1,51 @@
+name: Recheck a reported claim
+# Runs when an issue gets the "claim-report" label. The site's report form adds it;
+# only maintainers can add labels by hand, so strangers can't trigger paid runs.
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: recheck
+  cancel-in-progress: false
+
+jobs:
+  recheck:
+    if: github.event.label.name == 'claim-report'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ISSUE: ${{ github.event.issue.number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Recheck with independent agents
+        run: npm run recheck -- "$ISSUE"
+      - name: Open a pull request if anything changed
+        run: |
+          if git diff --quiet -- data/positions; then
+            gh issue comment "$ISSUE" --body-file recheck-summary.md
+            gh issue edit "$ISSUE" --add-label rechecked
+            exit 0
+          fi
+          git config user.name "plainballot-bot"
+          git config user.email "plainballot-bot@users.noreply.github.com"
+          git switch -c "recheck/$ISSUE"
+          git add data/positions
+          git commit -m "Recheck #$ISSUE"
+          git push -u origin "recheck/$ISSUE"
+          { cat recheck-summary.md; printf '\nCloses #%s\n' "$ISSUE"; } > pr-body.md
+          gh pr create --title "Recheck #$ISSUE: proposed correction" --body-file pr-body.md --label rechecked
+          gh issue comment "$ISSUE" --body-file recheck-summary.md

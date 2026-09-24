@@ -49,3 +49,6 @@ next-env.d.ts
 mockup/
 docs/market-research.md
 docs/cost-estimate.md
+review.html
+recheck-summary.md
+pr-body.md

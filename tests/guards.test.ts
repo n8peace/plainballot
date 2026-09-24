@@ -123,3 +123,32 @@ describe('address suggestions', () => {
     expect(formatPhoton({ street: 'Maureen Street', city: 'Thunder Bay', state: 'Ontario', countrycode: 'CA' }, '589')).toBeNull();
   });
 });
+
+describe('research consensus', () => {
+  type R = import('../lib/research/consensus').AgentResult;
+  const s = (pos: -2 | -1 | 0 | 1 | 2) => ({ pos, text: 'x', quote: 'a quote long enough', sourceUrl: 'https://a.test' });
+  const none = (n: number): R[] => [...Array(n)].map(() => ({}));
+  const many = (n: number, pos: -2 | -1 | 0 | 1 | 2): R[] => [...Array(n)].map(() => ({ guns: s(pos) }));
+  it('settles when all 3 agents find the same side', async () => {
+    const { decide } = await import('../lib/research/consensus');
+    const d = decide('housing', [{ housing: s(2) }, { housing: s(1) }, { housing: s(2) }]);
+    expect(d).toMatchObject({ outcome: 'r', agreement: '3/3' });
+    expect(d!.stance!.pos).toBe(2); // 2 of 3 said strong
+  });
+  it('settles when 2 find it and the third finds nothing, since not finding is not a vote against', async () => {
+    const { decide } = await import('../lib/research/consensus');
+    expect(decide('housing', [{ housing: s(1) }, { housing: s(1) }, {}])).toMatchObject({ outcome: 'r', agreement: '2/3' });
+  });
+  it('escalates when agents conflict, or only one found anything', async () => {
+    const { needsEscalation } = await import('../lib/research/consensus');
+    expect(needsEscalation(['housing'], [{ housing: s(2) }, { housing: s(-1) }, {}])).toBe(true);
+    expect(needsEscalation(['housing'], [{ housing: s(2) }, {}, {}])).toBe(true);
+    expect(needsEscalation(['housing'], none(3))).toBe(false);
+  });
+  it('after 10 agents, publishes the majority of agents that found a position (3 minimum), or leaves it blank', async () => {
+    const { decide } = await import('../lib/research/consensus');
+    expect(decide('guns', [...many(5, -1), ...many(1, 1), ...none(4)])).toMatchObject({ outcome: 'l', agreement: '5/10' });
+    expect(decide('guns', [...many(3, -1), ...many(3, 1), ...none(4)])).toBeNull();
+    expect(decide('guns', [...many(2, -1), ...none(8)])).toBeNull();
+  });
+});

@@ -6,6 +6,8 @@ export interface Stance {
   /** One neutral sentence a voter can read. */
   text: string;
   sourceUrl?: string;
+  /** How many independent research agents agreed, e.g. "3/3". */
+  agreement?: string;
 }
 
 export interface Choice {

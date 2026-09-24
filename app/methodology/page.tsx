@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ISSUES } from '@/lib/issues';
 import { INTERPRET_MODEL } from '@/lib/ai/interpret';
-import { RESEARCH_MODEL } from '@/lib/ai/research';
+import { RESEARCH_MODELS } from '@/lib/research/agent';
 import { GITHUB_URL } from '@/lib/share';
 
 export const metadata: Metadata = { title: 'How Plain Ballot works', description: 'The matching method, the dial wording, and where the AI is and isn’t used.' };
@@ -25,7 +25,9 @@ export default function Methodology() {
       <h2>Where AI is used, and where it isn’t</h2>
       <ul>
         <li><b>Reading your words.</b> If you describe your priorities in your own words, a small model ({INTERPRET_MODEL}) turns them into dial settings, quoting the phrase each came from. You can see and change every one. Your text isn’t stored, and the model provider keeps no copy.</li>
-        <li><b>Researching candidates.</b> A model ({RESEARCH_MODEL}) reads each candidate’s sources and suggests a position with an exact supporting quote. Any claim whose quote isn’t found word for word in the source is thrown out. A person then checks every remaining claim before it’s published.</li>
+        <li><b>Researching candidates.</b> Three independent research agents, each running on a model from a different AI company ({RESEARCH_MODELS.join(', ')}), search the web, read the candidate’s own sources and record positions with exact quotes. If all three agree on an issue, that’s the answer. If they don’t, seven more agents run, and a position is published only if at least 6 of the 10 agree. Without a majority, the issue is left blank. The same process confirms who is on the ballot.</li>
+        <li><b>Checking the quotes.</b> Every quote is fetched from its source and must appear there word for word, or the claim is thrown out. A person then reviews every claim before it’s published.</li>
+        <li><b>Fixing mistakes.</b> Anyone can tap “Not right?” on a claim. The report is public, and it starts a fresh recheck with new agents. If the result changes, a correction is proposed and a person approves it.</li>
         <li><b>Not used for matching.</b> No model decides your matches or writes your explanations. Those are computed from the reviewed data.</li>
       </ul>
 

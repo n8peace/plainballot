@@ -295,3 +295,14 @@ img{max-width:100%}
 .compare-list .you.same{font-weight:600}
 .compare-list .you.diff{color:var(--ink-2)}
 @media (max-width:560px){.compare-list li{grid-template-columns:1fr}}
+.agree{display:inline-block;font-family:var(--sans);font-size:11px;color:var(--ink-3);border:1px solid var(--rule);padding:0 6px;margin-left:6px;vertical-align:1px}
+.notright{border:0;background:transparent;padding:0;margin-left:8px;font-family:var(--sans);font-size:12px;color:var(--ink-3);text-decoration:underline;cursor:pointer}
+.why > .notright{margin:12px 0 0}
+.report{border:1px solid var(--ink);padding:12px 14px;margin-top:12px;font-family:var(--sans);font-size:14px;display:grid;gap:10px}
+.report-head{display:flex;justify-content:space-between;align-items:baseline}
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.report-grid{grid-template-columns:1fr}}
+.report label{display:grid;gap:4px;font-size:13px;color:var(--ink-2)}
+.report select,.report input,.report textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);padding:8px 10px;border-radius:0}
+.report textarea{min-height:80px;resize:vertical}
+.report-done{margin:0}

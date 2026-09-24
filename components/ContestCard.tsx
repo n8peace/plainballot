@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { ReportForm } from './ReportForm';
 import { issueById, leanPhrase, type IssueId } from '@/lib/issues';
 import { CLOSE_CALL, explain, rank, RETAIN_THRESHOLD, retentionMatch, type Ranked } from '@/lib/match';
 import { researchIssueUrl } from '@/lib/share';
@@ -46,7 +48,7 @@ function Basis({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; onAd
   );
 }
 
-function Why({ contest, prefs, ranked }: { contest: Contest; prefs: Prefs; ranked: Ranked[] }) {
+function Why({ contest, prefs, ranked, onReport }: { contest: Contest; prefs: Prefs; ranked: Ranked[]; onReport: (candidate: string, issue: string) => void }) {
   const [win, run] = ranked;
   const ex = explain(contest, prefs, ranked);
   const missing = win.score.missing;
@@ -62,7 +64,11 @@ function Why({ contest, prefs, ranked }: { contest: Contest; prefs: Prefs; ranke
             {[win, run].map(({ choice }) => {
               const s = choice.stances[ex.decisive!]!;
               return (
-                <li key={choice.id}><b>{longName(choice)}:</b> {s.text} <Src url={s.sourceUrl} /></li>
+                <li key={choice.id}>
+                  <b>{longName(choice)}:</b> {s.text} <Src url={s.sourceUrl} />
+                  {s.agreement && <span className="agree">{s.agreement.replace('/', ' of ')} research checks agree</span>}
+                  <button className="notright" onClick={() => onReport(choice.name, ex.decisive!)}>Not right?</button>
+                </li>
               );
             })}
           </ul>
@@ -128,6 +134,12 @@ function Retention({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; 
 }
 
 export function ContestCard({ contest, prefs, showParty, place, onAdd }: { contest: Contest; prefs: Prefs; showParty: boolean; place?: string; onAdd: (id: IssueId) => void }) {
+  const [report, setReport] = useState<{ candidate?: string; issue?: string } | null>(null);
+  const reportUi = report ? (
+    <ReportForm contest={contest} initial={report} onClose={() => setReport(null)} />
+  ) : (
+    <button className="notright" onClick={() => setReport({})}>Report a problem with this race</button>
+  );
   const head = (
     <div className="race-head"><span className="office">{contest.office}</span><span className="sub">{contest.sub}</span></div>
   );
@@ -187,9 +199,10 @@ export function ContestCard({ contest, prefs, showParty, place, onAdd }: { conte
           {none ? (
             <p><b>None of your issues are at stake in this contest.</b> Add one above to see a match, or decide this one yourself.</p>
           ) : (
-            <Why contest={contest} prefs={prefs} ranked={ranked} />
+            <Why contest={contest} prefs={prefs} ranked={ranked} onReport={(candidate, issue) => setReport({ candidate, issue })} />
           )}
           {contest.sources && <p className="src">Sources: {contest.sources} <Link href="/methodology">How matching works</Link></p>}
+          {reportUi}
         </div>
       </div>
     </article>

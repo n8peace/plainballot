@@ -26,7 +26,11 @@ Every contest starts as "not researched yet." Here's how to fill one in:
 - Candidates' own sites, voting records, questionnaires, rulings and direct interviews are best. Opinion pieces and attack ads don't count.
 - Research every candidate in the race, not just the one you like.
 
-Have an AI Gateway key? `npm run research -- data/research/your-contest.json` drafts a file for you, and you check it before opening a PR.
+Have an AI Gateway key? `npm run research -- data/research/your-contest.json` does the research for you. Three independent agents on models from different AI companies must agree (seven more run if they don't, and a 6-of-10 majority decides). Then `npm run review` builds a one-page sheet so you can check every claim quickly.
+
+### Review research (the most valuable job)
+
+Most research is drafted by agents. What it needs most is people checking it. Run `npm run review`, open `review.html`, and for each claim confirm that the quote says what the claim says and the side of the dial is right. Comment on the pull request with anything that's wrong.
 
 ### 2. Challenge a dial's wording
 

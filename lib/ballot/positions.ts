@@ -16,10 +16,12 @@ const StanceSchema = z.object({
   text: z.string().min(10).max(240),
   quote: z.string().min(12),
   sourceUrl: z.url(),
+  /** How many independent research agents agreed, e.g. "3/3" or "7/10". */
+  agreement: z.string().regex(/^\d+\/\d+$/).optional(),
 });
 
 const StancesSchema = z.partialRecord(z.enum(ISSUE_IDS), StanceSchema).transform((rec, ctx) => {
-  const out: Partial<Record<IssueId, { pos: Position; text: string; quote: string; sourceUrl: string }>> = {};
+  const out: Partial<Record<IssueId, { pos: Position; text: string; quote: string; sourceUrl: string; agreement?: string }>> = {};
   for (const [id, s] of Object.entries(rec) as [IssueId, z.infer<typeof StanceSchema>][]) {
     if (!s) continue;
     const pos = toPosition(id, s.toward, s.strength);
@@ -28,7 +30,7 @@ const StancesSchema = z.partialRecord(z.enum(ISSUE_IDS), StanceSchema).transform
       ctx.addIssue({ code: 'custom', path: [id, 'toward'], message: `"${s.toward}" isn't a side of ${i.name}. Use "${i.l}", "${i.r}" or "${NEITHER}".` });
       continue;
     }
-    out[id] = { pos, text: s.text, quote: s.quote, sourceUrl: s.sourceUrl };
+    out[id] = { pos, text: s.text, quote: s.quote, sourceUrl: s.sourceUrl, agreement: s.agreement };
   }
   return out;
 });
@@ -110,7 +112,7 @@ export function fileToContest(f: PositionsFile): Contest {
       name: ch.name,
       party: ch.party,
       stances: Object.fromEntries(
-        Object.entries(ch.stances).filter(([, s]) => s).map(([id, s]) => [id, { pos: s!.pos, text: s!.text, sourceUrl: s!.sourceUrl }]),
+        Object.entries(ch.stances).filter(([, s]) => s).map(([id, s]) => [id, { pos: s!.pos, text: s!.text, sourceUrl: s!.sourceUrl, agreement: s!.agreement }]),
       ),
     })),
   };

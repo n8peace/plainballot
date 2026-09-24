@@ -75,11 +75,12 @@ export async function researchChoice(opts: {
   issues: IssueId[];
   sources: Source[];
   isMeasure?: boolean;
+  model?: string;
 }): Promise<{ stances: Partial<Record<IssueId, ResearchedStance>>; dropped: string[] }> {
   const subject = opts.isMeasure ? `a "${opts.name}" vote on ${opts.office}` : `${opts.name}, candidate for ${opts.office}`;
 
   const { output } = await generateText({
-    model: RESEARCH_MODEL,
+    model: opts.model ?? RESEARCH_MODEL,
     instructions: `You are a nonpartisan researcher. From the sources provided, record where ${subject} stands on each issue below.
 
 Issues. Each has two sides; the quoted short label names the side:
