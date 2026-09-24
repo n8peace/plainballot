@@ -154,3 +154,17 @@ describe('research consensus', () => {
     expect(decide('guns', [...many(2, -1), ...none(7)])).toBeNull();
   });
 });
+
+describe('state batch research', () => {
+  it('maps offices on a candidate list to the districts voters are matched by', async () => {
+    const { divisionFor, canonicalOffice } = await import('../lib/research/divisions');
+    expect(divisionFor('CA', 'U.S. Representative', 'District 10')).toBe('ca/cd-10');
+    expect(divisionFor('CA', 'United States Senator')).toBe('ca/state');
+    expect(divisionFor('CA', 'State Senator', 'District 09')).toBe('ca/sldu-9');
+    expect(divisionFor('CA', 'Member of the State Assembly', 'District 15')).toBe('ca/sldl-15');
+    expect(divisionFor('TX', 'State Representative', 'District 47')).toBe('tx/sldl-47');
+    expect(divisionFor('CA', 'Governor')).toBe('ca/state');
+    expect(divisionFor('CA', 'County Sheriff')).toBeNull();
+    expect(canonicalOffice('U.S. House')).toBe(canonicalOffice('U.S. Representative'));
+  });
+});

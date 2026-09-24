@@ -88,6 +88,11 @@ async function viaCodex(prompt: string): Promise<string> {
   }
 }
 
+/** Sends one prompt to a subscription CLI and returns its final text reply. */
+export function runCli(backend: 'claude-code' | 'codex', prompt: string): Promise<string> {
+  return backend === 'claude-code' ? viaClaudeCode(prompt) : viaCodex(prompt);
+}
+
 /** Runs a research agent on a subscription CLI, then verifies every quote ourselves. */
 export async function runCliAgent(
   backend: 'claude-code' | 'codex',
