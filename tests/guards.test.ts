@@ -98,3 +98,28 @@ describe('abuse limits', () => {
     expect(tooLarge(new Request('http://x', { method: 'POST', headers: { 'content-length': '9000' } }), 8000)).toBe(true);
   });
 });
+
+describe('compare with a friend', () => {
+  it('counts agreement only on issues both chose, by side of the dial', async () => {
+    const { agreement } = await import('../lib/share');
+    const me = { sel: ['housing', 'guns', 'tax'] as const, pos: { housing: 2, guns: -1, tax: 0 } as const, imp: {} };
+    const friend = { sel: ['housing', 'guns', 'abortion'] as const, pos: { housing: 1, guns: 1, abortion: -2 } as const, imp: {} };
+    const a = agreement({ ...me, sel: [...me.sel], pos: { ...me.pos } }, { ...friend, sel: [...friend.sel], pos: { ...friend.pos } });
+    expect(a).toEqual({ shared: ['housing', 'guns'], agree: ['housing'], differ: ['guns'], unset: ['abortion'] });
+  });
+  it('builds a research link pre-filled with the contest', async () => {
+    const { researchIssueUrl } = await import('../lib/share');
+    const u = new URL(researchIssueUrl({ contest: 'State Senate District 9', place: 'California', candidates: ['A', 'B'] }));
+    expect(u.searchParams.get('template')).toBe('research-a-race.yml');
+    expect(u.searchParams.get('contest')).toBe('State Senate District 9, California');
+  });
+});
+
+describe('address suggestions', () => {
+  it('keeps the typed house number when the map only knows the street', async () => {
+    const { formatPhoton } = await import('../lib/address/suggest');
+    expect(formatPhoton({ street: 'Maureen Lane', city: 'Pleasant Hill', state: 'California', postcode: '94523', countrycode: 'US' }, '589'))
+      .toBe('589 Maureen Lane, Pleasant Hill, CA 94523');
+    expect(formatPhoton({ street: 'Maureen Street', city: 'Thunder Bay', state: 'Ontario', countrycode: 'CA' }, '589')).toBeNull();
+  });
+});

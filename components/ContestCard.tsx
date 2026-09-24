@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { issueById, leanPhrase, type IssueId } from '@/lib/issues';
 import { CLOSE_CALL, explain, rank, RETAIN_THRESHOLD, retentionMatch, type Ranked } from '@/lib/match';
+import { researchIssueUrl } from '@/lib/share';
 import type { Choice, Contest, Prefs } from '@/lib/types';
 
 const lower = (id: IssueId) => issueById[id].name.toLowerCase();
@@ -125,7 +126,7 @@ function Retention({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; 
   );
 }
 
-export function ContestCard({ contest, prefs, showParty, onAdd }: { contest: Contest; prefs: Prefs; showParty: boolean; onAdd: (id: IssueId) => void }) {
+export function ContestCard({ contest, prefs, showParty, place, onAdd }: { contest: Contest; prefs: Prefs; showParty: boolean; place?: string; onAdd: (id: IssueId) => void }) {
   const head = (
     <div className="race-head"><span className="office">{contest.office}</span><span className="sub">{contest.sub}</span></div>
   );
@@ -145,7 +146,10 @@ export function ContestCard({ contest, prefs, showParty, onAdd }: { contest: Con
               <li key={c.id} className="opt"><span className="oval" /><div className="who"><span className="name">{c.name}</span>{showParty && c.party && <span className="party">{c.party}</span>}{c.url && <a href={c.url} target="_blank" rel="noopener noreferrer">website</a>}</div><div className="meter">Not researched</div></li>
             ))}
           </ul>
-          <p className="unresearched">We haven’t researched this contest yet, so there’s no match. We’d rather show nothing than guess.</p>
+          <p className="unresearched">
+            We haven’t researched this contest yet, so there’s no match. We’d rather show nothing than guess.{' '}
+            <a className="btn small" href={researchIssueUrl({ contest: [contest.office, contest.sub.split(' · ')[0]].join(', '), place, candidates: contest.choices.map((c) => (c.party ? `${c.name} (${c.party})` : c.name)) })} target="_blank" rel="noopener noreferrer">Research this race</a>
+          </p>
         </div>
       </article>
     );

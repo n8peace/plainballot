@@ -5,8 +5,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Importance, IssueId, Position } from '@/lib/issues';
 import { picksFor } from '@/lib/match';
-import { decodePrefs, encodePrefs, GITHUB_URL, X_URL } from '@/lib/share';
+import { decodePrefs, encodePrefs, GITHUB_URL, researchIssueUrl, X_URL } from '@/lib/share';
 import type { Ballot, Prefs } from '@/lib/types';
+import { AddressInput } from './AddressInput';
+import { ComparePanel } from './ComparePanel';
 import { ContestCard } from './ContestCard';
 import { Dials } from './Dials';
 import { IssuePicker } from './IssuePicker';
@@ -26,7 +28,7 @@ function longDate(date: string) {
   return date ? new Date(`${date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
 }
 
-export function BallotApp({ initialBallot }: { initialBallot: Ballot }) {
+export function BallotApp({ initialBallot, friend = null }: { initialBallot: Ballot; friend?: Prefs | null }) {
   const [ballot, setBallot] = useState(initialBallot);
   const [prefs, setPrefs] = useState<Prefs>(EMPTY);
   const [tab, setTab] = useState<'words' | 'dials'>('words');
@@ -37,6 +39,7 @@ export function BallotApp({ initialBallot }: { initialBallot: Ballot }) {
   const [lookupError, setLookupError] = useState('');
   const [days, setDays] = useState<number | null>(null);
   const [jump, setJump] = useState(false);
+  const [showCompare, setShowCompare] = useState(!!friend);
   const dialsRef = useRef<HTMLElement>(null);
   const ballotRef = useRef<HTMLElement>(null);
 
@@ -101,12 +104,13 @@ export function BallotApp({ initialBallot }: { initialBallot: Ballot }) {
     });
   };
 
-  const lookup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const lookup = async (e?: React.FormEvent, addr = address) => {
+    e?.preventDefault();
+    if (addr.trim().length < 5) return;
     setLooking(true);
     setLookupError('');
     try {
-      const res = await fetch(`/api/ballot?address=${encodeURIComponent(address)}`);
+      const res = await fetch(`/api/ballot?address=${encodeURIComponent(addr)}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Ballot lookup failed.');
       setBallot(data);
@@ -145,7 +149,7 @@ export function BallotApp({ initialBallot }: { initialBallot: Ballot }) {
           <form className="addr" onSubmit={lookup}>
             <div className="field">
               <label className="label" htmlFor="address">Street address and ZIP code</label>
-              <input id="address" autoComplete="street-address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="1400 Example Ave, Springfield 00000" />
+              <AddressInput value={address} onChange={setAddress} onPick={(a) => lookup(undefined, a)} />
             </div>
             <button className="btn" type="submit" disabled={looking || address.trim().length < 5}>{looking ? 'Finding…' : 'Find my ballot'}</button>
           </form>
@@ -155,10 +159,25 @@ export function BallotApp({ initialBallot }: { initialBallot: Ballot }) {
               ? <>Showing a <b>sample ballot</b>{address ? ' for now' : ' until you enter your address'}. Your address is only used to look up your ballot and isn’t stored.</>
               : <>We found <b>{ballot.contests.length} contests</b> on your ballot{ballot.place ? ` in ${ballot.place}` : ''}. {researched < ballot.contests.length && <>We’ve researched {researched} so far.</>}</>}
           </p>
+          {ballot.districts && ballot.districts.length > 0 && (
+            <div className="districts">
+              <span className="label">Your districts</span>
+              <ul>{ballot.districts.map((d) => <li key={d.key}>{d.label}</li>)}</ul>
+              {ballot.needsResearch && (
+                <p className="research-cta">
+                  None of your races are researched yet. Help put your area on the map: pick one race and research it in about 20 minutes, no coding needed.{' '}
+                  <a className="btn small" href={researchIssueUrl({ place: ballot.districts.find((d) => d.key.endsWith('/state'))?.label })} target="_blank" rel="noopener noreferrer">Research a race here</a>
+                </p>
+              )}
+            </div>
+          )}
         </section>
 
         <section className="step" aria-labelledby="s2" ref={dialsRef}>
           <div className="step-head"><span className="step-num">2</span><h3 id="s2">What you care about</h3><span className="aside">Change anything. Your ballot updates as you go.</span></div>
+          {friend && showCompare && (
+            <ComparePanel mine={prefs} theirs={friend} onAdd={addFromBallot} onClose={() => setShowCompare(false)} />
+          )}
           <div className="tabs" role="tablist">
             <button role="tab" aria-selected={tab === 'words'} onClick={() => setTab('words')}>In your own words</button>
             <button role="tab" aria-selected={tab === 'dials'} onClick={() => setTab('dials')}>Pick issues and set dials</button>
@@ -180,13 +199,13 @@ export function BallotApp({ initialBallot }: { initialBallot: Ballot }) {
             <span className="hint">Hidden by default, so you see the issues before the party.</span>
           </div>
           {ballot.contests.map((c) => (
-            <ContestCard key={c.id} contest={c} prefs={prefs} showParty={showParty} onAdd={addFromBallot} />
+            <ContestCard key={c.id} contest={c} prefs={prefs} showParty={showParty} place={ballot.place} onAdd={addFromBallot} />
           ))}
         </section>
 
         <section className="step" aria-labelledby="s4">
           <div className="step-head"><span className="step-num">4</span><h3 id="s4">Send it to a friend</h3></div>
-          <SharePanel picks={picks} electionDate={ballot.electionDate} issueCount={prefs.sel.length} />
+          <SharePanel picks={picks} prefs={prefs} electionDate={ballot.electionDate} />
         </section>
 
         <section className="ask" aria-labelledby="askH">

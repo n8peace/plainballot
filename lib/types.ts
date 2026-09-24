@@ -41,6 +41,10 @@ export interface Contest {
 
 export interface Ballot {
   electionName: string;
+  /** The voter's districts, when their address was found. */
+  districts?: { key: string; label: string }[];
+  /** True when the address was found but none of its races are researched yet. */
+  needsResearch?: boolean;
   electionDate: string; // YYYY-MM-DD
   place: string;
   sample: boolean;

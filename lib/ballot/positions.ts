@@ -2,6 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
 import { ISSUE_IDS, NEITHER, issueById, toPosition, type IssueId, type Position } from '../issues';
+import type { Contest } from '../types';
 
 // Researched positions live as reviewable JSON files in data/positions/, written by
 // `npm run research` and checked by a person before `reviewed` is set to true.
@@ -35,6 +36,8 @@ const StancesSchema = z.partialRecord(z.enum(ISSUE_IDS), StanceSchema).transform
 export const PositionsFileSchema = z.object({
   office: z.string(),
   district: z.string().optional(),
+  /** Which voters see this contest, e.g. "ca/cd-10" or "ca/county-contra-costa". See lib/address/census.ts. */
+  division: z.string().regex(/^[a-z]{2}\/[a-z0-9-]+$/, 'Use a division key like "ca/cd-10" or "ca/county-contra-costa"').optional(),
   kind: z.enum(['candidate', 'measure', 'retention']).default('candidate'),
   issues: z.array(z.enum(ISSUE_IDS)),
   choices: z.array(
@@ -82,4 +85,31 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
   }
   cache = out;
   return out;
+}
+
+/** Researched contests for a voter's districts, used before official candidate lists are published. */
+export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
+  const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
+  return files.map((f) => fileToContest(f));
+}
+
+export function fileToContest(f: PositionsFile): Contest {
+  const measure = f.kind === 'measure';
+  return {
+    id: contestKey(f.office, f.district),
+    kind: measure ? 'measure' : 'candidate',
+    office: f.office,
+    sub: [f.district, measure ? 'Yes or No' : 'Vote for one'].filter(Boolean).join(' · '),
+    issues: f.issues,
+    researched: true,
+    sources: f.sources,
+    choices: f.choices.map((ch) => ({
+      id: slug(ch.name),
+      name: ch.name,
+      party: ch.party,
+      stances: Object.fromEntries(
+        Object.entries(ch.stances).filter(([, s]) => s).map(([id, s]) => [id, { pos: s!.pos, text: s!.text, sourceUrl: s!.sourceUrl }]),
+      ),
+    })),
+  };
 }

@@ -39,3 +39,39 @@ export function picksText(picks: Pick[], electionDate: string): string {
   const lines = picks.map((p) => `• ${p.office}: ${p.pick ?? 'deciding myself'}`);
   return [`My ballot for ${date}, matched to my own priorities:`, ...lines, '', `Make yours (free, nonpartisan): ${SITE_URL}`].join('\n');
 }
+
+/** A link that carries only the voter's dials (never an address or picks). */
+export function compareUrl(p: Prefs): string {
+  return `${SITE_URL}/d/${encodePrefs(p)}`;
+}
+
+export function compareText(p: Prefs): string {
+  return `Here's what I care about this election (${p.sel.length} issues). See where we agree, then get your own ballot, matched to you: ${compareUrl(p)}`;
+}
+
+export interface Agreement {
+  shared: IssueId[];
+  agree: IssueId[];
+  differ: IssueId[];
+  /** Issues the friend chose that you haven't set yet. */
+  unset: IssueId[];
+}
+
+/** Agree = same side of the dial (or both undecided). Only issues both people chose count. */
+export function agreement(mine: Prefs, theirs: Prefs): Agreement {
+  const shared = theirs.sel.filter((id) => mine.sel.includes(id));
+  const side = (v: number | undefined) => Math.sign(v ?? 0);
+  const agree = shared.filter((id) => side(mine.pos[id]) === side(theirs.pos[id]));
+  return { shared, agree, differ: shared.filter((id) => !agree.includes(id)), unset: theirs.sel.filter((id) => !mine.sel.includes(id)) };
+}
+
+/** Opens the "Research a race" form on GitHub, pre-filled with what we know. */
+export function researchIssueUrl(opts: { contest?: string; place?: string; candidates?: string[] }): string {
+  const u = new URL(`${GITHUB_URL}/issues/new`);
+  u.searchParams.set('template', 'research-a-race.yml');
+  const contest = [opts.contest, opts.place].filter(Boolean).join(', ');
+  u.searchParams.set('title', `Research: ${contest || '[Office], [District], [State]'}`);
+  if (contest) u.searchParams.set('contest', contest);
+  if (opts.candidates?.length) u.searchParams.set('candidates', opts.candidates.map((c) => `- ${c}`).join('\n'));
+  return u.toString();
+}

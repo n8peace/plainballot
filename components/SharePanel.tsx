@@ -2,14 +2,17 @@
 
 import { useState, useSyncExternalStore } from 'react';
 import type { Pick } from '@/lib/match';
-import { inviteText, picksText, SITE_URL } from '@/lib/share';
+import { issueById, readout } from '@/lib/issues';
+import { compareText, inviteText, picksText, SITE_URL } from '@/lib/share';
+import type { Prefs } from '@/lib/types';
 
-type Mode = 'invite' | 'picks';
+type Mode = 'invite' | 'compare' | 'picks';
 const noop = () => () => {};
 
-export function SharePanel({ picks, electionDate, issueCount }: { picks: Pick[]; electionDate: string; issueCount: number }) {
+export function SharePanel({ picks, prefs, electionDate }: { picks: Pick[]; prefs: Prefs; electionDate: string }) {
+  const issueCount = prefs.sel.length;
   const [mode, setMode] = useState<Mode>('invite');
-  const generated = mode === 'invite' ? inviteText() : picksText(picks, electionDate);
+  const generated = mode === 'invite' ? inviteText() : mode === 'compare' ? (issueCount ? compareText(prefs) : 'Set a few dials first, then send them to a friend.') : picksText(picks, electionDate);
   // Keep the voter's edits until the generated message itself changes.
   const [edit, setEdit] = useState<{ base: string; text: string } | null>(null);
   const text = edit && edit.base === generated ? edit.text : generated;
@@ -38,8 +41,17 @@ export function SharePanel({ picks, electionDate, issueCount }: { picks: Pick[];
   return (
     <div className="share">
       <div className="card">
-        <div className="cm">{mode === 'picks' ? 'My ballot' : 'Plain Ballot'} <small>{electionDate ? new Date(`${electionDate}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</small></div>
-        {mode === 'picks' ? (
+        <div className="cm">{mode === 'picks' ? 'My ballot' : mode === 'compare' ? 'What I care about' : 'Plain Ballot'} <small>{electionDate ? new Date(`${electionDate}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</small></div>
+        {mode === 'compare' ? (
+          <>
+            <ol>
+              {prefs.sel.slice(0, 8).map((id) => (
+                <li key={id}><span className="o f" /><span className="ro">{issueById[id].name}</span><span className="pk">{readout(issueById[id], prefs.pos[id] ?? 0).replace(/^(Lean|Strongly): /, '')}</span></li>
+              ))}
+            </ol>
+            <div className="foot">This is the picture friends see when you text the link. No candidates, no address.</div>
+          </>
+        ) : mode === 'picks' ? (
           <>
             <ol>
               {picks.map((p) => (
@@ -60,6 +72,7 @@ export function SharePanel({ picks, electionDate, issueCount }: { picks: Pick[];
         <fieldset>
           <legend className="label">What to send</legend>
           <label className="radio"><input type="radio" name="shareMode" id="shareInvite" checked={mode === 'invite'} onChange={() => setMode('invite')} /><span>An invite to try it<small>Friends answer for themselves. Your picks stay private.</small></span></label>
+          <label className="radio"><input type="radio" name="shareMode" id="shareCompare" checked={mode === 'compare'} onChange={() => setMode('compare')} /><span>Compare our priorities<small>Sends your dials, not your picks. Friends see where you agree, then get their own ballot.</small></span></label>
           <label className="radio"><input type="radio" name="shareMode" id="sharePicks" checked={mode === 'picks'} onChange={() => setMode('picks')} /><span>My picks<small>Good for a partner or roommate on the same ballot. Your address is never included.</small></span></label>
         </fieldset>
         <label className="label" htmlFor="shareText" style={{ display: 'block', marginBottom: 6 }}>Your message (edit it if you like)</label>

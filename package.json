@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "research": "node --env-file-if-exists=.env.local --import tsx scripts/research.ts",
     "eval": "node --env-file-if-exists=.env.local --import tsx scripts/eval-interpret.ts",
     "check:research": "node --import tsx scripts/check-positions.ts"

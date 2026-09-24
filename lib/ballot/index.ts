@@ -1,26 +1,57 @@
+import { locate } from '../address/census';
 import type { Ballot } from '../types';
-import { lookupGoogleCivic } from './google-civic';
+import { BallotLookupError, lookupGoogleCivic } from './google-civic';
+import { contestsForDivisions } from './positions';
 import { SAMPLE_BALLOT } from './sample';
 
 export { BallotLookupError } from './google-civic';
 
-/** Live lookup when a Google Civic key is set; otherwise the fictional sample ballot. */
+const ELECTION = { electionName: 'General Election', electionDate: process.env.ELECTION_DATE || SAMPLE_BALLOT.electionDate };
+
+/**
+ * 1. Find the voter's districts (U.S. Census, free).
+ * 2. Official contests and candidates from Google Civic, once published.
+ * 3. Otherwise, the races volunteers have researched for those districts.
+ * 4. Otherwise, the sample ballot, with the voter's real districts shown.
+ */
 export async function getBallot(address: string): Promise<Ballot> {
+  if (address.trim().toLowerCase() === 'sample') return SAMPLE_BALLOT;
+
+  const loc = await locate(address).catch((e) => {
+    console.error('census lookup failed', e);
+    return undefined;
+  });
+  if (loc === null) {
+    throw new BallotLookupError('We couldn’t find that address. Pick it from the suggestions, or check the street number and ZIP code.');
+  }
+  const districts = loc?.districts ?? [];
+  const place = districts.find((d) => d.key.includes('/place-'))?.label ?? loc?.state ?? '';
   const key = process.env.GOOGLE_CIVIC_API_KEY;
-  if (!key || address.trim().toLowerCase() === 'sample') {
+
+  if (key) {
+    const live = await lookupGoogleCivic(loc?.matchedAddress ?? address, key).catch((e) => {
+      if (!(e instanceof BallotLookupError)) console.error('civic lookup failed', e);
+      return null;
+    });
+    if (live?.contests.length) return { ...live, districts };
+  }
+
+  const researched = await contestsForDivisions(districts.map((d) => d.key));
+  if (researched.length) {
     return {
-      ...SAMPLE_BALLOT,
-      notice: key
-        ? SAMPLE_BALLOT.notice
-        : 'Live ballot lookup isn’t connected yet, so this is a sample ballot. The candidates, races and records are fictional.',
+      ...ELECTION,
+      place,
+      sample: false,
+      districts,
+      contests: researched,
+      notice: 'The official candidate list for your address isn’t published yet. These are the races volunteers have researched for your districts so far.',
     };
   }
-  const live = await lookupGoogleCivic(address, key);
-  if (live.contests.length) return live;
-  // The election is listed but races for this address aren't published yet
-  // (Google usually loads them in the last few weeks before Election Day).
+
   return {
     ...SAMPLE_BALLOT,
-    notice: `Your ${live.electionName || 'ballot'} details for ${live.place || 'this address'} haven’t been published yet. That usually happens in the last few weeks before Election Day. Until then, here’s a sample ballot with fictional candidates.`,
+    districts,
+    needsResearch: true,
+    notice: 'We found your districts, but none of your races are researched yet and the official candidate list isn’t published. Here’s a sample ballot until then.',
   };
 }

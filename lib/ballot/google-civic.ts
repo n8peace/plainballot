@@ -1,7 +1,7 @@
 import type { IssueId } from '../issues';
 import type { Ballot, Choice, Contest } from '../types';
 import { issuesForOffice } from './offices';
-import { contestKey, loadPositions, nameKey, slug } from './positions';
+import { contestKey, fileToContest, loadPositions, nameKey, slug } from './positions';
 
 // Ballot contents by address from the Google Civic Information API (voterinfo).
 // Positions come only from our own reviewed research files; a contest we haven't
@@ -70,14 +70,14 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
       sub: [c.referendumSubtitle, 'Yes or No'].filter(Boolean).join(' · '),
       summary: c.referendumBrief,
       issues: found?.issues ?? [],
-      choices: found ? found.choices.map(toChoice) : [],
+      choices: found ? fileToContest(found).choices : [],
       researched: !!found,
       sources: found?.sources,
     };
   }
 
   const issues: IssueId[] = found?.issues ?? issuesForOffice(office);
-  const researchedByName = new Map(found?.choices.map((ch) => [nameKey(ch.name), ch]) ?? []);
+  const researchedByName = new Map(found ? fileToContest(found).choices.map((ch) => [nameKey(ch.name), ch]) : []);
   const choices: Choice[] = (c.candidates ?? []).map((cand) => {
     const r = researchedByName.get(nameKey(cand.name));
     return {
@@ -85,7 +85,7 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
       name: cand.name,
       party: cand.party,
       url: cand.candidateUrl,
-      stances: r ? toChoice(r).stances : {},
+      stances: r?.stances ?? {},
     };
   });
 
@@ -99,18 +99,5 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
     choices,
     researched: !!found,
     sources: found?.sources,
-  };
-}
-
-function toChoice(ch: { name: string; party?: string; stances: Record<string, { pos: -2 | -1 | 0 | 1 | 2; text: string; sourceUrl: string } | undefined> }): Choice {
-  return {
-    id: slug(ch.name),
-    name: ch.name,
-    party: ch.party,
-    stances: Object.fromEntries(
-      Object.entries(ch.stances)
-        .filter((e): e is [string, NonNullable<(typeof e)[1]>] => !!e[1])
-        .map(([id, s]) => [id, { pos: s.pos, text: s.text, sourceUrl: s.sourceUrl }]),
-    ),
   };
 }

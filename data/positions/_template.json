@@ -1,6 +1,7 @@
 {
   "office": "State Senate",
   "district": "District 14",
+  "division": "tx/sldu-14",
   "kind": "candidate",
   "issues": ["tax", "housing", "schools"],
   "choices": [
