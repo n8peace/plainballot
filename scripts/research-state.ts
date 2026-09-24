@@ -117,8 +117,12 @@ async function main() {
 
   const parallel = Number(process.env.RESEARCH_PARALLEL || 2);
   let done = 0;
+  // Stop cleanly before AI credit runs out, rather than failing halfway through a contest.
+  const minBalance = Number(process.env.RESEARCH_MIN_BALANCE || 5);
   const worker = async () => {
     while (queue.length) {
+      const balance = Number((await gateway.getCredits().catch(() => ({ balance: '999' }))).balance);
+      if (balance < minBalance) { console.log(`  ■ stopping: AI credit is $${balance.toFixed(2)} (minimum $${minBalance}). Add credit and rerun to continue.`); return; }
       const file = queue.shift()!;
       const name = path.basename(file, '.json');
       try {
