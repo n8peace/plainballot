@@ -41,6 +41,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   const [jump, setJump] = useState(false);
   const [showCompare, setShowCompare] = useState(!!friend);
   const [askStuck, setAskStuck] = useState(false);
+  const [stars, setStars] = useState<number | null>(null);
   const askRef = useRef<HTMLElement>(null);
   const dialsRef = useRef<HTMLElement>(null);
   const ballotRef = useRef<HTMLElement>(null);
@@ -59,6 +60,12 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   useEffect(() => {
     try { localStorage.setItem(STORE_KEY, encodePrefs(prefs)); } catch {}
   }, [prefs]);
+
+  useEffect(() => {
+    fetch('/api/stars').then((r) => r.json()).then((d: { stars: number | null }) => setStars(d.stars)).catch(() => {});
+  }, []);
+  // Only shown once it's social proof, not a zero.
+  const starLabel = stars === null || stars < 10 ? '' : ` · ${stars >= 1000 ? `${(stars / 1000).toFixed(1).replace(/\.0$/, '')}k` : stars}`;
 
   // Once the star/follow box scrolls away, keep its two buttons pinned to the top.
   useEffect(() => {
@@ -160,7 +167,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
             <p>No ads, no account, no data sold. Every line of code, every dial’s wording and every source is public, so anyone can check our work. If this helped, the only thing we ask is a star or a follow.</p>
           </div>
           <div className="ask-btns">
-            <a className="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">★ Star the code on GitHub</a>
+            <a className="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">★ Star the code on GitHub{starLabel}</a>
             <a className="btn ghost" href={X_URL} target="_blank" rel="noopener noreferrer">Follow @n8peace on X</a>
           </div>
         </section>
@@ -247,7 +254,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
       <div className={`askbar ${askStuck ? 'on' : ''}`} aria-hidden={!askStuck}>
         <span className="askbar-name">Plain Ballot <span>· free and open source</span></span>
         <span className="askbar-btns">
-          <a className="btn small" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" tabIndex={askStuck ? 0 : -1}>★ Star on GitHub</a>
+          <a className="btn small" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" tabIndex={askStuck ? 0 : -1}>★ Star on GitHub{starLabel}</a>
           <a className="btn small ghost" href={X_URL} target="_blank" rel="noopener noreferrer" tabIndex={askStuck ? 0 : -1}>Follow @n8peace</a>
         </span>
       </div>

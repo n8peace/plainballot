@@ -53,3 +53,6 @@ review.html
 recheck-summary.md
 pr-body.md
 *.tmp.mts
+
+# launch plan and outreach (personal, not published)
+launch/
