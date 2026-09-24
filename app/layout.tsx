@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import { Libre_Franklin, Newsreader } from 'next/font/google';
 import { SITE_URL } from '@/lib/share';
@@ -28,7 +29,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${newsreader.variable} ${franklin.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Cookie-free page counts on Vercel; nothing personal is collected. */}
+        <Analytics />
+      </body>
     </html>
   );
 }
