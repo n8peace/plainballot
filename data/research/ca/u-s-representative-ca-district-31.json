@@ -5,12 +5,12 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Eric Ching",
-      "party": "Republican"
-    },
-    {
       "name": "Gil Cisneros",
       "party": "Democratic"
+    },
+    {
+      "name": "Eric Ching",
+      "party": "Republican"
     }
   ]
 }
