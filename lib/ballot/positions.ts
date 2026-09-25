@@ -91,11 +91,34 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
   return out;
 }
 
+// Within the same district, the order offices appear on a California ballot.
+// Checked in this order so "Lieutenant Governor" doesn't match "Governor".
+const OFFICE_ORDER: [RegExp, number][] = [
+  [/lieutenant governor/i, 1], [/governor/i, 0], [/secretary of state/i, 2], [/controller/i, 3], [/treasurer/i, 4],
+  [/attorney general/i, 5], [/insurance commissioner/i, 6], [/board of equalization/i, 7],
+];
+export function officeRank(f: PositionsFile): number {
+  if (f.kind === 'measure') return Number(/\d+/.exec(f.office)?.[0]) || 0;
+  return OFFICE_ORDER.find(([re]) => re.test(f.office))?.[1] ?? 500;
+}
+
 /** Researched contests for a voter's districts, used before official candidate lists are published. */
 export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
   const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
   // Same order as the voter's districts: statewide, U.S. House, legislature, county, city, schools.
-  files.sort((a, b) => keys.indexOf(a.division!) - keys.indexOf(b.division!));
+  // Printed-ballot order: partisan statewide offices, then U.S. Senate, House and
+  // legislature (by district), then nonpartisan offices, then judges, then measures.
+  const group = (f: PositionsFile) =>
+    f.kind === 'measure' ? 4
+      : f.kind === 'retention' ? 3
+        : /superintendent/i.test(f.office) ? 2
+          : f.division!.endsWith('/state') && !/u\.?\s?s\.?\s*senat|united states senat/i.test(f.office) ? 0 : 1;
+  const sortKey = new Map(files.map((f) => [f, [group(f), keys.indexOf(f.division!), officeRank(f)]]));
+  // Compare field by field, so no key can overflow into another.
+  files.sort((a, b) => {
+    const [x, y] = [sortKey.get(a)!, sortKey.get(b)!];
+    return x[0] - y[0] || x[1] - y[1] || x[2] - y[2];
+  });
   return files.map((f) => fileToContest(f));
 }
 

@@ -169,7 +169,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:20px;border-radius:50%;bac
 .race-body{padding:6px 16px 16px}
 .summary{font-size:16px;color:var(--ink-2);margin:8px 0 4px}
 .opts{list-style:none;margin:0;padding:0}
-.opt{display:grid;grid-template-columns:28px 1fr 130px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+.opt,.opts-head{--opts-cols:28px 1fr 130px}
+.opt{display:grid;grid-template-columns:var(--opts-cols);gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
 .opt:last-child{border-bottom:0}
 .oval{width:22px;height:14px;border:1.5px solid var(--ink);border-radius:50%}
 .opt.pick .oval{background:var(--ink)}
@@ -205,7 +206,7 @@ details p{font-size:16px;color:var(--ink-2);margin:8px 0 0 16px}
 .facts b{display:block;font-size:24px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
 .facts span{font-family:var(--sans);font-size:12px;color:var(--ink-2)}
 @media (max-width:560px){
-  .opt{grid-template-columns:24px 1fr}
+  .opt,.opts-head{--opts-cols:24px 1fr}
   .opt .meter{grid-column:2;justify-content:flex-start}
   .facts{grid-template-columns:1fr}
   .facts div{border-right:0;border-bottom:1px solid var(--rule)}
@@ -324,3 +325,12 @@ img{max-width:100%}
 .sample-gate .gate-text{margin:0;font-size:16px;color:var(--ink-2)}
 .sample-gate .rm{margin:0;justify-self:start}
 @media (max-width:560px){.sample-gate{padding:14px;box-shadow:4px 4px 0 var(--ink)}.sample-gate h4{font-size:21px}}
+.opts-head{display:grid;grid-template-columns:var(--opts-cols);gap:12px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:10px 0 2px;border-bottom:1px solid var(--rule)}
+.opts-head span:first-child{grid-column:2}
+.opts-head span:last-child{text-align:right}
+.fit-note{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--ink-2);background:var(--wash);padding:10px 12px;margin:10px 0 0}
+.fit-note b{color:var(--ink);font-weight:600}
+@media (max-width:560px){.opts-head span:last-child{display:none}}
+/* Spelled out for screen readers everywhere, and visibly on phones where the column heading is hidden. */
+.fit-long{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:560px){.fit-long{position:static;width:auto;height:auto;overflow:visible;clip:auto}}
