@@ -330,3 +330,6 @@ img{max-width:100%}
 .fit-note{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--ink-2);background:var(--wash);padding:10px 12px;margin:10px 0 0}
 .fit-note b{color:var(--ink);font-weight:600}
 @media (max-width:560px){.opts-head{grid-template-columns:24px 1fr}.opts-head span:last-child{display:none}}
+/* Spelled out for screen readers everywhere, and visibly on phones where the column heading is hidden. */
+.fit-long{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:560px){.fit-long{position:static;width:auto;height:auto;overflow:visible;clip:auto}}

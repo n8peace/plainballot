@@ -17,9 +17,9 @@ const longName = (c: Choice) => (isYesNo(c) ? `A ${c.name.toLowerCase()} vote` :
 function Meter({ value }: { value: number | null }) {
   if (value === null) return <div className="meter">No match yet</div>;
   return (
-    <div className="meter" title="How closely this choice fits the dials you set. Not a poll or a prediction." aria-label={`Fits your views ${value} percent`}>
+    <div className="meter" title="How closely this choice fits the dials you set. Not a poll or a prediction.">
       <span className="bar"><b style={{ width: `${value}%` }} /></span>
-      {value}% fit
+      {value}% fit<span className="fit-long"> with your views</span>
     </div>
   );
 }
@@ -111,7 +111,7 @@ function Retention({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; 
       <div className="opts-head" aria-hidden="true"><span>Your vote</span><span>Fit with your views</span></div>
       <ul className="opts">
         <li className={`opt ${m !== null && retain ? 'pick' : ''}`}><span className="oval" /><div className="who"><span className="name">Yes, retain</span></div><Meter value={m} /></li>
-        <li className={`opt ${m !== null && !retain ? 'pick' : ''}`}><span className="oval" /><div className="who"><span className="name">No, remove</span></div><Meter value={m === null ? null : 100 - m} /></li>
+        <li className={`opt ${m !== null && !retain ? 'pick' : ''}`}><span className="oval" /><div className="who"><span className="name">No, remove</span></div><div className="meter" /></li>
       </ul>
       <div className="why">
         {m === null ? (

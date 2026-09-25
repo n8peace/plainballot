@@ -168,3 +168,12 @@ describe('state batch research', () => {
     expect(canonicalOffice('U.S. House')).toBe(canonicalOffice('U.S. Representative'));
   });
 });
+
+describe('ballot order', () => {
+  it('ranks Lieutenant Governor after Governor, and measures by number', async () => {
+    const { officeRank } = await import('../lib/ballot/positions');
+    const f = (office: string, kind = 'candidate') => ({ office, kind } as Parameters<typeof officeRank>[0]);
+    expect(officeRank(f('Lieutenant Governor'))).toBeGreaterThan(officeRank(f('Governor')));
+    expect(officeRank(f('Proposition 38', 'measure'))).toBeGreaterThan(officeRank(f('Proposition 5', 'measure')));
+  });
+});

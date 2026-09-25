@@ -91,21 +91,27 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
   return out;
 }
 
+// Within the same district, the order offices appear on a California ballot.
+// Checked in this order so "Lieutenant Governor" doesn't match "Governor".
+const OFFICE_ORDER: [RegExp, number][] = [
+  [/lieutenant governor/i, 1], [/governor/i, 0], [/secretary of state/i, 2], [/controller/i, 3], [/treasurer/i, 4],
+  [/attorney general/i, 5], [/insurance commissioner/i, 6], [/board of equalization/i, 7],
+];
+export function officeRank(f: PositionsFile): number {
+  if (f.kind === 'measure') return Number(/\d+/.exec(f.office)?.[0]) || 0;
+  return OFFICE_ORDER.find(([re]) => re.test(f.office))?.[1] ?? 500;
+}
+
 /** Researched contests for a voter's districts, used before official candidate lists are published. */
 export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
   const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
   // Same order as the voter's districts: statewide, U.S. House, legislature, county, city, schools.
-  // Within the same district (e.g. statewide), follow the order offices appear on the ballot.
-  const OFFICE_ORDER = ['governor', 'lieutenant governor', 'secretary of state', 'controller', 'treasurer', 'attorney general', 'insurance commissioner', 'superintendent', 'board of equalization', 'u.s. senat', 'united states senat'];
-  const rank = (f: PositionsFile) => {
-    const o = f.office.toLowerCase();
-    if (f.kind === 'measure') return 1000 + (Number(/\d+/.exec(o)?.[0]) || 0);
-    const i = OFFICE_ORDER.findIndex((x) => o.includes(x));
-    return i < 0 ? 500 : i;
-  };
-  // Measures go last, as on the printed ballot.
-  const isMeasure = (f: PositionsFile) => (f.kind === 'measure' ? 1 : 0);
-  files.sort((a, b) => isMeasure(a) - isMeasure(b) || keys.indexOf(a.division!) - keys.indexOf(b.division!) || rank(a) - rank(b));
+  // Printed-ballot order: partisan statewide offices, then U.S. Senate, House and
+  // legislature (by district), then nonpartisan offices, then measures.
+  const group = (f: PositionsFile) =>
+    f.kind === 'measure' ? 3 : /superintendent/i.test(f.office) ? 2 : f.division!.endsWith('/state') && !/u\.?\s?s\.?\s*senat|united states senat/i.test(f.office) ? 0 : 1;
+  const rank = new Map(files.map((f) => [f, group(f) * 1e6 + keys.indexOf(f.division!) * 1e3 + officeRank(f)]));
+  files.sort((a, b) => rank.get(a)! - rank.get(b)!);
   return files.map((f) => fileToContest(f));
 }
 
