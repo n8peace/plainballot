@@ -1,12 +1,13 @@
 import { locate } from '../address/census';
 import type { Ballot } from '../types';
 import { BallotLookupError, lookupGoogleCivic } from './google-civic';
+import { levelFor } from '../research/divisions';
 import { contestsForDivisions } from './positions';
 import { SAMPLE_BALLOT } from './sample';
 
 export { BallotLookupError } from './google-civic';
 
-/** States we research for this election. Others get a clear notice and a sample ballot. */
+/** States whose whole ballot we research. Elsewhere, only federal races (U.S. Senate and House). */
 export const COVERED_STATES = (process.env.COVERED_STATES || 'CA').split(',').map((s) => s.trim().toUpperCase());
 
 const ELECTION = { electionName: 'General Election', electionDate: process.env.ELECTION_DATE || SAMPLE_BALLOT.electionDate };
@@ -28,16 +29,27 @@ export async function getBallot(address: string): Promise<Ballot> {
     throw new BallotLookupError('We couldn’t find that address. Pick it from the suggestions, or check the street number and ZIP code.');
   }
   const districts = loc?.districts ?? [];
+  const place = districts.find((d) => d.key.includes('/place-'))?.label ?? loc?.state ?? '';
   if (loc && !COVERED_STATES.includes(loc.state)) {
     const stateName = districts.find((d) => d.key.endsWith('/state'))?.label ?? loc.state;
+    const federal = (await contestsForDivisions(districts.map((d) => d.key))).filter((c) => levelFor(c.office) === 'federal');
+    if (federal.length) {
+      return {
+        ...ELECTION,
+        place,
+        sample: false,
+        districts,
+        contests: federal,
+        notice: `Outside California, Plain Ballot covers federal races: U.S. Senate and U.S. House. Your state and local races in ${stateName} aren’t covered, so check your official sample ballot for the rest.`,
+      };
+    }
     return {
       ...SAMPLE_BALLOT,
       districts,
       needsResearch: true,
-      notice: `Plain Ballot covers California for the November 2026 election. ${stateName} isn’t covered yet, so here’s a sample ballot with fictional candidates. Want your state next? Tell us, or help research it on GitHub.`,
+      notice: `Plain Ballot covers California’s full ballot, and federal races in more states as research finishes. ${stateName} isn’t researched yet, so here’s a sample ballot with fictional candidates. Help research it on GitHub.`,
     };
   }
-  const place = districts.find((d) => d.key.includes('/place-'))?.label ?? loc?.state ?? '';
   const key = process.env.GOOGLE_CIVIC_API_KEY;
 
   if (key) {

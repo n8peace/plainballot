@@ -19,6 +19,9 @@ export interface Located {
 interface Geo { NAME?: string; BASENAME?: string; STUSAB?: string }
 
 const cache = new Memo<Located | null>(2000);
+/** "10" → "cd-10"; at-large seats ("Congressional District (at Large)", DC's delegate) → "cd-at-large". */
+export const cdKey = (basename: string) => (/at large/i.test(basename) ? 'cd-at-large' : `cd-${Number(basename) || basename.toLowerCase()}`);
+
 const slug = (s: string) => s.toLowerCase().replace(/ (city|town|village|cdp)$/, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const first = (geos: Record<string, Geo[]>, match: (layer: string) => boolean): Geo | undefined =>
   Object.entries(geos).find(([k, v]) => match(k) && v?.length)?.[1][0];
@@ -52,7 +55,7 @@ export async function locate(address: string): Promise<Located | null> {
   };
 
   if (state) districts.push({ key: `${st}/state`, label: state.NAME ?? st.toUpperCase() });
-  add(first(g, (k) => k.includes('Congressional Districts')), (b) => `cd-${Number(b) || b.toLowerCase()}`, (x) =>
+  add(first(g, (k) => k.includes('Congressional Districts')), cdKey, (x) =>
     x.BASENAME && /at large/i.test(x.NAME ?? '') ? 'U.S. House (at large)' : `U.S. House District ${x.BASENAME}`);
   add(first(g, (k) => k.includes('Legislative Districts - Upper')), (b) => `sldu-${slug(b)}`, (x) => x.NAME ?? '');
   add(first(g, (k) => k.includes('Legislative Districts - Lower')), (b) => `sldl-${slug(b)}`, (x) => x.NAME ?? '');
