@@ -14,9 +14,9 @@
 
 </div>
 
-Pick the issues you care about and set a dial for each. Enter your address. Plain Ballot goes through your whole ballot, from Congress to the Assembly to the propositions, and shows who fits you, why, and where that came from. Party labels stay hidden until you ask for them.
+Pick the issues you care about and set a dial for each. Enter your address. Plain Ballot goes through your ballot, from Congress to the Assembly to the propositions, and shows who fits you, why, and where that came from. Party labels stay hidden until you ask for them.
 
-Free. No ads, no account, nothing stored. Covering California for Nov 3, 2026.
+Free. No ads, no account, nothing stored. Covering every race in California, plus U.S. House and Senate in all 50 states, for Nov 3, 2026.
 
 ## AI that has to show its work
 

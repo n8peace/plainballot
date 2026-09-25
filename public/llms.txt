@@ -1,6 +1,6 @@
 # Plain Ballot
 
-> Free, open-source, nonpartisan voter guide. A voter picks the issues they care about and sets a dial for each; Plain Ballot matches every race on their ballot (California, Nov 3, 2026) to those priorities and shows an exact, verified quote behind every claim.
+> Free, open-source, nonpartisan voter guide. A voter picks the issues they care about and sets a dial for each; Plain Ballot matches their ballot to those priorities (Nov 3, 2026: every race in California, plus U.S. House and Senate in all 50 states) and shows an exact, verified quote behind every claim.
 
 Matching is deterministic arithmetic in the browser, not AI. Candidate positions are researched by independent AI agents on models from different companies; a position is published only when the agents agree and its quote is found word for word on the cited page. Party labels are hidden until the voter asks.
 

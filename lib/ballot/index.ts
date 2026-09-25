@@ -40,14 +40,14 @@ export async function getBallot(address: string): Promise<Ballot> {
         sample: false,
         districts,
         contests: federal,
-        notice: `Outside California, Plain Ballot covers federal races: U.S. Senate and U.S. House. Your state and local races in ${stateName} aren’t covered, so check your official sample ballot for the rest.`,
+        notice: `Plain Ballot covers every race in California, plus U.S. House and Senate in all 50 states. Your state and local races in ${stateName} aren’t covered, so check your official sample ballot for the rest.`,
       };
     }
     return {
       ...SAMPLE_BALLOT,
       districts,
       needsResearch: true,
-      notice: `Plain Ballot covers California’s full ballot, and federal races in more states as research finishes. ${stateName} isn’t researched yet, so here’s a sample ballot with fictional candidates. Help research it on GitHub.`,
+      notice: `Plain Ballot covers every race in California, plus U.S. House and Senate in all 50 states. The research for ${stateName} isn’t finished yet, so here’s a sample ballot with fictional candidates for now.`,
     };
   }
   const key = process.env.GOOGLE_CIVIC_API_KEY;
