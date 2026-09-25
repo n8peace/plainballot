@@ -3,10 +3,9 @@
   "district": "City of Santa Rosa",
   "division": "ca/place-santa-rosa",
   "kind": "measure",
-  "summary": "A Yes vote reauthorizes the city's existing sales tax at an updated 1-cent (1%) rate, providing about $46,000,000 annually until ended by voters, for 911 emergency medical and police response, fire stations, homeless encampment response, and other services, with audits and public disclosure.",
+  "summary": "A Yes vote extends and increases the city's half-cent sales tax to one cent with no expiration date, raising an estimated $46 million annually for city finances and deferred maintenance.",
   "issues": [
-    "tax",
-    "safety"
+    "tax"
   ],
   "choices": [
     {

@@ -3,8 +3,10 @@
   "district": "City of Redwood City",
   "division": "ca/place-redwood",
   "kind": "measure",
-  "summary": "A Yes vote enacts a rent stabilization and tenant protection ordinance that caps annual rent increases on covered units at the lower of 5% or 60% of the change in the Consumer Price Index, applies just-cause eviction rules, sets relocation payments for no-fault evictions, and funds a rent program through per-unit landlord fees.",
-  "issues": [],
+  "summary": "A Yes vote adopts an ordinance that caps annual rent increases on covered older units, applies just-cause eviction rules with relocation payments for no-fault terminations, and funds the program through per-unit landlord fees.",
+  "issues": [
+    "housing"
+  ],
   "choices": [
     {
       "name": "Yes"

@@ -5,20 +5,20 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Gerald L. Heikes",
-      "party": "Republican"
+      "name": "Heikes, Gerald L.",
+      "party": "Registered Republican"
     },
     {
-      "name": "Mary Peltola",
-      "party": "Democrat"
+      "name": "Peltola, Mary",
+      "party": "Registered Democrat"
     },
     {
-      "name": "Dan S. Sullivan",
-      "party": "Republican"
+      "name": "Sullivan, Dan S.",
+      "party": "Registered Republican"
     },
     {
-      "name": "Daniel J. Sullivan Jr.",
-      "party": "Republican"
+      "name": "Sullivan, Daniel J. Jr.",
+      "party": "Registered Republican"
     }
   ]
 }

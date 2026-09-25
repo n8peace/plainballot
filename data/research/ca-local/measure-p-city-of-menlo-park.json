@@ -3,10 +3,10 @@
   "district": "City of Menlo Park",
   "division": "ca/place-menlo-park",
   "kind": "measure",
-  "summary": "A Yes vote prohibits the City of Menlo Park from selling, leasing, conveying, authorizing new uses on, or making improvements to City-owned downtown parking lots in ways that would reduce parking availability, access, or convenience, unless voters approve the change in a future ballot measure.",
+  "summary": "A Yes vote adopts an ordinance requiring voter approval before the City sells, leases, or otherwise disposes of downtown city-owned parking plaza land in ways that reduce public parking.",
   "issues": [
-    "transit",
-    "housing"
+    "housing",
+    "transit"
   ],
   "choices": [
     {

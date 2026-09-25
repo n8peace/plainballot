@@ -5,20 +5,20 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Nick Begich",
-      "party": "Republican"
+      "name": "Begich, Nick",
+      "party": "Registered Republican"
     },
     {
-      "name": "Eric Hafner",
-      "party": "Democrat"
+      "name": "Hafner, Eric",
+      "party": "Registered Democrat"
     },
     {
-      "name": "Bill Hill",
+      "name": "Hill, Bill",
       "party": "Nonpartisan"
     },
     {
-      "name": "James C. \"Jim\" McDermott",
-      "party": "Libertarian"
+      "name": "McDermott, James C. “Jim”",
+      "party": "Registered Libertarian"
     }
   ]
 }
