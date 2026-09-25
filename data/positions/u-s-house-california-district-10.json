@@ -99,11 +99,11 @@
         },
         "energy": {
           "toward": "faster emissions cuts",
-          "strength": "lean",
-          "text": "Discussed transitioning away from fossil fuels during a visit to a renewable-fuels complex.",
-          "quote": "to discuss the transition away from fossil fuels and their renewable fuel operation.",
-          "sourceUrl": "https://desaulnier.house.gov/media-center/desaulnier-digest/desaulnier-digest-dont-miss-tomorrows-town-hall-antioch",
-          "agreement": "6/10"
+          "strength": "strong",
+          "text": "DeSaulnier endorsed clean-energy legislation and voted against bills that would roll back federal energy-efficiency standards and increase energy consumption.",
+          "quote": "These bills would increase energy consumption, raise utility bills over time, and undermine efforts to reduce pollution.",
+          "sourceUrl": "https://desaulnier.house.gov/media-center/desaulnier-digest/desaulnier-digest-join-our-womens-equality-town-hall-next-thursday",
+          "agreement": "3/3"
         },
         "voting": {
           "toward": "easier voting",
@@ -171,6 +171,6 @@
     }
   ],
   "sources": "desaulnier.house.gov · clerk.house.gov · freseforcongress.com · 2026election.com",
-  "checkedAt": "2026-09-24",
+  "checkedAt": "2026-09-25",
   "reviewed": true
 }
