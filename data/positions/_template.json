@@ -1,4 +1,5 @@
 {
+  "$schema": "../positions.schema.json",
   "office": "State Senate",
   "district": "District 14",
   "division": "tx/sldu-14",

@@ -18,5 +18,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
+      - name: Research file schema is up to date
+        run: npm run schema && git diff --exit-code data/positions.schema.json
       - name: Verify research quotes against their sources
         run: npm run check:research
