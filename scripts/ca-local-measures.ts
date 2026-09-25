@@ -43,22 +43,26 @@ Reply with ONLY this JSON, no other text:
 {"sourceUrl":"<official list>","measures":[{"letter":"A","jurisdiction":"...","type":"city","title":"...","summary":"A Yes vote ..."}]}`;
 }
 
+async function readViaApi(county: string, model: string) {
+  try {
+    const { output } = await generateText({
+      model: model.replace(/^gateway:/, ''),
+      abortSignal: AbortSignal.timeout(10 * 60 * 1000),
+      tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5, maxTokensPerPage: 2048, maxTokens: 12000, country: 'US' }) },
+      stopWhen: isStepCount(8),
+      output: Output.object({ schema: Measures }),
+      prompt: prompt(county),
+    });
+    return output;
+  } catch { return null; }
+}
+
 async function readList(backend: 'claude-code' | 'codex', county: string) {
   const parse = (t: string) => Measures.parse(JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)));
   try { return parse(await runCli(backend, prompt(county))); } catch (e) {
     console.log(`  ${backend} unavailable for ${county} (${(e as Error).message.slice(0, 80)}); reading via the API instead`);
-    try {
-      const { output } = await generateText({
-        // A different model for each reader, so two fallbacks are still independent.
-        model: backend === 'codex' ? 'anthropic/claude-haiku-4.5' : (process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra').replace(/^gateway:/, ''),
-        abortSignal: AbortSignal.timeout(10 * 60 * 1000),
-        tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5, maxTokensPerPage: 2048, maxTokens: 12000, country: 'US' }) },
-        stopWhen: isStepCount(8),
-        output: Output.object({ schema: Measures }),
-        prompt: prompt(county),
-      });
-      return output;
-    } catch { return null; }
+    // A different model for each reader, so two fallbacks are still independent.
+    return readViaApi(county, backend === 'codex' ? 'anthropic/claude-haiku-4.5' : process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra');
   }
 }
 
@@ -74,10 +78,19 @@ export function localDivision(m: Pick<Measure, 'jurisdiction' | 'type'>, county:
 }
 
 const letter = (m: Measure) => m.letter.replace(/^measure\s+/i, '').replace(/\W/g, '').toUpperCase();
-const same = (a: Measure, b: Measure, county: string) => letter(a) === letter(b) && localDivision(a, county) === localDivision(b, county);
+// The registrar gives every measure in a county its own letter, so the letter identifies it
+// (readers may label San Francisco's measures "city" or "county"; both reach the same voters).
+const inAtLeast = (lists: Measure[][], n: number) => {
+  const seen = new Map<string, { m: Measure; count: number }>();
+  for (const l of lists) for (const k of new Set(l.map(letter))) {
+    const m = l.find((x) => letter(x) === k)!;
+    seen.set(k, { m: seen.get(k)?.m ?? m, count: (seen.get(k)?.count ?? 0) + 1 });
+  }
+  return [...seen.values()].filter((x) => x.count >= n).map((x) => x.m);
+};
 
 async function main() {
-  const only = process.argv.includes('--county') ? [process.argv[process.argv.indexOf('--county') + 1]] : CA_COUNTIES;
+  const only = process.argv.includes('--county') ? process.argv[process.argv.indexOf('--county') + 1].split(',').map((c) => c.trim()) : CA_COUNTIES;
   const dir = path.join(process.cwd(), 'data', 'research', 'ca-local');
   await mkdir(dir, { recursive: true });
   const existing = new Set((await readdir(POSITIONS_DIR)).map((f) => f.replace(/\.json$/, '')));
@@ -88,7 +101,14 @@ async function main() {
   const lister = async () => { while (counties.length) { const county = counties.shift()!;
     const [a, b] = await Promise.all([readList('claude-code', county), readList('codex', county)]);
     if (!a || !b) { console.log(`${county}: need two independent readers; skipped`); continue; }
-    const agreed = a.measures.filter((m) => b.measures.some((o) => same(m, o, county)));
+    let agreed = inAtLeast([a.measures, b.measures], 2);
+    const differ = new Set([...a.measures, ...b.measures].map(letter)).size !== agreed.length;
+    let note = `${a.measures.length} and ${b.measures.length} listed`;
+    if (differ) {
+      // The readers disagree: a third reader on a different model decides, 2 of 3.
+      const c = await readViaApi(county, 'google/gemini-3.8-flash');
+      if (c) { agreed = inAtLeast([a.measures, b.measures, c.measures], 2); note += `, third reader ${c.measures.length}`; }
+    }
     let kept = 0;
     for (const m of agreed) {
       const division = localDivision(m, county);
@@ -106,7 +126,7 @@ async function main() {
       if (issues.length && !existing.has(key)) queue.push(path.join(dir, `${key}.json`));
       kept++;
     }
-    console.log(`${county}: ${kept} measures kept (${a.measures.length} and ${b.measures.length} listed) · ${a.sourceUrl ?? b.sourceUrl ?? ''}`);
+    console.log(`${county}: ${kept} measures kept (${note}) · ${a.sourceUrl ?? b.sourceUrl ?? ''}`);
   } };
   await Promise.all(Array.from({ length: Number(process.env.LIST_PARALLEL || 3) }, lister));
   console.log(`\n${queue.length} measures to research.`);
