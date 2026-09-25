@@ -10,10 +10,10 @@ export async function GET(req: NextRequest) {
   if (address.length < 5 || address.length > 200) {
     return Response.json({ error: 'Enter your street address and ZIP code.' }, { status: 400 });
   }
-  if ((await checkBotId()).isBot) {
-    return Response.json({ error: 'This looks automated. Try again from your browser.' }, { status: 403 });
-  }
-  if (!allow(`ballot:${clientIp(req)}`, 30)) {
+  // Ballot lookup uses free services and is the core of the site, so a suspected
+  // bot is slowed down, never blocked outright: a false positive must not stop a voter.
+  const suspected = (await checkBotId()).isBot;
+  if (!allow(`ballot:${suspected ? 'bot:' : ''}${clientIp(req)}`, suspected ? 5 : 30)) {
     return Response.json({ error: 'Too many lookups in a few minutes. Wait a bit and try again.' }, { status: 429 });
   }
   try {
