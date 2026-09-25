@@ -107,11 +107,18 @@ export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
   const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
   // Same order as the voter's districts: statewide, U.S. House, legislature, county, city, schools.
   // Printed-ballot order: partisan statewide offices, then U.S. Senate, House and
-  // legislature (by district), then nonpartisan offices, then measures.
+  // legislature (by district), then nonpartisan offices, then judges, then measures.
   const group = (f: PositionsFile) =>
-    f.kind === 'measure' ? 3 : /superintendent/i.test(f.office) ? 2 : f.division!.endsWith('/state') && !/u\.?\s?s\.?\s*senat|united states senat/i.test(f.office) ? 0 : 1;
-  const rank = new Map(files.map((f) => [f, group(f) * 1e6 + keys.indexOf(f.division!) * 1e3 + officeRank(f)]));
-  files.sort((a, b) => rank.get(a)! - rank.get(b)!);
+    f.kind === 'measure' ? 4
+      : f.kind === 'retention' ? 3
+        : /superintendent/i.test(f.office) ? 2
+          : f.division!.endsWith('/state') && !/u\.?\s?s\.?\s*senat|united states senat/i.test(f.office) ? 0 : 1;
+  const sortKey = new Map(files.map((f) => [f, [group(f), keys.indexOf(f.division!), officeRank(f)]]));
+  // Compare field by field, so no key can overflow into another.
+  files.sort((a, b) => {
+    const [x, y] = [sortKey.get(a)!, sortKey.get(b)!];
+    return x[0] - y[0] || x[1] - y[1] || x[2] - y[2];
+  });
   return files.map((f) => fileToContest(f));
 }
 
