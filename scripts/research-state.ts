@@ -105,8 +105,18 @@ async function listMeasures(state: string) {
   const parse = (t: string) => Measures.parse(JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)));
   const read = async (backend: 'claude-code' | 'codex') => {
     try { return parse(await runCli(backend, measuresPrompt(state))); } catch (e) {
-      console.log(`  ${backend} unavailable for measures (${(e as Error).message.slice(0, 80)}); skipping that reader`);
-      return null;
+      console.log(`  ${backend} unavailable for measures (${(e as Error).message.slice(0, 80)}); reading via the API instead`);
+      try {
+        const { output } = await generateText({
+          model: (process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra').replace(/^gateway:/, ''),
+          abortSignal: AbortSignal.timeout(10 * 60 * 1000),
+          tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5, maxTokensPerPage: 2048, maxTokens: 12000, country: 'US' }) },
+          stopWhen: isStepCount(8),
+          output: Output.object({ schema: Measures }),
+          prompt: measuresPrompt(state),
+        });
+        return output;
+      } catch { return null; }
     }
   };
   const [a, b] = await Promise.all([read('claude-code'), read('codex')]);
