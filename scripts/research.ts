@@ -18,6 +18,7 @@ import { contestKey, POSITIONS_DIR, type PositionsFileInput } from '../lib/ballo
 import { ISSUE_IDS, issueById, NEITHER, type IssueId } from '../lib/issues';
 import { RESEARCH_MODELS } from '../lib/research/agent';
 import { findRoster } from '../lib/research/roster';
+import { researchMeasure, sideLabel } from '../lib/research/measure';
 import { researchWithConsensus } from '../lib/research/run';
 
 const Input = z.object({
@@ -28,6 +29,8 @@ const Input = z.object({
   summary: z.string().optional(),
   issues: z.array(z.enum(ISSUE_IDS)).optional(),
   choices: z.array(z.object({ name: z.string(), party: z.string().optional(), sources: z.array(z.url()).optional() })).optional(),
+  /** Measures: the official page with the measure's text, if known. */
+  sourceUrl: z.string().optional(),
 });
 
 async function main() {
@@ -38,6 +41,30 @@ async function main() {
   const issues = input.issues ?? issuesForOffice(input.office);
   const office = [input.office, input.district].filter(Boolean).join(', ');
   console.log(`Researching ${office} with ${RESEARCH_MODELS.join(', ')}`);
+
+  // Measures: read the official text with three models (cents per measure), unless
+  // MEASURE_MODE=agents asks for the full agent research.
+  // If no official text can be read (many registrar sites are scripts or PDFs), fall back to agents.
+  const cheap = input.kind === 'measure' && process.env.MEASURE_MODE !== 'agents'
+    ? await researchMeasure({ office: input.office, district: input.district, summary: input.summary, issues, sourceUrl: input.sourceUrl }).catch(() => null)
+    : null;
+  if (cheap && Object.keys(cheap.yes).length) {
+    const r = cheap;
+    const side = (rec: typeof r.yes) => Object.fromEntries(Object.entries(rec).map(([id, s]) => [id, {
+      toward: sideLabel(id as IssueId, s!.pos), strength: Math.abs(s!.pos) === 2 ? 'strong' : 'lean', text: s!.text, quote: s!.quote, sourceUrl: s!.sourceUrl, agreement: s!.agreement,
+    }]));
+    for (const id of issues) console.log(`    ${issueById[id].name}: ${r.yes[id] ? `Yes → ${sideLabel(id, r.yes[id]!.pos)} (${r.yes[id]!.agreement}) ✓` : 'no agreement, left blank'}`);
+    const out: PositionsFileInput = {
+      office: input.office, district: input.district, division: input.division, kind: 'measure', summary: input.summary, issues,
+      choices: [{ name: 'Yes', stances: side(r.yes) }, { name: 'No', stances: side(r.no) }],
+      sources: r.sourceUrl ? new URL(r.sourceUrl).hostname.replace(/^www\./, '') : undefined,
+      checkedAt: new Date().toISOString().slice(0, 10), reviewed: false,
+    };
+    const dest = path.join(POSITIONS_DIR, `${contestKey(input.office, input.district)}.json`);
+    await writeFile(dest, JSON.stringify(out, null, 2) + '\n');
+    console.log(`\nWrote ${path.relative(process.cwd(), dest)}.`);
+    return;
+  }
 
   const roster = input.choices ?? (input.kind === 'measure' ? [{ name: 'Yes' }, { name: 'No' }] : await findRoster(input.office, input.district));
   if (!roster.length) throw new Error('Could not confirm who is on the ballot. Add "choices" to the input file.');

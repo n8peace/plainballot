@@ -120,7 +120,7 @@ async function main() {
       const district = m.jurisdiction;
       const key = contestKey(office, district);
       const issues = await mapMeasureIssues('California', { number: letter(m), title: m.title, summary: m.summary }, `${m.jurisdiction} Measure ${letter(m)}`);
-      const input = { office, district, division, kind: 'measure', summary: m.summary, issues, choices: [{ name: 'Yes' }, { name: 'No' }] };
+      const input = { office, district, division, kind: 'measure', summary: m.summary, issues, sourceUrl: a.sourceUrl ?? b.sourceUrl, choices: [{ name: 'Yes' }, { name: 'No' }] };
       await writeFile(path.join(dir, `${key}.json`), JSON.stringify(input, null, 2) + '\n');
       if (!issues.length && !existing.has(key)) {
         // Still shown on the ballot with its summary, just without a match.
