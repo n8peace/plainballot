@@ -20,7 +20,8 @@
     "consensus": "node --env-file-if-exists=.env.local --import tsx scripts/consensus.ts",
     "research:queue": "node --env-file-if-exists=.env.local --import tsx scripts/research-queue.ts",
     "bias-check": "node --env-file-if-exists=.env.local --import tsx scripts/bias-check.ts",
-    "schema": "node --import tsx scripts/positions-schema.ts"
+    "schema": "node --import tsx scripts/positions-schema.ts",
+    "ca:local-measures": "node --env-file-if-exists=.env.local --import tsx scripts/ca-local-measures.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
