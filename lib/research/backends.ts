@@ -24,7 +24,7 @@ function runClosed(cmd: string, args: string[], cwd: string, timeoutMs: number):
     child.stderr.on('data', (d) => { err = (err + d).slice(-2000); });
     const t = setTimeout(() => { child.kill('SIGKILL'); reject(new Error(`${cmd} timed out`)); }, timeoutMs);
     child.on('error', (e) => { clearTimeout(t); reject(e); });
-    child.on('close', (code) => { clearTimeout(t); code === 0 ? resolve() : reject(new Error(`${cmd} exited ${code}: ${err.trim().split('\n').pop()}`)); });
+    child.on('close', (code) => { clearTimeout(t); if (code === 0) resolve(); else reject(new Error(`${cmd} exited ${code}: ${err.trim().split('\n').pop()}`)); });
   });
 }
 

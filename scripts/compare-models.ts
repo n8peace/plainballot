@@ -25,7 +25,7 @@ async function main() {
         const r = await runAgent({ name: c.name, office: c.office, issues: c.issues, run: 0 });
         for (const id of c.issues) {
           const a = c.approved[id], g = r[id];
-          if (a && g) Math.sign(a.pos) === Math.sign(g.pos) ? agree++ : conflict++;
+          if (a && g) { if (Math.sign(a.pos) === Math.sign(g.pos)) agree++; else conflict++; }
           else if (a && !g) missed++;
           else if (!a && g) extra++;
         }

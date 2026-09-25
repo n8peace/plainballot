@@ -101,6 +101,23 @@ Reply with ONLY this JSON, no other text:
 {"sourceUrl":"<official list>","measures":[{"number":"<e.g. 50>","title":"...","summary":"A Yes vote ...","issues":["<issue id>"]}]}`;
 }
 
+/** Which dials a measure decides: 3 models vote from its official title and summary; an issue needs 2 of 3. */
+async function mapMeasureIssues(state: string, m: { number: string; title: string; summary: string }): Promise<string[]> {
+  const models = ['openai/gpt-5.6-luna', 'google/gemini-3.8-flash', 'openai/gpt-5.6-terra'];
+  const votes = new Map<string, number>();
+  const settled = await Promise.allSettled(models.map((model) => generateText({
+    model,
+    abortSignal: AbortSignal.timeout(2 * 60 * 1000),
+    output: Output.object({ schema: z.object({ issues: z.array(z.string()) }) }),
+    prompt: `${state} Proposition ${m.number}: ${m.title}. ${m.summary}
+Which of these issues does a Yes or No vote on this measure directly decide? Pick only issues where the measure clearly moves policy toward one side. Often it's 1 or 2, sometimes none.
+${sideGuide(ISSUE_IDS)}
+Reply with the issue ids.`,
+  })));
+  for (const r of settled) if (r.status === 'fulfilled') for (const id of new Set(r.value.output.issues)) votes.set(id, (votes.get(id) ?? 0) + 1);
+  return [...votes].filter(([id, n]) => n >= 2 && (ISSUE_IDS as readonly string[]).includes(id)).map(([id]) => id);
+}
+
 async function listMeasures(state: string) {
   const parse = (t: string) => Measures.parse(JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)));
   const read = async (backend: 'claude-code' | 'codex') => {
@@ -122,14 +139,15 @@ async function listMeasures(state: string) {
   const [a, b] = await Promise.all([read('claude-code'), read('codex')]);
   if (!a || !b) { console.log('  measures: need two independent readers; skipped'); return []; }
   const byNum = new Map(b.measures.map((m) => [m.number.replace(/\D/g, ''), m]));
-  const valid = (ids: string[]) => ids.filter((id) => (ISSUE_IDS as readonly string[]).includes(id));
   const agreed = a.measures.flatMap((m) => {
     const other = byNum.get(m.number.replace(/\D/g, ''));
     if (!other) { console.log(`  ? only one agent listed Proposition ${m.number}; skipped`); return []; }
-    // Issues: only the ones both readers tied to this measure.
-    const issues = valid(m.issues).filter((id) => valid(other.issues).includes(id));
-    return [{ ...m, number: m.number.replace(/\D/g, ''), issues }];
+    return [{ ...m, number: m.number.replace(/\D/g, ''), issues: [] as string[] }];
   });
+  for (const m of agreed) {
+    m.issues = await mapMeasureIssues(state, m);
+    console.log(`  Proposition ${m.number}: ${m.issues.length ? m.issues.join(', ') : 'no dial applies'}`);
+  }
   console.log(`  measures: ${agreed.length} agreed (${a.measures.length} and ${b.measures.length} listed) · ${a.sourceUrl ?? b.sourceUrl ?? ''}`);
   return agreed;
 }
@@ -163,7 +181,9 @@ async function main() {
           await writeFile(posFile, JSON.stringify({ ...input, choices: [{ name: 'Yes', stances: {} }, { name: 'No', stances: {} }], checkedAt: new Date().toISOString().slice(0, 10), reviewed: false }, null, 2) + '\n');
           console.log(`  Proposition ${m.number}: no dial applies; listed with its summary, no match`);
         }
-        if (m.issues.length && !covered.has(`${division}|${canonicalOffice(office)}`)) queue.push(file);
+        const existing = path.join(POSITIONS_DIR, `${contestKey(office, m.title)}.json`);
+        const hadNoIssues = await readFile(existing, 'utf8').then((t) => !JSON.parse(t).issues?.length).catch(() => true);
+        if (m.issues.length && (!covered.has(`${division}|${canonicalOffice(office)}`) || hadNoIssues)) queue.push(file);
       }
       continue;
     }
