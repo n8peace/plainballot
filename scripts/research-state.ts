@@ -178,6 +178,9 @@ async function main() {
   if (!state || !/^[A-Z]{2}$/.test(state)) throw new Error('Usage: npm run research:state -- CA [--only federal|statewide|legislature] [--list]');
   const only = process.argv.includes('--only') ? (process.argv[process.argv.indexOf('--only') + 1] as Level) : null;
   const levels: Level[] = only ? [only] : ['federal', 'statewide', 'legislature', 'measures'];
+  // Don't start (reading lists costs AI credit too) when credit is already near the floor.
+  const startBalance = Number((await gateway.getCredits().catch(() => ({ balance: '999' }))).balance);
+  if (startBalance < Number(process.env.RESEARCH_MIN_BALANCE || 5) * 2) { console.log(`  ■ not starting: AI credit is $${startBalance.toFixed(2)}. Add credit and rerun.`); return; }
   const dir = path.join(process.cwd(), 'data', 'research', state.toLowerCase());
   await mkdir(dir, { recursive: true });
 

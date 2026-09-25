@@ -95,6 +95,9 @@ async function main() {
   await mkdir(dir, { recursive: true });
   const existing = new Set((await readdir(POSITIONS_DIR)).map((f) => f.replace(/\.json$/, '')));
   const queue: string[] = [];
+  // Don't start (reading lists costs AI credit too) when credit is already near the floor.
+  const startBalance = Number((await gateway.getCredits().catch(() => ({ balance: '999' }))).balance);
+  if (startBalance < Number(process.env.RESEARCH_MIN_BALANCE || 5) * 2) { console.log(`  ■ not starting: AI credit is $${startBalance.toFixed(2)}. Add credit and rerun.`); return; }
 
   // A few counties at a time: each read is a long agent session.
   const counties = [...only];
