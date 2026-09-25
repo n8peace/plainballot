@@ -67,6 +67,14 @@ export function agreement(mine: Prefs, theirs: Prefs): Agreement {
   return { shared, agree, differ: shared.filter((id) => !agree.includes(id)), unset: theirs.sel.filter((id) => !mine.sel.includes(id)) };
 }
 
+/** The open "Research races in <State>" issue in Open Election Data, where people pick a race to research. */
+export function stateResearchUrl(state?: string): string {
+  if (!state) return `${DATA_REPO_URL}/blob/main/CONTRIBUTING.md`;
+  const u = new URL(`${DATA_REPO_URL}/issues`);
+  u.searchParams.set('q', `is:issue is:open "Research races in ${state}"`);
+  return u.toString();
+}
+
 /** Opens the "Research a race" form on GitHub, pre-filled with what we know. */
 export function researchIssueUrl(opts: { contest?: string; place?: string; candidates?: string[] }): string {
   const u = new URL(`${DATA_REPO_URL}/issues/new`);

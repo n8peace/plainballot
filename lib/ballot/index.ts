@@ -39,6 +39,7 @@ export async function getBallot(address: string): Promise<Ballot> {
         sample: false,
         districts,
         contests: federal,
+        partial: true,
         notice: `Plain Ballot covers every race in California, plus U.S. House and Senate in all 50 states. Your state and local races in ${stateName} aren’t covered, so check your official sample ballot for the rest.`,
       };
     }

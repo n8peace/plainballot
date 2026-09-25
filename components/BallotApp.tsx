@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Importance, IssueId, Position } from '@/lib/issues';
 import { picksFor } from '@/lib/match';
-import { decodePrefs, encodePrefs, GITHUB_URL, researchIssueUrl, X_URL } from '@/lib/share';
+import { DATA_REPO_URL, decodePrefs, encodePrefs, GITHUB_URL, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Ballot, Prefs } from '@/lib/types';
 import { AddressInput } from './AddressInput';
 import { ComparePanel } from './ComparePanel';
@@ -141,6 +141,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   };
 
   const researched = ballot.contests.filter((c) => c.researched).length;
+  const stateName = ballot.districts?.find((d) => d.key.endsWith('/state'))?.label;
 
   return (
     <>
@@ -192,12 +193,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
             <div className="districts">
               <span className="label">Your districts</span>
               <ul>{ballot.districts.map((d) => <li key={d.key}>{d.label}</li>)}</ul>
-              {ballot.needsResearch && (
-                <p className="research-cta">
-                  None of your races are researched yet. Help put your area on the map: pick one race and research it in about 20 minutes, no coding needed.{' '}
-                  <a className="btn small" href={researchIssueUrl({ place: ballot.districts.find((d) => d.key.endsWith('/state'))?.label })} target="_blank" rel="noopener noreferrer">Research a race here</a>
-                </p>
-              )}
+              {(ballot.needsResearch || ballot.partial) && <ResearchCta state={stateName} partial={!!ballot.partial} />}
             </div>
           )}
         </section>
@@ -250,6 +246,9 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
                     <button className="btn" type="submit" disabled={looking || address.trim().length < 5}>{looking ? 'Finding…' : 'Find my ballot'}</button>
                   </div>
                 )}
+                {ballot.needsResearch && (
+                  <p><a className="btn" href={stateResearchUrl(stateName)} target="_blank" rel="noopener noreferrer">Help research {stateName ?? 'your area'}</a></p>
+                )}
                 {lookupError && <p className="err" role="alert">{lookupError}</p>}
                 <button type="button" className="rm" onClick={() => setSampleDismissed(true)}>Explore the sample ballot instead</button>
               </form>
@@ -294,5 +293,24 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
         <a href="#s3" tabIndex={jump ? 0 : -1}>See my ballot</a>
       </div>
     </>
+  );
+}
+
+/** Invites the voter to research their own area in Open Election Data. */
+function ResearchCta({ state, partial }: { state?: string; partial: boolean }) {
+  const where = state ?? 'your area';
+  return (
+    <div className="research-cta">
+      <p>
+        {partial
+          ? <>Outside California we cover U.S. House and Senate races. {where}’s state and local races aren’t researched yet.</>
+          : <>{where === 'your area' ? 'Your area' : where} isn’t researched yet.</>}
+        {' '}Plain Ballot runs on <b>Open Election Data</b>, free research anyone can add to. Pick one race and research it in about 20 minutes, no coding needed.
+      </p>
+      <p>
+        <a className="btn small" href={stateResearchUrl(state)} target="_blank" rel="noopener noreferrer">Help research {where}</a>{' '}
+        <a className="small-link" href={`${DATA_REPO_URL}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener noreferrer">How it works</a>
+      </p>
+    </div>
   );
 }
