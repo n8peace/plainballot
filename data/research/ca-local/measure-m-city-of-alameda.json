@@ -1,0 +1,16 @@
+{
+  "office": "Measure M",
+  "district": "City of Alameda",
+  "division": "ca/place-alameda",
+  "kind": "measure",
+  "summary": "A Yes vote amends the City Charter to revise or repeal outdated provisions across multiple sections.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

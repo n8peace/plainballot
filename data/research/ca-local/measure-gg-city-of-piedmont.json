@@ -1,0 +1,18 @@
+{
+  "office": "Measure GG",
+  "district": "City of Piedmont",
+  "division": "ca/place-piedmont",
+  "kind": "measure",
+  "summary": "A Yes vote increases the City of Piedmont's real property transfer tax from $13.00 to $17.50 per $1,000 of consideration, raising about $1.5 million annually for general city services until ended by voters.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

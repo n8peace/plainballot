@@ -1,0 +1,18 @@
+{
+  "office": "Measure D",
+  "district": "City of Fresno",
+  "division": "ca/place-fresno",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a half-cent general transactions and use (sales) tax in the City of Fresno, with revenue placed in the city's general fund.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

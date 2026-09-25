@@ -1,0 +1,18 @@
+{
+  "office": "Measure II",
+  "district": "City of Union City",
+  "division": "ca/place-union",
+  "kind": "measure",
+  "summary": "A Yes vote extends the City of Union City's existing Utility Users Tax at the current 5% rate for 9 years, providing about $7 million annually for general city services, with senior and low-income exemptions.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

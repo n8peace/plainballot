@@ -1,0 +1,19 @@
+{
+  "office": "Measure P",
+  "district": "City of Albany",
+  "division": "ca/place-albany",
+  "kind": "measure",
+  "summary": "A Yes vote sets the Street Paving and Storm Drain special parcel tax at $0.0638 per lot square foot and adds low-income exemptions and rebates, raising about $1.4 million per year until ended by voters.",
+  "issues": [
+    "tax",
+    "transit"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

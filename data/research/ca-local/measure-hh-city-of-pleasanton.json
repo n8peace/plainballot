@@ -1,0 +1,18 @@
+{
+  "office": "Measure HH",
+  "district": "City of Pleasanton",
+  "division": "ca/place-pleasanton",
+  "kind": "measure",
+  "summary": "A Yes vote increases the City of Pleasanton's transient occupancy tax paid by hotel guests from 8% to 10% on July 1, 2027 and to 12% on July 1, 2028, raising an estimated $1.4 million to $2.8 million per year for general city services until ended by voters.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

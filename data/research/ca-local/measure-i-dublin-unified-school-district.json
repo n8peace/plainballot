@@ -1,0 +1,19 @@
+{
+  "office": "Measure I",
+  "district": "Dublin Unified School District",
+  "division": "ca/school-dublin-unified",
+  "kind": "measure",
+  "summary": "A Yes vote renews the district's expiring parcel tax and sets it at $144 per parcel per year for 9 years, raising about $3 million annually for teacher retention and class-size reduction.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

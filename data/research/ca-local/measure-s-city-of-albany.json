@@ -1,0 +1,18 @@
+{
+  "office": "Measure S",
+  "district": "City of Albany",
+  "division": "ca/place-albany",
+  "kind": "measure",
+  "summary": "A Yes vote changes the real property transfer tax from a flat $15 per $1,000 to a tiered rate of $10 to $30 per $1,000 based on sale price, raising about $1 million per year for general city services until ended by voters.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

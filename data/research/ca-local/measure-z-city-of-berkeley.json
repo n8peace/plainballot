@@ -1,0 +1,19 @@
+{
+  "office": "Measure Z",
+  "district": "City of Berkeley",
+  "division": "ca/place-berkeley",
+  "kind": "measure",
+  "summary": "A Yes vote creates a special parcel tax of $0.06 per square foot of residential improvements and $0.09 per square foot of non-residential improvements for six years, estimated to raise about $9.2 million the first year, to capitalize and support a public bank funding affordable housing, green energy and infrastructure, and small businesses.",
+  "issues": [
+    "tax",
+    "energy"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

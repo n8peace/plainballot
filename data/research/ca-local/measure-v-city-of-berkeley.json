@@ -1,0 +1,18 @@
+{
+  "office": "Measure V",
+  "district": "City of Berkeley",
+  "division": "ca/place-berkeley",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a 0.5% transactions and use (sales) tax in the City of Berkeley for general municipal purposes, estimated to raise more than $9 million per year.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

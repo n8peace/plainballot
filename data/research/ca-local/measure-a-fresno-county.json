@@ -1,0 +1,18 @@
+{
+  "office": "Measure A",
+  "district": "Fresno County",
+  "division": "ca/county-fresno",
+  "kind": "measure",
+  "summary": "A Yes vote imposes a transient occupancy (hotel/lodging) tax on guests staying at short-term lodging in unincorporated Fresno County.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

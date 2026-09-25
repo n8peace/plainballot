@@ -1,0 +1,18 @@
+{
+  "office": "Measure S",
+  "district": "Fresno County",
+  "division": "ca/county-fresno",
+  "kind": "measure",
+  "summary": "A Yes vote imposes a new half-cent countywide transactions and use (sales) tax for 30 years to fund transportation, including road maintenance, public transit, and related projects.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "office": "Measure O",
+  "district": "City of Albany",
+  "division": "ca/place-albany",
+  "kind": "measure",
+  "summary": "A Yes vote amends the existing voter-approval requirement so the City Council can approve zoning changes to single-family residential areas without a neighborhood voter approval vote.",
+  "issues": [
+    "housing"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
