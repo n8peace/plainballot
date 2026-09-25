@@ -15,7 +15,10 @@
     "review": "node --import tsx scripts/review-sheet.ts",
     "recheck": "node --env-file-if-exists=.env.local --import tsx scripts/recheck.ts",
     "research:state": "node --env-file-if-exists=.env.local --import tsx scripts/research-state.ts",
-    "compare-models": "node --env-file-if-exists=.env.local --import tsx scripts/compare-models.ts"
+    "compare-models": "node --env-file-if-exists=.env.local --import tsx scripts/compare-models.ts",
+    "ca:list": "node --import tsx scripts/ca-cert-list.ts",
+    "consensus": "node --env-file-if-exists=.env.local --import tsx scripts/consensus.ts",
+    "research:queue": "node --env-file-if-exists=.env.local --import tsx scripts/research-queue.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

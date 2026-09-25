@@ -3,7 +3,7 @@
 
 import type { IssueId } from '../issues';
 import { runAgent, modelFor } from './agent';
-import { decide, FIRST_ROUND, FULL_ROUND, needsEscalation, type AgentResult, type Decision } from './consensus';
+import { decide, FIRST_ROUND, FULL_ROUND, hasConflict, needsEscalation, type AgentResult, type Decision } from './consensus';
 
 export interface CandidateResearch {
   decisions: Partial<Record<IssueId, Decision>>;
@@ -36,8 +36,11 @@ export async function researchWithConsensus(
   let runs = await runMany(0, FIRST_ROUND, base, log);
   if (runs.length < FIRST_ROUND) runs = runs.concat(await runMany(FIRST_ROUND, FIRST_ROUND - runs.length, base, log));
   if (needsEscalation(opts.issues, runs)) {
-    log(`    agents disagree on some issues; running ${FULL_ROUND - runs.length} more`);
-    runs = runs.concat(await runMany(runs.length, FULL_ROUND - runs.length, base, log));
+    // Real disagreement (opposite sides): 10 agents and a majority. Only sparse finds
+    // (one agent found something, the others found nothing): 2 more agents, total 5.
+    const target = hasConflict(opts.issues, runs) ? FULL_ROUND : 5;
+    log(`    ${target === FULL_ROUND ? 'agents disagree' : 'only one agent found some positions'}; running ${target - runs.length} more`);
+    runs = runs.concat(await runMany(runs.length, target - runs.length, base, log));
   }
   const decisions: CandidateResearch['decisions'] = {};
   const split: IssueId[] = [];

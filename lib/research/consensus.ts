@@ -55,3 +55,8 @@ export function decide(issue: IssueId, runs: AgentResult[]): Decision | null {
 export function needsEscalation(issues: IssueId[], runs: AgentResult[]): boolean {
   return issues.some((id) => decide(id, runs) === null);
 }
+
+/** True when agents found opposite positions on an issue (not just some finding nothing). */
+export function hasConflict(issues: IssueId[], runs: AgentResult[]): boolean {
+  return issues.some((id) => new Set(runs.map((r) => r[id]).filter(Boolean).map((s) => outcomeOf(s))).size > 1);
+}

@@ -177,3 +177,12 @@ describe('ballot order', () => {
     expect(officeRank(f('Proposition 38', 'measure'))).toBeGreaterThan(officeRank(f('Proposition 5', 'measure')));
   });
 });
+
+describe('escalation size', () => {
+  it('tells real disagreement apart from sparse finds', async () => {
+    const { hasConflict } = await import('../lib/research/consensus');
+    const s = (pos: -2 | -1 | 0 | 1 | 2) => ({ pos, text: 'x', quote: 'a quote long enough', sourceUrl: 'https://a.test' });
+    expect(hasConflict(['guns'], [{ guns: s(-1) }, { guns: s(1) }, {}])).toBe(true);
+    expect(hasConflict(['guns'], [{ guns: s(-1) }, {}, {}])).toBe(false);
+  });
+});
