@@ -45,13 +45,16 @@ curl -s https://n8peace.github.io/open-election-data/v1/divisions/ca/cd-10.json
 
 Use it for anything, including commercial products, under the Open Database License: credit it, and share improvements to the data under the same terms.
 
-## Why not just use Ballotpedia?
+## What already exists, and why we still built this
 
-Ballotpedia is a great reference, and the research agents read it. But it can't be the whole answer:
+Good sources are already out there, and Plain Ballot learns from them:
 
-- **It tells you who's running, not where they stand on your issues.** Its candidate survey is the closest thing, and many candidates never answer it. Plain Ballot needs every candidate placed on the same 18 dials so they can be compared.
-- **Its data isn't open.** Bulk access is a paid product, and its pages aren't ours to republish. Everything here is free to copy, check and reuse.
-- **Every claim needs the candidate's own words.** A summary of a position isn't enough; agents follow it back to the candidate's site, voting record or interview and quote that.
+- **[Ballotpedia](https://ballotpedia.org)** is the most complete record of who's running, and the research agents read it. Its bulk data is a paid product, and its pages aren't ours to republish.
+- **[BallotReady](https://organizations.ballotready.org/ballotready-api)** offers candidate issue stances through a paid API for organizations.
+- **[Vote Smart](https://www.votesmart.org/votesmart-api)** collects positions through its Political Courage Test, a survey candidates fill in, along with voting records and ratings.
+- **[Google Civic](https://developers.google.com/civic-information)** and **[Democracy Works](https://democracy.works/elections-api)** cover who's on the ballot and how to vote.
+
+What we couldn't find was a free, open dataset of where candidates stand, with a checkable quote behind every position, with every candidate on the same issues so they can be compared, and free for anyone to reuse. So we built one: [Open Election Data](https://github.com/n8peace/open-election-data). Every claim still comes from the candidate's own words: agents follow a summary back to the candidate's site, voting record or interview and quote that.
 
 ## Research your state
 
