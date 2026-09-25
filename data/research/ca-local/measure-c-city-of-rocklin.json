@@ -3,9 +3,10 @@
   "district": "City of Rocklin",
   "division": "ca/place-rocklin",
   "kind": "measure",
-  "summary": "A Yes vote establishes a half-cent (1/2%) general transactions and use (sales) tax in the City of Rocklin, providing about $8,000,000 a year for general city purposes.",
+  "summary": "A Yes vote establishes a half-cent (0.5%) sales tax to fund city services including police, fire, and 911 emergency response.",
   "issues": [
-    "tax"
+    "tax",
+    "safety"
   ],
   "choices": [
     {

@@ -3,7 +3,7 @@
   "district": "City of Orange",
   "division": "ca/place-orange",
   "kind": "measure",
-  "summary": "A Yes vote modifies the City of Orange's hotel guest tax.",
+  "summary": "A Yes vote modifies the City of Orange's transient occupancy (hotel guest) tax.",
   "issues": [
     "tax"
   ],
