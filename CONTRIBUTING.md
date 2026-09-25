@@ -28,7 +28,7 @@ Every contest starts as "not researched yet." Here's how to fill one in:
 
 Tip: add `"$schema": "../positions.schema.json"` at the top of your file (the template has it) and your editor will autocomplete fields and flag mistakes as you type.
 
-**Let agents do the research.** With a Claude or ChatGPT plan (or an AI Gateway key), `npm run research -- data/research/your-contest.json` researches a whole contest. Three independent agents on models from different AI companies research each candidate. A position is kept when two agree and none disagree; two more agents run when only one found something, and ten run with a majority deciding when they conflict. For a whole state, `npm run research:state -- CA`; for a folder of prepared contests, `npm run research:queue`. Then `npm run review` builds a one-page sheet so you can check every claim quickly.
+**Let agents do the research.** `npm run research -- data/research/your-contest.json` researches a whole contest. To use your own Claude and ChatGPT plans instead of paid API models, sign in to the `claude` and `codex` command-line tools and set `RESEARCH_MODELS=claude-code,codex,gateway:openai/gpt-5.6-luna` in `.env.local` (the last one is a low-cost fallback for when a plan hits its limit, and needs an AI Gateway key). Three independent agents on models from different AI companies research each candidate. A position is kept when two agree and none disagree; two more agents run when only one found something, and ten run with a majority deciding when they conflict. For a whole state, `npm run research:state -- CA`; for a folder of prepared contests, `npm run research:queue`. Then `npm run review` builds a one-page sheet so you can check every claim quickly.
 
 ### Review research (the most valuable job)
 

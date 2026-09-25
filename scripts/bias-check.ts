@@ -13,6 +13,8 @@ import { z } from 'zod';
 
 const MODELS = (process.env.BIAS_MODELS || 'openai/gpt-5.6-terra,google/gemini-3.8-flash,anthropic/claude-haiku-4.5').split(',');
 const MAX_DIFF_CHARS = 120_000;
+const RANK = { low: 0, medium: 1, high: 2 } as const;
+type Severity = keyof typeof RANK;
 
 const CATEGORIES = [
   'wording',        // a dial end, label, summary or UI text framed the way one side's opponents would put it
@@ -54,55 +56,86 @@ async function reviewWith(model: string, diff: string) {
   return output.findings;
 }
 
+// Code and wording go first and research data last, so if a long diff has to be cut,
+// only data is left out, and the report says which files weren't read.
+function prepare(raw: string) {
+  const parts = raw.split(/(?=^diff --git )/m).filter((p) => p.trim());
+  const fileOf = (p: string) => /^diff --git a\/(\S+) b\//.exec(p)?.[1] ?? '';
+  parts.sort((a, b) => Number(fileOf(a).startsWith('data/')) - Number(fileOf(b).startsWith('data/')));
+  let diff = '';
+  const skipped: string[] = [];
+  for (const p of parts) {
+    if (diff.length + p.length <= MAX_DIFF_CHARS) diff += p;
+    else skipped.push(fileOf(p) || '(unnamed)');
+  }
+  return { diff, files: parts.map(fileOf).filter(Boolean), skipped };
+}
+
+// Models write file paths in different ways ("a/lib/issues.ts", "issues.ts"); map each
+// to the file in the diff it refers to, so agreement is counted on the same file.
+function canonical(file: string, files: string[]) {
+  const f = file.trim().replace(/^[`'"]|[`'"]$/g, '').replace(/^(\.\/|[ab]\/)/, '');
+  return files.find((x) => x === f) ?? files.find((x) => x.endsWith('/' + f)) ?? f;
+}
+
 async function main() {
   const file = process.argv[2];
   if (!file) throw new Error('Usage: npm run bias-check -- <diff-file>');
-  let diff = await readFile(file, 'utf8');
-  if (!diff.trim()) { await writeFile('bias-report.md', 'No changes to check.\n'); return; }
-  const truncated = diff.length > MAX_DIFF_CHARS;
-  diff = diff.slice(0, MAX_DIFF_CHARS);
+  const raw = await readFile(file, 'utf8');
+  if (!raw.trim()) { await writeFile('bias-report.md', 'No changes to check.\n'); return; }
+  const { diff, files, skipped } = prepare(raw);
 
   const results = await Promise.allSettled(MODELS.map((m) => reviewWith(m, diff)));
-  const ran = results.map((r, i) => ({ model: MODELS[i], ok: r.status === 'fulfilled', findings: r.status === 'fulfilled' ? r.value : [] }));
+  const ran = results.map((r, i) => ({ model: MODELS[i], ok: r.status === 'fulfilled', findings: r.status === 'fulfilled' ? r.value : ([] as z.infer<typeof Finding>[]) }));
   const reviewers = ran.filter((r) => r.ok);
 
   // A concern is confirmed when 2+ models raise the same category on the same file.
-  const byKey = new Map<string, { models: Set<string>; worst: string; notes: string[] }>();
+  // Its severity is what at least two of them agree on (the second-highest rating).
+  const byKey = new Map<string, { bySeverity: Map<string, Severity>; notes: string[] }>();
   for (const r of reviewers) {
     for (const f of r.findings) {
-      const key = `${f.category}|${f.file}`;
-      const e = byKey.get(key) ?? { models: new Set(), worst: 'low', notes: [] };
-      e.models.add(r.model);
-      if (f.severity === 'high' || (f.severity === 'medium' && e.worst === 'low')) e.worst = f.severity;
+      const key = `${f.category}|${canonical(f.file, files)}`;
+      const e = byKey.get(key) ?? { bySeverity: new Map<string, Severity>(), notes: [] as string[] };
+      const prev = e.bySeverity.get(r.model);
+      if (!prev || RANK[f.severity] > RANK[prev]) e.bySeverity.set(r.model, f.severity);
       e.notes.push(`${r.model.split('/')[0]}: ${f.explanation}`);
       byKey.set(key, e);
     }
   }
-  const confirmed = [...byKey].filter(([, e]) => e.models.size >= 2);
-  const single = [...byKey].filter(([, e]) => e.models.size < 2);
-  const blocking = confirmed.some(([, e]) => e.worst === 'high');
+  const agreed = (e: { bySeverity: Map<string, Severity> }) => [...e.bySeverity.values()].sort((a, b) => RANK[b] - RANK[a])[1];
+  const confirmed = [...byKey].filter(([, e]) => e.bySeverity.size >= 2).map(([k, e]) => [k, { ...e, worst: agreed(e), count: e.bySeverity.size }] as const);
+  const single = [...byKey].filter(([, e]) => e.bySeverity.size < 2);
+  const tooFew = reviewers.length < 2;
+  const blocking = tooFew || confirmed.some(([, e]) => e.worst === 'high');
 
   const lines = [
     '## Bias check',
     '',
-    `${reviewers.length} of ${MODELS.length} models reviewed this change (${reviewers.map((r) => r.model).join(', ')}). A concern counts when at least 2 raise it.${truncated ? ' The diff was long, so only the first part was checked.' : ''}`,
+    `${reviewers.length} of ${MODELS.length} models reviewed this change (${reviewers.map((r) => r.model).join(', ')}). A concern counts when at least 2 raise it.`,
     '',
   ];
-  if (reviewers.length < 2) lines.push('**Not enough models ran to reach agreement. A maintainer should check this change by hand.**', '');
-  if (!confirmed.length) lines.push('**No confirmed bias concerns.**', '');
+  if (skipped.length) lines.push(`The change was too long to read in full. Not checked: ${skipped.map((f) => `\`${f}\``).join(', ')}.`, '');
+  if (tooFew) lines.push(`**Not enough models ran to reach agreement (${ran.filter((r) => !r.ok).map((r) => r.model).join(', ')} failed). Blocked until the check is rerun or a maintainer reviews it by hand.**`, '');
+  if (!tooFew && !confirmed.length) lines.push('**No confirmed bias concerns.**', '');
   for (const [key, e] of confirmed) {
     const [category, file] = key.split('|');
-    lines.push(`### ${e.worst === 'high' ? '🔴' : e.worst === 'medium' ? '🟠' : '🟡'} ${category} in \`${file}\` (${e.models.size} of ${reviewers.length} models)`, ...e.notes.map((n) => `- ${n}`), '');
+    lines.push(`### ${e.worst === 'high' ? '🔴' : e.worst === 'medium' ? '🟠' : '🟡'} ${category} in \`${file}\` (${e.count} of ${reviewers.length} models)`, ...e.notes.map((n) => `- ${n}`), '');
   }
   if (single.length) {
     lines.push('<details><summary>Raised by only one model (not confirmed)</summary>', '');
     for (const [key, e] of single) lines.push(`- **${key.replace('|', '** in `')}\`: ${e.notes[0]}`);
     lines.push('', '</details>', '');
   }
-  lines.push(blocking ? '**This change is blocked until the confirmed high-severity concern is fixed or a maintainer overrides it.**' : '_This check is advisory unless a confirmed concern is high severity._');
+  if (blocking && !tooFew) lines.push('**This change is blocked until the confirmed high-severity concern is fixed or a maintainer overrides it.**');
+  else if (!blocking) lines.push('_This check is advisory unless at least two models agree a concern is high severity._');
   await writeFile('bias-report.md', lines.join('\n') + '\n');
   console.log(lines.join('\n'));
   process.exit(blocking ? 1 : 0);
 }
 
-main().catch((e) => { console.error(e instanceof Error ? e.message : e); process.exit(1); });
+main().catch(async (e) => {
+  const msg = e instanceof Error ? e.message : String(e);
+  console.error(msg);
+  await writeFile('bias-report.md', `## Bias check\n\n**The check couldn't run** (${msg}). A maintainer should rerun it or review this change by hand.\n`).catch(() => {});
+  process.exit(1);
+});
