@@ -15,11 +15,11 @@ const shortName = (c: Choice) => (isYesNo(c) ? `“${c.name}”` : c.name);
 const longName = (c: Choice) => (isYesNo(c) ? `A ${c.name.toLowerCase()} vote` : c.name);
 
 function Meter({ value }: { value: number | null }) {
-  if (value === null) return <div className="meter">Not matched</div>;
+  if (value === null) return <div className="meter">No match yet</div>;
   return (
-    <div className="meter">
+    <div className="meter" title="How closely this choice fits the dials you set. Not a poll or a prediction." aria-label={`Fits your views ${value} percent`}>
       <span className="bar"><b style={{ width: `${value}%` }} /></span>
-      {value}% match
+      {value}% fit
     </div>
   );
 }
@@ -108,6 +108,7 @@ function Retention({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; 
   const issue = issueById[r.issue];
   return (
     <>
+      <div className="opts-head" aria-hidden="true"><span>Your vote</span><span>Fit with your views</span></div>
       <ul className="opts">
         <li className={`opt ${m !== null && retain ? 'pick' : ''}`}><span className="oval" /><div className="who"><span className="name">Yes, retain</span></div><Meter value={m} /></li>
         <li className={`opt ${m !== null && !retain ? 'pick' : ''}`}><span className="oval" /><div className="who"><span className="name">No, remove</span></div><Meter value={m === null ? null : 100 - m} /></li>
@@ -120,7 +121,7 @@ function Retention({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; 
           </p>
         ) : (
           <p>
-            <b>{retain ? 'The record fits you.' : 'The record doesn’t fit you.'}</b> You {leanPhrase(issue, prefs.pos[r.issue] ?? 0)}. {r.stance.text} That’s a {m}% match on the only issue we can measure for judges.
+            <b>{retain ? 'The record fits you.' : 'The record doesn’t fit you.'}</b> You {leanPhrase(issue, prefs.pos[r.issue] ?? 0)}. {r.stance.text} That’s a {m}% fit with your views on the only issue we can measure for judges.
           </p>
         )}
         <p style={{ fontSize: 15, color: 'var(--ink-2)', marginTop: 14 }}>Other things on the record for you to weigh:</p>
@@ -177,6 +178,7 @@ export function ContestCard({ contest, prefs, showParty, place, onAdd }: { conte
       {head}
       <div className="race-body">
         {contest.summary && <p className="summary">{contest.summary}</p>}
+        <div className="opts-head" aria-hidden="true"><span>{contest.kind === 'measure' ? 'Your vote' : 'Candidates'}</span><span>Fit with your views</span></div>
         <ul className="opts">
           {contest.choices.map((c) => {
             const r = ranked.find((x) => x.choice.id === c.id)!;

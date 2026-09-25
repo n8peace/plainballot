@@ -95,7 +95,17 @@ export async function loadPositions(): Promise<Map<string, PositionsFile>> {
 export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
   const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
   // Same order as the voter's districts: statewide, U.S. House, legislature, county, city, schools.
-  files.sort((a, b) => keys.indexOf(a.division!) - keys.indexOf(b.division!));
+  // Within the same district (e.g. statewide), follow the order offices appear on the ballot.
+  const OFFICE_ORDER = ['governor', 'lieutenant governor', 'secretary of state', 'controller', 'treasurer', 'attorney general', 'insurance commissioner', 'superintendent', 'board of equalization', 'u.s. senat', 'united states senat'];
+  const rank = (f: PositionsFile) => {
+    const o = f.office.toLowerCase();
+    if (f.kind === 'measure') return 1000 + (Number(/\d+/.exec(o)?.[0]) || 0);
+    const i = OFFICE_ORDER.findIndex((x) => o.includes(x));
+    return i < 0 ? 500 : i;
+  };
+  // Measures go last, as on the printed ballot.
+  const isMeasure = (f: PositionsFile) => (f.kind === 'measure' ? 1 : 0);
+  files.sort((a, b) => isMeasure(a) - isMeasure(b) || keys.indexOf(a.division!) - keys.indexOf(b.division!) || rank(a) - rank(b));
   return files.map((f) => fileToContest(f));
 }
 

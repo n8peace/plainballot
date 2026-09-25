@@ -230,6 +230,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
             <label className="switch"><input type="checkbox" id="showParty" checked={showParty} onChange={(e) => setShowParty(e.target.checked)} /> Show party labels</label>
             <span className="hint">Hidden by default, so you see the issues before the party.</span>
           </div>
+          <p className="fit-note"><b>What the percentages mean:</b> how closely each choice’s record fits the dials you set above. 100% means their record lines up exactly with your dials. It’s not a poll, and it doesn’t predict who will win.</p>
           <div className={`ballot-stack ${ballot.sample && !sampleDismissed ? 'blurred' : ''}`}>
             {ballot.sample && !sampleDismissed && (
               <form className="sample-gate" onSubmit={lookup} aria-labelledby="gateH">
