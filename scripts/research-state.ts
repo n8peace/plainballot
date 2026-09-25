@@ -47,9 +47,9 @@ Reply with ONLY this JSON, no other text:
 }
 
 /** Reads the list with an API model and web search, when a subscription is out of usage. */
-async function listViaGateway(state: string, level: Exclude<Level, 'measures'>): Promise<z.infer<typeof Contests>> {
+async function listViaGateway(state: string, level: Exclude<Level, 'measures'>, model = process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra'): Promise<z.infer<typeof Contests>> {
   const { output } = await generateText({
-    model: (process.env.RESEARCH_FALLBACK || 'gateway:openai/gpt-5.6-terra').replace(/^gateway:/, ''),
+    model: model.replace(/^gateway:/, ''),
     abortSignal: AbortSignal.timeout(10 * 60 * 1000),
     tools: { web_search: gateway.tools.perplexitySearch({ maxResults: 5, maxTokensPerPage: 2048, maxTokens: 12000, country: 'US' }) },
     stopWhen: isStepCount(8),
@@ -64,26 +64,47 @@ async function listContests(state: string, level: Exclude<Level, 'measures'>) {
   const read = async (backend: 'claude-code' | 'codex') => {
     try { return parse(await runCli(backend, listPrompt(state, level))); } catch (e) {
       console.log(`  ${backend} unavailable (${(e as Error).message.slice(0, 80)}); reading the list via the API instead`);
-      return listViaGateway(state, level);
+      // A different model for each reader, so two fallbacks are still independent.
+      return listViaGateway(state, level, backend === 'codex' ? 'gateway:anthropic/claude-haiku-4.5' : undefined);
     }
   };
-  const [la, lb] = await Promise.all([read('claude-code'), read('codex')]);
+  const lists = await Promise.all([read('claude-code'), read('codex')]);
   // Several statewide offices share a division, so the office name is part of the key.
   const key = (c: { office: string; district?: string }) => `${divisionFor(state, c.office, c.district) ?? contestKey(c.office, c.district)}|${canonicalOffice(c.office)}`;
-  const byKey = new Map(lb.contests.map((c) => [key(c), c]));
-  const agreed = [];
-  for (const c of la.contests) {
-    const other = byKey.get(key(c));
-    if (!other) { console.log(`  ? only one agent listed ${c.office} ${c.district ?? ''}; skipped`); continue; }
-    const names = new Set(other.candidates.map((x) => nameKey(x.name)));
-    const candidates = c.candidates.filter((x) => names.has(nameKey(x.name)));
-    if (candidates.length !== c.candidates.length || candidates.length !== other.candidates.length) {
-      console.log(`  ? agents disagree on candidates for ${c.office} ${c.district ?? ''}; skipped for a person to check`);
-      continue;
+  const tally = (ls: z.infer<typeof Contests>[]) => {
+    const need = ls.length === 2 ? 2 : Math.floor(ls.length / 2) + 1;
+    const byKey = new Map<string, z.infer<typeof Contests>['contests']>();
+    for (const l of ls) for (const c of l.contests) byKey.set(key(c), [...(byKey.get(key(c)) ?? []), c]);
+    const agreed: z.infer<typeof Contests>['contests'] = [];
+    const unsettled: string[] = [];
+    for (const [k, cs] of byKey) {
+      if (cs.length < need) { unsettled.push(k); continue; }
+      // A candidate is kept when enough readers list them.
+      const count = new Map<string, number>();
+      for (const c of cs) for (const n of new Set(c.candidates.map((x) => nameKey(x.name)))) count.set(n, (count.get(n) ?? 0) + 1);
+      // With two readers any difference is unsettled; with three, the majority decides.
+      if (ls.length === 2 && [...count.values()].some((n) => n < need)) { unsettled.push(k); continue; }
+      const candidates = [...new Map(cs.flatMap((c) => c.candidates).map((x) => [nameKey(x.name), x])).values()]
+        .filter((x) => (count.get(nameKey(x.name)) ?? 0) >= need);
+      if (!candidates.length) { unsettled.push(k); continue; }
+      agreed.push({ ...cs[0], candidates });
     }
-    agreed.push({ ...c, candidates });
+    return { agreed, unsettled };
+  };
+  let { agreed, unsettled } = tally(lists);
+  // Readers disagree: a third reader on a different model breaks the tie (2 of 3 decide).
+  if (unsettled.length) {
+    console.log(`  ${unsettled.length} contests disagree; asking a third reader`);
+    const third = await listViaGateway(state, level, 'gateway:google/gemini-3.8-flash').catch(() => null);
+    if (third) {
+      const all = tally([...lists, third]);
+      const settled = all.agreed.filter((c) => unsettled.includes(key(c)));
+      agreed = [...agreed, ...settled];
+      unsettled = unsettled.filter((k) => !settled.some((c) => key(c) === k));
+    }
+    for (const k of unsettled) console.log(`  ? readers still disagree on ${k}; skipped`);
   }
-  console.log(`  ${level}: ${agreed.length} contests agreed (${la.contests.length} and ${lb.contests.length} listed) · ${la.sourceUrl ?? lb.sourceUrl ?? ''}`);
+  console.log(`  ${level}: ${agreed.length} contests agreed (${lists.map((l) => l.contests.length).join(' and ')} listed) · ${lists[0].sourceUrl ?? lists[1].sourceUrl ?? ''}`);
   return agreed;
 }
 
@@ -102,14 +123,14 @@ Reply with ONLY this JSON, no other text:
 }
 
 /** Which dials a measure decides: 3 models vote from its official title and summary; an issue needs 2 of 3. */
-async function mapMeasureIssues(state: string, m: { number: string; title: string; summary: string }): Promise<string[]> {
+export async function mapMeasureIssues(state: string, m: { number: string; title: string; summary: string }, label = `Proposition ${m.number}`): Promise<string[]> {
   const models = ['openai/gpt-5.6-luna', 'google/gemini-3.8-flash', 'openai/gpt-5.6-terra'];
   const votes = new Map<string, number>();
   const settled = await Promise.allSettled(models.map((model) => generateText({
     model,
     abortSignal: AbortSignal.timeout(2 * 60 * 1000),
     output: Output.object({ schema: z.object({ issues: z.array(z.string()) }) }),
-    prompt: `${state} Proposition ${m.number}: ${m.title}. ${m.summary}
+    prompt: `${state} ${label}: ${m.title}. ${m.summary}
 Which of these issues does a Yes or No vote on this measure directly decide? Pick only issues where the measure clearly moves policy toward one side. Often it's 1 or 2, sometimes none.
 ${sideGuide(ISSUE_IDS)}
 Reply with the issue ids.`,
@@ -224,7 +245,9 @@ async function main() {
   console.log('\nDone. Review with `npm run review`.');
 }
 
-main().catch((e) => {
-  console.error(e instanceof Error ? e.message : e);
-  process.exit(1);
-});
+if (process.argv[1]?.endsWith('research-state.ts')) {
+  main().catch((e) => {
+    console.error(e instanceof Error ? e.message : e);
+    process.exit(1);
+  });
+}
