@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Ted W. Lieu",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Houston Brignano",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

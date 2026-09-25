@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Linda T. Sánchez",
-      "party": "Democratic"
+      "name": "Linda Sánchez",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Mitch Clemmons",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

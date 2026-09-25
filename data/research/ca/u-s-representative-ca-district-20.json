@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Vince Fong",
-      "party": "Republican"
+      "name": "Sandra Van Scotter",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Sandra Van Scotter",
-      "party": "Democratic"
+      "name": "Vince Fong",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Mike Thompson",
-      "party": "Democratic"
+      "name": "Eric Jones",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Eric Jones",
-      "party": "Democratic"
+      "name": "Mike Thompson",
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Genevieve Angel",
-      "party": "Republican"
+      "name": "Nanette Diaz Barragan",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Nanette Diaz Barragan",
-      "party": "Democratic"
+      "name": "Genevieve Angel",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

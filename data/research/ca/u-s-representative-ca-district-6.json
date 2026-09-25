@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Kevin Kiley",
-      "party": "No Party Preference"
+      "name": "Richard Pan",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Richard Pan",
-      "party": "Democratic"
+      "name": "Kevin Kiley",
+      "party": "No Party Preference",
+      "incumbent": false
     }
   ]
 }

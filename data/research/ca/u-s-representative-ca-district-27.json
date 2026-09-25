@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Jason Gibbs",
-      "party": "Republican"
+      "name": "George Whitesides",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "George Whitesides",
-      "party": "Democratic"
+      "name": "Jason Gibbs",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

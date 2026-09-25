@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Adam Gray",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Kevin Lincoln",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

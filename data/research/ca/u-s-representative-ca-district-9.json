@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Josh Harder",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "John McBride",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

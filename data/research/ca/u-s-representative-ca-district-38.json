@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Pedro Antonio Casas",
-      "party": "Republican"
+      "name": "Hilda Solis",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Hilda Solis",
-      "party": "Democratic"
+      "name": "Pedro Antonio Casas",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

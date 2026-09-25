@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Sam Liccardo",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Peter Sundin Soulé",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

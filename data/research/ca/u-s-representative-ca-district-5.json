@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Tom McClintock",
-      "party": "Republican"
+      "name": "Michael Masuda",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Michael Masuda",
-      "party": "Democratic"
+      "name": "Tom McClintock",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

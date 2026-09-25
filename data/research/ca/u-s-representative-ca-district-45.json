@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Derek Tran",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Chuong V. Vo",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

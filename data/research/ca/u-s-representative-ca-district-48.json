@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Jim Desmond",
-      "party": "Republican"
+      "name": "Marni von Wilpert",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Marni von Wilpert",
-      "party": "Democratic"
+      "name": "Jim Desmond",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

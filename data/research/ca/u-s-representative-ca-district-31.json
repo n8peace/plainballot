@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Gil Cisneros",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Eric Ching",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

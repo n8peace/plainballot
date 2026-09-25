@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Jacqui Irwin",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Sam Gallucci",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

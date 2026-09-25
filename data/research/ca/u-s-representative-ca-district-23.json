@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Jay Obernolte",
-      "party": "Republican"
+      "name": "Tessa Lynn Hodge",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Tessa Lynn Hodge",
-      "party": "Democratic"
+      "name": "Jay Obernolte",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

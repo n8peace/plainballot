@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Jimmy Gomez",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Angela Gonzales-Torres",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

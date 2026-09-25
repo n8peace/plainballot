@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Judy Chu",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "April A. Verlato",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

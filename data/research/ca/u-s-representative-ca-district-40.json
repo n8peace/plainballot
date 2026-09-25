@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Ken Calvert",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     },
     {
       "name": "Young Kim",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

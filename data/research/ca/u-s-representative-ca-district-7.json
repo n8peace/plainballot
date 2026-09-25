@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Doris Matsui",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Mai Vang",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

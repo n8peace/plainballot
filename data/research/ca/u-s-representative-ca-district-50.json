@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Scott Peters",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Steve Cohen",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

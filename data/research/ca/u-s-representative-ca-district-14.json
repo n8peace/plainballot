@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Aisha Wahab",
-      "party": "Democratic"
+      "name": "Melissa Hernandez",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Melissa Hernandez",
-      "party": "Democratic"
+      "name": "Aisha Wahab",
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

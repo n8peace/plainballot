@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Raul Ruiz",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Joe Males",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Laura Friedman",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Scott Alan Meyers",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

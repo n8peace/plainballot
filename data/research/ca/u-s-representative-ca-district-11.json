@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Scott Wiener",
-      "party": "Democratic"
+      "name": "Connie Chan",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Connie Chan",
-      "party": "Democratic"
+      "name": "Scott Wiener",
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

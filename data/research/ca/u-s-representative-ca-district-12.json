@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Lateefah Simon",
-      "party": "Democratic"
+      "name": "Jamie Joyce",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Jamie Joyce",
-      "party": "Democratic"
+      "name": "Lateefah Simon",
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Juan Vargas",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Jeff Belle",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

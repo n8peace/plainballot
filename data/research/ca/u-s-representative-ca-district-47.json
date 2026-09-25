@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Jenny Rae Le Roux",
-      "party": "Republican"
+      "name": "Dave Min",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Dave Min",
-      "party": "Democratic"
+      "name": "Jenny Rae Le Roux",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

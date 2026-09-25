@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Mike Levin",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Armen Kurdian",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

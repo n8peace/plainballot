@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Sydney Kamlager-Dove",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Samantha Mota",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }

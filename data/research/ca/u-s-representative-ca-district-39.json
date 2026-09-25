@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Mark Takano",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Steve Manos",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

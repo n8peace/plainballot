@@ -6,11 +6,13 @@
   "choices": [
     {
       "name": "Pete Aguilar",
-      "party": "Democratic"
+      "party": "Democratic",
+      "incumbent": false
     },
     {
       "name": "Stephanie M. Vargas",
-      "party": "Republican"
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

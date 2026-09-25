@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "James Gallagher",
-      "party": "Republican"
+      "name": "Mike McGuire",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Mike McGuire",
-      "party": "Democratic"
+      "name": "James Gallagher",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

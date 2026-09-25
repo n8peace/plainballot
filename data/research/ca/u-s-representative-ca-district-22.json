@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "David G. Valadao",
-      "party": "Republican"
+      "name": "Randy Villegas",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Randy Villegas",
-      "party": "Democratic"
+      "name": "David G. Valadao",
+      "party": "Republican",
+      "incumbent": false
     }
   ]
 }

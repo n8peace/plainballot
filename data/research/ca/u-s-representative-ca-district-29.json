@@ -5,12 +5,14 @@
   "kind": "candidate",
   "choices": [
     {
-      "name": "Luz Maria Rivas",
-      "party": "Democratic"
+      "name": "Angélica María Dueñas",
+      "party": "Democratic",
+      "incumbent": false
     },
     {
-      "name": "Angélica María Dueñas",
-      "party": "Democratic"
+      "name": "Luz Maria Rivas",
+      "party": "Democratic",
+      "incumbent": false
     }
   ]
 }
