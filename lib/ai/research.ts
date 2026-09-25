@@ -9,6 +9,7 @@ import { ISSUE_IDS, NEITHER, sideGuide, toPosition, type IssueId, type Position 
 
 export const RESEARCH_MODEL = process.env.RESEARCH_MODEL || 'anthropic/claude-sonnet-5';
 const MAX_SOURCE_CHARS = 20_000;
+const MAX_PDF_CHARS = 400_000;
 
 export interface Source {
   url: string;
@@ -50,11 +51,24 @@ export function htmlToText(html: string): string {
     .trim();
 }
 
+/** Text of a PDF (voter guides and sample ballots often are PDFs), via poppler's pdftotext. */
+async function pdfText(body: ArrayBuffer): Promise<string> {
+  const { execFile } = await import('node:child_process');
+  return new Promise((resolve, reject) => {
+    const child = execFile('pdftotext', ['-', '-'], { maxBuffer: 50 * 1024 * 1024, timeout: 30_000 }, (err, stdout) => (err ? reject(err) : resolve(stdout)));
+    child.stdin?.end(Buffer.from(body));
+  });
+}
+
 export async function fetchSource(url: string): Promise<Source> {
   // A hard time limit: one slow site must never stall a whole research run.
   const res = await fetch(url, { headers: { 'user-agent': 'PlainBallotResearch/0.1 (+https://plainballot.com/methodology)' }, signal: AbortSignal.timeout(20_000) });
   if (!res.ok) throw new Error(`${url} returned ${res.status}`);
   const type = res.headers.get('content-type') ?? '';
+  if (type.includes('pdf') || /\.pdf($|\?)/i.test(url)) {
+    // Whole documents can be long; keep more of them so a measure deep inside is still found.
+    return { url, text: (await pdfText(await res.arrayBuffer())).replace(/[ \t]+/g, ' ').slice(0, MAX_PDF_CHARS) };
+  }
   const body = await Promise.race([res.text(), new Promise<string>((_, rej) => setTimeout(() => rej(new Error('read timed out')), 20_000))]);
   return { url, text: (type.includes('html') ? htmlToText(body) : body).slice(0, MAX_SOURCE_CHARS) };
 }
