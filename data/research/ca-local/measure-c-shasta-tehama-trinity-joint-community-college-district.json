@@ -1,0 +1,18 @@
+{
+  "office": "Measure C",
+  "district": "Shasta-Tehama-Trinity Joint Community College District",
+  "division": "ca/school-shasta-tehama-trinity-joint-community-college-district",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Shasta-Tehama-Trinity Joint Community College District (Shasta College) to issue about $129 million in general obligation bonds to repair, upgrade, and build college facilities, repaid by an assessment on taxable property in the district, which includes a portion of Lassen County.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
