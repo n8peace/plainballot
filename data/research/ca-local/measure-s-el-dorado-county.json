@@ -3,9 +3,10 @@
   "district": "El Dorado County",
   "division": "ca/county-el-dorado",
   "kind": "measure",
-  "summary": "A Yes vote enacts a 3/8-cent countywide sales tax for 30 years to fund hospital facilities and equipment, fire prevention, and emergency response.",
+  "summary": "A Yes vote enacts a 3/8% sales tax for 30 years, estimated at $13 million annually, for emergency services and wildfire prevention.",
   "issues": [
-    "tax"
+    "tax",
+    "safety"
   ],
   "choices": [
     {
