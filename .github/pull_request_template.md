@@ -2,13 +2,7 @@
 
 <!-- One or two sentences. Link the issue: "Closes #12". -->
 
-## For research pull requests
-
-- [ ] Every candidate in the race is included.
-- [ ] Every position has an exact quote and a link to where it came from.
-- [ ] Each `text` sentence says what they did or said, with no praise or criticism.
-- [ ] Nothing is inferred from party, endorsements, or what similar candidates believe.
-- [ ] `reviewed` is left `false`. A reviewer sets it after checking.
+Research changes go to [open-election-data](https://github.com/n8peace/open-election-data).
 
 ## For code pull requests
 

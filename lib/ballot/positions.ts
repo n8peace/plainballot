@@ -1,12 +1,11 @@
-import { readdir, readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { z } from 'zod';
 import { ISSUE_IDS, NEITHER, issueById, toPosition, type IssueId, type Position } from '../issues';
 import type { Contest } from '../types';
+import { allContests, contestsForDivision, type RawContest } from './data';
 
-// Researched positions live as reviewable JSON files in data/positions/, written by
-// `npm run research`. They publish once independent agents agree and every quote
-// verifies; `reviewed: true` marks files a person has also checked (shown to voters).
+// Researched positions come from Open Election Data, the open research repo
+// (see ./data.ts). They publish once independent agents agree and every quote
+// verifies; `reviewed: true` marks contests a person has also checked (shown to voters).
 
 // In the files, a stance names its side in words (the dial's short label), so a
 // person writing or reviewing research can't put someone on the wrong end by
@@ -53,6 +52,8 @@ export const PositionsFileSchema = z.object({
     }),
   ),
   sources: z.string().optional(),
+  /** federal | statewide | legislature | measures, added by the research API. */
+  level: z.string().optional(),
   checkedAt: z.string(),
   reviewed: z.boolean(),
 });
@@ -61,34 +62,21 @@ export type PositionsFile = z.output<typeof PositionsFileSchema>;
 /** The on-disk shape (sides named in words). */
 export type PositionsFileInput = z.input<typeof PositionsFileSchema>;
 
-export const POSITIONS_DIR = path.join(process.cwd(), 'data', 'positions');
-
 export const slug = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const contestKey = (office: string, district?: string) => slug([office, district].filter(Boolean).join(' '));
 export const nameKey = (name: string) => slug(name).split('-').filter((p) => p.length > 1).sort().join('-');
 
-let cache: Map<string, PositionsFile> | null = null;
+function parse(raw: RawContest[]): PositionsFile[] {
+  return raw.flatMap((r) => {
+    const p = PositionsFileSchema.safeParse(r);
+    if (!p.success) console.warn(`Skipping ${r.id ?? 'a contest'}: ${p.error.message}`);
+    return p.success ? [p.data] : [];
+  });
+}
 
-/** Loads all research files keyed by contest. */
+/** Every researched contest, keyed by contest. */
 export async function loadPositions(): Promise<Map<string, PositionsFile>> {
-  if (cache) return cache;
-  const out = new Map<string, PositionsFile>();
-  let files: string[] = [];
-  try {
-    files = (await readdir(POSITIONS_DIR)).filter((f) => f.endsWith('.json') && !f.startsWith('_'));
-  } catch {
-    // No research yet.
-  }
-  for (const f of files) {
-    const parsed = PositionsFileSchema.safeParse(JSON.parse(await readFile(path.join(POSITIONS_DIR, f), 'utf8')));
-    if (!parsed.success) {
-      console.warn(`Skipping ${f}: ${parsed.error.message}`);
-      continue;
-    }
-    out.set(contestKey(parsed.data.office, parsed.data.district), parsed.data);
-  }
-  cache = out;
-  return out;
+  return new Map(parse(await allContests()).map((f) => [contestKey(f.office, f.district), f]));
 }
 
 // Within the same district, the order offices appear on a California ballot.
@@ -103,8 +91,9 @@ export function officeRank(f: PositionsFile): number {
 }
 
 /** Researched contests for a voter's districts, used before official candidate lists are published. */
-export async function contestsForDivisions(keys: string[]): Promise<Contest[]> {
-  const files = [...(await loadPositions()).values()].filter((f) => f.division && keys.includes(f.division));
+export async function contestsForDivisions(keys: string[], opts: { level?: string } = {}): Promise<Contest[]> {
+  const files = parse((await Promise.all(keys.map((k) => contestsForDivision(k).catch(() => [])))).flat())
+    .filter((f) => f.division && keys.includes(f.division) && (!opts.level || f.level === opts.level));
   // Same order as the voter's districts: statewide, U.S. House, legislature, county, city, schools.
   // Printed-ballot order: partisan statewide offices, then U.S. Senate, House and
   // legislature (by district), then nonpartisan offices, then judges, then measures.

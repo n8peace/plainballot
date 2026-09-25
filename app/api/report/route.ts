@@ -2,7 +2,7 @@ import { checkBotId } from 'botid/server';
 import { z } from 'zod';
 import { ISSUE_IDS, issueById } from '@/lib/issues';
 import { allow, clientIp, tooLarge } from '@/lib/ratelimit';
-import { GITHUB_URL } from '@/lib/share';
+import { DATA_REPO_URL } from '@/lib/share';
 
 // A voter says something on their ballot is wrong. Each report becomes a public
 // GitHub issue labeled "claim-report"; that label starts an automatic recheck
@@ -10,7 +10,8 @@ import { GITHUB_URL } from '@/lib/share';
 
 export const maxDuration = 15;
 
-const REPO = GITHUB_URL.replace('https://github.com/', '');
+// Reports go to the research repo, where the recheck runs and corrections are published.
+const REPO = DATA_REPO_URL.replace('https://github.com/', '');
 
 const Report = z.object({
   contestId: z.string().max(120),
@@ -51,7 +52,7 @@ ${JSON.stringify({ contestId: r.contestId, office: r.office, district: r.distric
   const token = process.env.GITHUB_REPORT_TOKEN;
   if (!token) {
     // No bot token configured: send the voter to a pre-filled GitHub issue instead.
-    const u = new URL(`${GITHUB_URL}/issues/new`);
+    const u = new URL(`${DATA_REPO_URL}/issues/new`);
     u.searchParams.set('title', title);
     u.searchParams.set('body', body);
     return Response.json({ fallbackUrl: u.toString() });

@@ -1,7 +1,6 @@
 import { locate } from '../address/census';
 import type { Ballot } from '../types';
 import { BallotLookupError, lookupGoogleCivic } from './google-civic';
-import { levelFor } from '../research/divisions';
 import { contestsForDivisions } from './positions';
 import { SAMPLE_BALLOT } from './sample';
 
@@ -32,7 +31,7 @@ export async function getBallot(address: string): Promise<Ballot> {
   const place = districts.find((d) => d.key.includes('/place-'))?.label ?? loc?.state ?? '';
   if (loc && !COVERED_STATES.includes(loc.state)) {
     const stateName = districts.find((d) => d.key.endsWith('/state'))?.label ?? loc.state;
-    const federal = (await contestsForDivisions(districts.map((d) => d.key))).filter((c) => levelFor(c.office) === 'federal');
+    const federal = await contestsForDivisions(districts.map((d) => d.key), { level: 'federal' });
     if (federal.length) {
       return {
         ...ELECTION,

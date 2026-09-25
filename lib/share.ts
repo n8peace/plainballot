@@ -4,6 +4,8 @@ import type { Prefs } from './types';
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://plainballot.com').replace(/\/$/, '');
 export const GITHUB_URL = 'https://github.com/n8peace/plainballot';
+/** The open research this site reads: candidates, positions and quotes (ODbL). */
+export const DATA_REPO_URL = 'https://github.com/n8peace/open-election-data';
 export const X_URL = 'https://x.com/n8peace';
 
 const IMP: Importance[] = ['low', 'medium', 'high'];
@@ -67,7 +69,7 @@ export function agreement(mine: Prefs, theirs: Prefs): Agreement {
 
 /** Opens the "Research a race" form on GitHub, pre-filled with what we know. */
 export function researchIssueUrl(opts: { contest?: string; place?: string; candidates?: string[] }): string {
-  const u = new URL(`${GITHUB_URL}/issues/new`);
+  const u = new URL(`${DATA_REPO_URL}/issues/new`);
   u.searchParams.set('template', 'research-a-race.yml');
   const contest = [opts.contest, opts.place].filter(Boolean).join(', ');
   u.searchParams.set('title', `Research: ${contest || '[Office], [District], [State]'}`);
