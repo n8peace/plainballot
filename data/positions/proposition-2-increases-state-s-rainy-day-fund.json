@@ -1,0 +1,20 @@
+{
+  "office": "Proposition 2",
+  "district": "Increases State’s Rainy Day Fund.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote changes state constitutional rules governing deposits into the Budget Stabilization Account and certain payments for unfunded liabilities and unemployment-insurance loans.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes",
+      "stances": {}
+    },
+    {
+      "name": "No",
+      "stances": {}
+    }
+  ],
+  "checkedAt": "2026-09-25",
+  "reviewed": false
+}

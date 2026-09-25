@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 38",
+  "district": "Authorizes Bonds for Immunology Medical Research.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote allows the state to borrow $8.4 billion for immunology and immunotherapy research at specified California research institutions.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "office": "Proposition 40",
+  "district": "Imposes One-Time Tax on Certain Taxpayers.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote imposes a one-time tax of up to 5 percent on specified individuals and trusts with covered assets exceeding $1 billion and allocates the revenue to health care, food assistance, and education-related programs.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes",
+      "stances": {}
+    },
+    {
+      "name": "No",
+      "stances": {}
+    }
+  ],
+  "checkedAt": "2026-09-25",
+  "reviewed": false
+}

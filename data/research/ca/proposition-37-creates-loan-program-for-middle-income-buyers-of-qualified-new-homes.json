@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 37",
+  "district": "Creates Loan Program for Middle-Income Buyers of Qualified New Homes.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes up to $25 billion in bonds for mortgages to eligible middle-income buyers of qualifying newly built homes, with mortgage payments repaying the bonds.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

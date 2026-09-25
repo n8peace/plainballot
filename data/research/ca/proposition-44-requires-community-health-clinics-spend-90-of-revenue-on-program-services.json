@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 44",
+  "district": "Requires Community Health Clinics Spend 90% Of Revenue on Program Services.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote requires nonprofit community health clinics to spend at least 90 percent of revenue on program services, subject to specified waivers.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

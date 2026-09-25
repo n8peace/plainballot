@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 41",
+  "district": "Prohibits New State Taxes That Exclude Revenues from State Spending Limit. Requires Audits for New State Special Taxes.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote prohibits new state taxes from excluding revenue from the state spending limit and requires audits of programs funded by new state special taxes.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 5",
+  "district": "Changes Recall Election Process for Statewide Officers.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote removes the successor-election question from statewide recall elections and provides for filling a resulting vacancy under constitutional and statutory procedures.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

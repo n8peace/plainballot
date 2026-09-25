@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 42",
+  "district": "Prohibits New State Personal Property Taxes and Certain Retroactive State Taxes.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote prohibits new state taxes on specified personal property and certain state taxes applied retroactively.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

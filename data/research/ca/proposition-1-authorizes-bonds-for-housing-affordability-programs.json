@@ -1,0 +1,16 @@
+{
+  "office": "Proposition 1",
+  "district": "Authorizes Bonds for Housing Affordability Programs.",
+  "division": "ca/state",
+  "kind": "measure",
+  "summary": "A Yes vote allows the state to borrow $11.25 billion for veterans' housing and housing-affordability programs.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
