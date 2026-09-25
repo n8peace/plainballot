@@ -49,6 +49,8 @@ export interface Ballot {
   districts?: { key: string; label: string }[];
   /** True when the address was found but none of its races are researched yet. */
   needsResearch?: boolean;
+  /** True when only some of the ballot is covered (outside California: federal races only). */
+  partial?: boolean;
   electionDate: string; // YYYY-MM-DD
   place: string;
   sample: boolean;
