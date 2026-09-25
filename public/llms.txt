@@ -1,6 +1,6 @@
 # Plain Ballot
 
-> A free, open source of candidates and their positions, every position backed by an exact, verified quote; plus a nonpartisan voter guide built on it. A voter picks the issues they care about and sets a dial for each; Plain Ballot matches their ballot to those priorities (Nov 3, 2026: every race in California, plus U.S. House and Senate in all 50 states) and shows an exact, verified quote behind every claim.
+> A free, nonpartisan voter guide built on open data about candidates and their positions, every position backed by an exact, verified quote. A voter picks the issues they care about and sets a dial for each; Plain Ballot matches their ballot to those priorities (Nov 3, 2026: every race in California, plus U.S. House and Senate in all 50 states) and shows an exact, verified quote behind every claim.
 
 Matching is deterministic arithmetic in the browser, not AI. Candidate positions are researched by independent AI agents on models from different companies; a position is published only when the agents agree and its quote is found word for word on the cited page. Party labels are hidden until the voter asks.
 
@@ -14,7 +14,7 @@ Matching is deterministic arithmetic in the browser, not AI. Candidate positions
 - [Source code (AGPL-3.0)](https://github.com/n8peace/plainballot)
 - [Dial wording](https://github.com/n8peace/plainballot/blob/main/lib/issues.ts): the 18 issues and how each end is worded
 - [Matching](https://github.com/n8peace/plainballot/blob/main/lib/match.ts): the scoring arithmetic
-- [Researched positions](https://github.com/n8peace/plainballot/tree/main/data/positions): one JSON file per contest, each claim with a quote and source URL
-- [Research file schema](https://github.com/n8peace/plainballot/blob/main/data/positions.schema.json)
+- [Open Election Data](https://github.com/n8peace/open-election-data): the open research (ODbL), one JSON file per contest, each claim with a quote and source URL
+- [Free data API](https://n8peace.github.io/open-election-data/): static JSON, no key
 - [Architecture](https://github.com/n8peace/plainballot/blob/main/docs/ARCHITECTURE.md)
 - [Contributing](https://github.com/n8peace/plainballot/blob/main/CONTRIBUTING.md)

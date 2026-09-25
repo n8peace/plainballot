@@ -15,11 +15,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: sudo apt-get install -y -qq poppler-utils
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
-      - name: Research file schema is up to date
-        run: npm run schema && git diff --exit-code data/positions.schema.json
-      - name: Verify research quotes against their sources
-        run: npm run check:research
+      - name: Dial wording matches the research data
+        run: npm run check:issues

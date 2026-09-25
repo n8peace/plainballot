@@ -2,9 +2,9 @@
 
 # Plain Ballot
 
-**A free source of candidates and their positions. Every position backed by a quote you can check.**
+**Every race on your ballot, matched to what you care about. Every position backed by a quote you can check.**
 
-[Use the data](#use-the-data) · [plainballot.com](https://plainballot.com) · [How it works](https://plainballot.com/methodology) · [Research your state](CONTRIBUTING.md)
+[plainballot.com](https://plainballot.com) · [How it works](https://plainballot.com/methodology) · [The open data](https://github.com/n8peace/open-election-data) · [Contribute](CONTRIBUTING.md)
 
 [![CI](https://github.com/n8peace/plainballot/actions/workflows/ci.yml/badge.svg)](https://github.com/n8peace/plainballot/actions/workflows/ci.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-black)](LICENSE)
@@ -14,14 +14,14 @@
 
 </div>
 
-Who's running, and where do they stand? Plain Ballot answers that for every candidate it covers, on the same 18 issues, with an exact quote and a link to where it came from. No other free source does this, so we're building it in the open.
+Who's running, and where do they stand? Pick the issues you care about, set a dial for each, and enter your address. Plain Ballot goes through your ballot and shows who fits you, why, and where that came from. Party labels stay hidden until you ask. No ads, no account, nothing stored.
 
 Covering every race in California, plus U.S. House and Senate in all 50 states, for Nov 3, 2026.
 
-**Two ways to use it:**
+**Two projects, both free and open:**
 
-- **As a voter:** [plainballot.com](https://plainballot.com). Pick the issues you care about, set a dial for each, and enter your address. It goes through your ballot and shows who fits you, why, and where that came from. Party labels stay hidden until you ask. No ads, no account, nothing stored.
-- **As a builder, researcher or newsroom:** take the data. Every race is a plain JSON file, free to use. See [Use the data](#use-the-data).
+- **[Plain Ballot](https://plainballot.com)** (this repo): the voter guide.
+- **[Open Election Data](https://github.com/n8peace/open-election-data)**: the research behind it. Every candidate on the same 18 issues, each position with an exact quote and its source, researched by AI agents that have to agree. Free to use, including commercially, under the Open Database License, with a [free API](https://n8peace.github.io/open-election-data/).
 
 ## AI that has to show its work
 
@@ -33,24 +33,17 @@ Chatbots get voting facts wrong. Plain Ballot is built so no single model's word
 - **Matching isn't AI.** It's plain, deterministic arithmetic in your browser ([lib/match.ts](lib/match.ts)). Same answers, same ballot, every time.
 - **Voters can push back.** "Not right?" on any claim files a public issue and reruns the research with fresh agents. Corrections are public.
 - **Every change is checked for bias.** Three models from different companies review each pull request for loaded wording and one-sided logic, and tests require that matching treats both ends of every dial the same.
-- **Every word is public.** The dial wording ([lib/issues.ts](lib/issues.ts)), the agreement rules ([lib/research/consensus.ts](lib/research/consensus.ts)) and every researched position ([data/positions](data/positions)) live in this repo.
+- **Every word is public.** The dial wording, the agreement rules and every researched position live in [Open Election Data](https://github.com/n8peace/open-election-data); the matching lives here.
 
 ## Use the data
 
-Every researched race is one file in [data/positions](data/positions): the office, the district, each candidate (or Yes and No for a measure) and their position on each issue that office decides. Every position names a side of the issue, how strongly, a one-sentence summary, the exact quote and its source.
+The research is its own project: **[Open Election Data](https://github.com/n8peace/open-election-data)**. It has a free, static API with no key needed:
 
 ```bash
-# One race
-curl -s https://raw.githubusercontent.com/n8peace/plainballot/main/data/positions/governor-california.json
-
-# Everything
-git clone --depth 1 https://github.com/n8peace/plainballot && ls plainballot/data/positions
+curl -s https://n8peace.github.io/open-election-data/v1/divisions/ca/cd-10.json
 ```
 
-- **Format:** [data/positions.schema.json](data/positions.schema.json) (JSON Schema). The 18 issues and the wording of each side are in [lib/issues.ts](lib/issues.ts).
-- **Freshness:** research updates several times a day until Nov 3, and every quote is rechecked against its source nightly.
-- **Districts:** each file's `division` (for example `ca/cd-10` or `tx/state`) uses U.S. Census district keys, so an address can be matched to its races.
-- **Found something wrong?** Open an issue, or use "Not right?" on the site. Corrections are public.
+Use it for anything, including commercial products, under the Open Database License: credit it, and share improvements to the data under the same terms.
 
 ## Why not just use Ballotpedia?
 
@@ -60,17 +53,9 @@ Ballotpedia is a great reference, and the research agents read it. But it can't 
 - **Its data isn't open.** Bulk access is a paid product, and its pages aren't ours to republish. Everything here is free to copy, check and reuse.
 - **Every claim needs the candidate's own words.** A summary of a position isn't enough; agents follow it back to the candidate's site, voting record or interview and quote that.
 
-## Research your state with your own subscription
+## Research your state
 
-The research runs on your own Claude or ChatGPT plan, so anyone can add coverage without paying for API credits.
-
-```bash
-npm install
-cp .env.example .env.local        # add AI_GATEWAY_API_KEY for the fallback model
-npm run research:state -- CA      # reads the state's certified candidate list, then researches every race
-```
-
-It shells out to `claude -p` and `codex exec`, verifies every quote itself, and falls back to an API model when your plan hits its usage limit. Open a pull request with the results; CI refetches every source and fails any quote it can't find. There's an open ["research your state" issue](https://github.com/n8peace/plainballot/issues?q=is%3Aopen+label%3Aresearch) for each of the 50 states and D.C.
+The research runs on your own Claude or ChatGPT plan, so anyone can add coverage without paying for API credits. It happens in [Open Election Data](https://github.com/n8peace/open-election-data), which has an open "research your state" issue for each state.
 
 ## Run it locally
 
@@ -80,17 +65,17 @@ cp .env.example .env.local
 npm run dev                        # http://localhost:3000
 ```
 
-Without keys, it runs on a fictional sample ballot and the dials still work. Keys turn on typed priorities (`AI_GATEWAY_API_KEY`), real ballot lookup (`GOOGLE_CIVIC_API_KEY`) and address suggestions (`GOOGLE_PLACES_API_KEY`).
+Without keys, it runs on a fictional sample ballot and the dials still work. Researched races come from the open data's API (set `ELECTION_DATA_DIR` to a local checkout's `data/positions` to work offline). Keys turn on typed priorities (`AI_GATEWAY_API_KEY`), real ballot lookup (`GOOGLE_CIVIC_API_KEY`) and address suggestions (`GOOGLE_PLACES_API_KEY`).
 
 ```bash
-npm test               # matching, agreement rules, quote checks, sharing, abuse limits
+npm test               # matching, neutrality, sharing, abuse limits
 npm run eval           # does the AI put people on the right side of each dial? (calls the model)
-npm run check:research # refetch every source and verify every quote
+npm run check:issues   # dial wording matches the research data
 ```
 
 ## How it's built
 
-Next.js on Vercel. The Census geocoder finds a voter's districts. Researched races are JSON files in `data/positions`, matched to voters by district. BotID, rate limits and a spending cap protect the paid endpoints ([docs/security.md](docs/security.md)). The full picture, with a diagram: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Coding with an AI agent? Point it at [AGENTS.md](AGENTS.md).
+Next.js on Vercel. The Census geocoder finds a voter's districts. Researched races come from the Open Election Data API, matched to voters by district. BotID, rate limits and a spending cap protect the paid endpoints ([docs/security.md](docs/security.md)). The full picture, with a diagram: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Coding with an AI agent? Point it at [AGENTS.md](AGENTS.md).
 
 ## Contributing
 

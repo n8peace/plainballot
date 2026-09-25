@@ -9,19 +9,9 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "next typegen && tsc --noEmit",
-    "research": "node --env-file-if-exists=.env.local --import tsx scripts/research.ts",
     "eval": "node --env-file-if-exists=.env.local --import tsx scripts/eval-interpret.ts",
-    "check:research": "node --import tsx scripts/check-positions.ts",
-    "review": "node --import tsx scripts/review-sheet.ts",
-    "recheck": "node --env-file-if-exists=.env.local --import tsx scripts/recheck.ts",
-    "research:state": "node --env-file-if-exists=.env.local --import tsx scripts/research-state.ts",
-    "compare-models": "node --env-file-if-exists=.env.local --import tsx scripts/compare-models.ts",
-    "ca:list": "node --import tsx scripts/ca-cert-list.ts",
-    "consensus": "node --env-file-if-exists=.env.local --import tsx scripts/consensus.ts",
-    "research:queue": "node --env-file-if-exists=.env.local --import tsx scripts/research-queue.ts",
     "bias-check": "node --env-file-if-exists=.env.local --import tsx scripts/bias-check.ts",
-    "schema": "node --import tsx scripts/positions-schema.ts",
-    "ca:local-measures": "node --env-file-if-exists=.env.local --import tsx scripts/ca-local-measures.ts"
+    "check:issues": "node --import tsx scripts/check-issues.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -43,7 +33,7 @@
     "vitest": "^5.0.1"
   },
   "license": "AGPL-3.0",
-  "description": "A free source of candidates and their positions, every position backed by a quote you can check. Plus a voter guide built on it.",
+  "description": "Plain Ballot: a free, nonpartisan voter guide that matches every race on your ballot to your priorities, built on the open Open Election Data.",
   "homepage": "https://plainballot.com",
   "repository": {
     "type": "git",

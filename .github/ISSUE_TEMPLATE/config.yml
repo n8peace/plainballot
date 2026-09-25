@@ -3,3 +3,6 @@ contact_links:
   - name: Ideas and questions
     url: https://github.com/n8peace/plainballot/discussions
     about: Talk through an idea before building it.
+  - name: Research a race, report a wrong claim, or challenge a dial's wording
+    url: https://github.com/n8peace/open-election-data/issues/new/choose
+    about: Research and dial wording live in Open Election Data.

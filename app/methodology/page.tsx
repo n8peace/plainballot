@@ -2,8 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ISSUES } from '@/lib/issues';
 import { INTERPRET_MODEL } from '@/lib/ai/interpret';
-import { RESEARCH_MODELS } from '@/lib/research/agent';
-import { GITHUB_URL } from '@/lib/share';
+import { DATA_REPO_URL, GITHUB_URL } from '@/lib/share';
 
 export const metadata: Metadata = { title: 'How Plain Ballot works', description: 'The matching method, the dial wording, and where the AI is and isn’t used.' };
 
@@ -25,14 +24,15 @@ export default function Methodology() {
       <h2>Where AI is used, and where it isn’t</h2>
       <ul>
         <li><b>Reading your words.</b> If you describe your priorities in your own words, a small model ({INTERPRET_MODEL}) turns them into dial settings, quoting the phrase each came from. You can see and change every one. Your text isn’t stored, and the model provider keeps no copy.</li>
-        <li><b>Researching candidates.</b> Three independent research agents, each running on a different AI model ({RESEARCH_MODELS.join(', ')}), search the web, read the candidate’s own sources and record positions with exact quotes. If all three agree on an issue, that’s the answer. If they don’t, seven more agents run, and a position is published only if at least 6 of the 10 agree. Without a majority, the issue is left blank. The same process confirms who is on the ballot.</li>
+        <li><b>Researching candidates.</b> Three independent research agents, on models from different AI companies, each search the web, read the candidate’s own sources and record positions with exact quotes. A position is published when two agree and none disagree. When only one finds something, two more agents run; when they conflict, ten run and a majority decides. Without agreement, the issue is left blank. The research is open data, published at <a href={DATA_REPO_URL}>Open Election Data</a>.</li>
+        <li><b>Ballot measures.</b> Three models read each measure’s official text and vote on which side a Yes vote moves each issue. A No vote gets the opposite side.</li>
         <li><b>Checking the quotes.</b> Every quote is fetched from its source and must appear there word for word, or the claim is thrown out. Claims publish automatically once the agents agree and the quotes check out; the ballot says whether a person has also reviewed a race. Every night, every published quote is checked again.</li>
         <li><b>Fixing mistakes.</b> Anyone can tap “Not right?” on a claim. The report is public, and it starts a fresh recheck with new agents. If the result changes, the correction is published.</li>
         <li><b>Not used for matching.</b> No model decides your matches or writes your explanations. Those are computed from the research data.</li>
       </ul>
 
       <h2>The dials, word for word</h2>
-      <p>Each end is worded the way its own supporters would put it. The ends aren’t all lined up left to right by party. Think a label is unfair? <a href={`${GITHUB_URL}/issues`}>Tell us</a>.</p>
+      <p>Each end is worded the way its own supporters would put it. The ends aren’t all lined up left to right by party. Think a label is unfair? <a href={`${DATA_REPO_URL}/issues/new?template=wording.yml`}>Tell us</a>.</p>
       <div className="table-wrap">
         <table>
           <thead><tr><th>Issue</th><th>−2 end</th><th>+2 end</th></tr></thead>
@@ -45,7 +45,7 @@ export default function Methodology() {
       </div>
 
       <h2>Check our work</h2>
-      <p>All of the code, the dial wording and the researched positions are public at <a href={GITHUB_URL}>{GITHUB_URL.replace('https://', '')}</a>. Corrections are welcome, and every change is public.</p>
+      <p>This site’s code is public at <a href={GITHUB_URL}>{GITHUB_URL.replace('https://', '')}</a>. The research, including every position, quote and source and the dial wording, is free open data at <a href={DATA_REPO_URL}>{DATA_REPO_URL.replace('https://', '')}</a>. Corrections are welcome, and every change is public.</p>
     </div>
   );
 }
