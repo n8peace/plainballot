@@ -1,0 +1,18 @@
+{
+  "office": "Measure A",
+  "district": "City of Simi Valley",
+  "division": "ca/place-simi-valley",
+  "kind": "measure",
+  "summary": "A Yes vote increases the City of Simi Valley transient occupancy tax from 10% to 12% for hotel and short-term lodging stays.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

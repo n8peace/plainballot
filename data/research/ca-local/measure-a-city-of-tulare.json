@@ -1,0 +1,18 @@
+{
+  "office": "Measure A",
+  "district": "City of Tulare",
+  "division": "ca/place-tulare",
+  "kind": "measure",
+  "summary": "A Yes vote increases the city's existing transactions and use (sales) tax by one cent, from 0.5% to 1.5%, for general city services until repealed by voters.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

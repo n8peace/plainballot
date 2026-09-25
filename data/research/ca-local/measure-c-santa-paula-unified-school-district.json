@@ -1,0 +1,19 @@
+{
+  "office": "Measure C",
+  "district": "Santa Paula Unified School District",
+  "division": "ca/school-santa-paula-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes up to $48,600,000 in general obligation bonds for school-facility projects including a gymnasium rebuild, pool facilities, and classroom and vocational-space modernization.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

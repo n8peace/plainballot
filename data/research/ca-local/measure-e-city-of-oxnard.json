@@ -1,0 +1,18 @@
+{
+  "office": "Measure E",
+  "district": "City of Oxnard",
+  "division": "ca/place-oxnard",
+  "kind": "measure",
+  "summary": "A Yes vote renews the existing one-half-cent City of Oxnard sales tax for general city services without increasing its rate.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
