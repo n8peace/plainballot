@@ -3,8 +3,10 @@
   "district": "Creates Loan Program for Middle-Income Buyers of Qualified New Homes.",
   "division": "ca/state",
   "kind": "measure",
-  "summary": "A Yes vote authorizes up to $25 billion in bonds for mortgages to eligible middle-income buyers of qualifying newly built homes, with mortgage payments repaying the bonds.",
-  "issues": [],
+  "summary": "A Yes vote authorizes up to $25 billion in bonds for fixed-rate mortgages for eligible middle-income buyers of qualified new homes, with mortgage payments repaying the bonds.",
+  "issues": [
+    "housing"
+  ],
   "choices": [
     {
       "name": "Yes",
@@ -15,6 +17,7 @@
       "stances": {}
     }
   ],
+  "sources": "",
   "checkedAt": "2026-09-25",
   "reviewed": false
 }

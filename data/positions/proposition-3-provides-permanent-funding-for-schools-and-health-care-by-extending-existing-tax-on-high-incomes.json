@@ -3,8 +3,11 @@
   "district": "Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes.",
   "division": "ca/state",
   "kind": "measure",
-  "summary": "A Yes vote makes permanent existing income-tax rates on high-income taxpayers and continues directing the revenue to schools and health care.",
-  "issues": [],
+  "summary": "A Yes vote makes existing high-income tax rates permanent and allocates revenue to K–12 schools, community colleges, and the state General Fund.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
   "choices": [
     {
       "name": "Yes",
@@ -15,6 +18,7 @@
       "stances": {}
     }
   ],
+  "sources": "",
   "checkedAt": "2026-09-25",
   "reviewed": false
 }

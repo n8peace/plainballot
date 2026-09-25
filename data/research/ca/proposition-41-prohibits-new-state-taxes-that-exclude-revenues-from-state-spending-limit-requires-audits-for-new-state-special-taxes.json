@@ -3,8 +3,10 @@
   "district": "Prohibits New State Taxes That Exclude Revenues from State Spending Limit. Requires Audits for New State Special Taxes.",
   "division": "ca/state",
   "kind": "measure",
-  "summary": "A Yes vote prohibits new state taxes from excluding revenue from the state spending limit and requires audits of programs funded by new state special taxes.",
-  "issues": [],
+  "summary": "A Yes vote requires specified audits of programs funded by new state special taxes and bars new state taxes whose revenues are excluded from the voter-approved state spending limit.",
+  "issues": [
+    "tax"
+  ],
   "choices": [
     {
       "name": "Yes"

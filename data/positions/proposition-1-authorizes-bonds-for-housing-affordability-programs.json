@@ -3,8 +3,10 @@
   "district": "Authorizes Bonds for Housing Affordability Programs.",
   "division": "ca/state",
   "kind": "measure",
-  "summary": "A Yes vote allows the state to borrow $11.25 billion for veterans' housing and housing-affordability programs.",
-  "issues": [],
+  "summary": "A Yes vote authorizes the state to borrow $11.25 billion for veterans and affordable-housing programs.",
+  "issues": [
+    "housing"
+  ],
   "choices": [
     {
       "name": "Yes",
@@ -15,6 +17,7 @@
       "stances": {}
     }
   ],
+  "sources": "",
   "checkedAt": "2026-09-25",
   "reviewed": false
 }
