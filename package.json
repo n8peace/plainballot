@@ -18,7 +18,9 @@
     "compare-models": "node --env-file-if-exists=.env.local --import tsx scripts/compare-models.ts",
     "ca:list": "node --import tsx scripts/ca-cert-list.ts",
     "consensus": "node --env-file-if-exists=.env.local --import tsx scripts/consensus.ts",
-    "research:queue": "node --env-file-if-exists=.env.local --import tsx scripts/research-queue.ts"
+    "research:queue": "node --env-file-if-exists=.env.local --import tsx scripts/research-queue.ts",
+    "bias-check": "node --env-file-if-exists=.env.local --import tsx scripts/bias-check.ts",
+    "schema": "node --import tsx scripts/positions-schema.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -39,5 +41,25 @@
     "typescript": "^5",
     "vitest": "^5.0.1"
   },
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "description": "Every race on your ballot, matched to what you care about, with a verified source for every claim.",
+  "homepage": "https://plainballot.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n8peace/plainballot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/n8peace/plainballot/issues"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "keywords": [
+    "voting",
+    "elections",
+    "ballot",
+    "civic-tech",
+    "nextjs",
+    "ai"
+  ]
 }

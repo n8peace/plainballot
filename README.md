@@ -27,6 +27,7 @@ Chatbots get voting facts wrong. Plain Ballot is built so no single model's word
 - **No guessing.** An agent not finding a source never counts as a vote. No majority means the issue stays blank, and the ballot says so.
 - **Matching isn't AI.** It's plain, deterministic arithmetic in your browser ([lib/match.ts](lib/match.ts)). Same answers, same ballot, every time.
 - **Voters can push back.** "Not right?" on any claim files a public issue and reruns the research with fresh agents. Corrections are public.
+- **Every change is checked for bias.** Three models from different companies review each pull request for loaded wording and one-sided logic, and tests require that matching treats both ends of every dial the same.
 - **Every word is public.** The dial wording ([lib/issues.ts](lib/issues.ts)), the agreement rules ([lib/research/consensus.ts](lib/research/consensus.ts)) and every researched position ([data/positions](data/positions)) live in this repo.
 
 ## Research your state with your own subscription
@@ -39,7 +40,7 @@ cp .env.example .env.local        # add AI_GATEWAY_API_KEY for the fallback mode
 npm run research:state -- CA      # reads the state's certified candidate list, then researches every race
 ```
 
-It shells out to `claude -p` and `codex exec`, verifies every quote itself, and falls back to an API model when your plan hits its usage limit. Open a pull request with the results; CI refetches every source and fails any quote it can't find. There are [51 "research your state" issues](https://github.com/n8peace/plainballot/issues?q=is%3Aopen+label%3Aresearch) open, one per state.
+It shells out to `claude -p` and `codex exec`, verifies every quote itself, and falls back to an API model when your plan hits its usage limit. Open a pull request with the results; CI refetches every source and fails any quote it can't find. There's an open ["research your state" issue](https://github.com/n8peace/plainballot/issues?q=is%3Aopen+label%3Aresearch) for each of the 50 states and D.C.
 
 ## Run it locally
 
@@ -59,11 +60,13 @@ npm run check:research # refetch every source and verify every quote
 
 ## How it's built
 
-Next.js on Vercel. The Census geocoder finds a voter's districts. Researched races are JSON files in `data/positions`, matched to voters by district. BotID, rate limits and a spending cap protect the paid endpoints ([docs/security.md](docs/security.md)).
+Next.js on Vercel. The Census geocoder finds a voter's districts. Researched races are JSON files in `data/positions`, matched to voters by district. BotID, rate limits and a spending cap protect the paid endpoints ([docs/security.md](docs/security.md)). The full picture, with a diagram: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Coding with an AI agent? Point it at [AGENTS.md](AGENTS.md).
 
 ## Contributing
 
-The most useful help is research and checking research, and neither needs code. See [CONTRIBUTING.md](CONTRIBUTING.md).
+The most useful help is research and checking research, and neither needs code. See [CONTRIBUTING.md](CONTRIBUTING.md), or open a ready-to-run copy in your browser:
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/n8peace/plainballot)
 
 ## License
 

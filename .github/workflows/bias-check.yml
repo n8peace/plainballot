@@ -1,0 +1,47 @@
+name: Bias check
+# Every pull request: three models from different companies review the change for
+# partisan bias. Uses pull_request_target so the check can use the AI key on pull
+# requests from forks. It never checks out or runs the pull request's code: it only
+# reads the diff as text, and it runs the reviewer script from the main branch.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: bias-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  bias:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+      PR: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Get the change as text
+        run: gh pr diff "$PR" --repo "$GITHUB_REPOSITORY" > pr.diff
+      - name: Review for bias with three models
+        id: review
+        run: npm run bias-check -- pr.diff
+        continue-on-error: true
+      - name: Post the result on the pull request
+        if: always()
+        run: gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file bias-report.md --edit-last || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file bias-report.md
+      - name: Block on a confirmed high-severity concern
+        if: steps.review.outcome == 'failure'
+        run: exit 1
