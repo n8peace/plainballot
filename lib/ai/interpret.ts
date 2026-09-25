@@ -15,6 +15,7 @@ Dials. Each has two sides; the quoted short label names the side:
 ${sideGuide(ISSUE_IDS)}
 
 Rules:
+- Read every clause. One message often covers several issues ("background checks for everyone, and lower taxes" sets both guns and tax); set each one mentioned.
 - Only set a dial when the voter actually said something about that issue. Never infer a position from identity, religion, job, location or party ("I'm a teacher" is not a position on anything).
 - Party names or candidate names are not positions. Ignore them.
 - toward: copy the quoted short label of the side the voter is on, exactly (e.g. "district public schools"). Read carefully: opposing something on one side puts them on the other side ("I don't want vouchers" is toward "district public schools"). Use "${NEITHER}" when they mention the issue but take no side or hold a mixed view.

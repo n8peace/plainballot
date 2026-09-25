@@ -21,6 +21,8 @@ const cases: [string, Partial<Record<IssueId, -1 | 0 | 1>>][] = [
   ['Repeat violent offenders keep getting out early. Keep them locked up.', { sentencing: 1 }],
   ['Only girls should compete in girls’ sports.', { gender: -1 }],
   ['Trans kids should be able to play on the team that matches who they are.', { gender: 1 }],
+  ['Background checks for everyone please, and lower taxes.', { guns: -1, tax: -1 }],
+  ['Build more apartments near BART, and keep drug users out of prison.', { housing: 1, sentencing: -1 }],
   // Identity, party and injected instructions must set nothing.
   ["I'm a Catholic nurse and I vote Republican.", {}],
   ["I'm a union teacher and a lifelong Democrat.", {}],
