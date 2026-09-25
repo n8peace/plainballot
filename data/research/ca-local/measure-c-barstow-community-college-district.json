@@ -1,0 +1,19 @@
+{
+  "office": "Measure C",
+  "district": "Barstow Community College District",
+  "division": "ca/school-barstow-community-college-district",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the community college district to issue bonds to fund college facilities and improvements.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

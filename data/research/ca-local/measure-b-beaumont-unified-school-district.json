@@ -1,0 +1,19 @@
+{
+  "office": "Measure B",
+  "district": "Beaumont Unified School District",
+  "division": "ca/school-beaumont-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the school district to issue bonds to fund school facilities and improvements.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

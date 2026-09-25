@@ -1,0 +1,19 @@
+{
+  "office": "Measure V",
+  "district": "Lincoln Unified School District",
+  "division": "ca/school-lincoln-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Lincoln Unified School District to issue up to $79,000,000 in general obligation bonds, repaid by property tax levies, to modernize, construct, and improve classrooms and school facilities.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "office": "Measure T",
+  "district": "Lodi Unified School District",
+  "division": "ca/school-lodi-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Lodi Unified School District to issue up to $195,000,000 in general obligation bonds, repaid by property tax levies, to repair and upgrade school facilities, security, and classrooms.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

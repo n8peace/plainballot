@@ -1,0 +1,18 @@
+{
+  "office": "Measure C",
+  "district": "City of Arroyo Grande",
+  "division": "ca/place-arroyo-grande",
+  "kind": "measure",
+  "summary": "A Yes vote establishes a tax of up to 10% of gross receipts on cannabis businesses operating in the city.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

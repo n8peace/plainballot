@@ -1,0 +1,16 @@
+{
+  "office": "Measure U",
+  "district": "San Mateo County",
+  "division": "ca/county-san-mateo",
+  "kind": "measure",
+  "summary": "A Yes vote amends the County Charter to change the process and standards for reapportioning the boundaries of the five supervisorial districts after each decennial census.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

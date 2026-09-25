@@ -1,0 +1,19 @@
+{
+  "office": "Measure P",
+  "district": "City of Menlo Park",
+  "division": "ca/place-menlo-park",
+  "kind": "measure",
+  "summary": "A Yes vote prohibits the City of Menlo Park from selling, leasing, conveying, authorizing new uses on, or making improvements to City-owned downtown parking lots in ways that would reduce parking availability, access, or convenience, unless voters approve the change in a future ballot measure.",
+  "issues": [
+    "transit",
+    "housing"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

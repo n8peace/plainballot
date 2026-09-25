@@ -1,0 +1,24 @@
+{
+  "office": "U.S. Senator",
+  "district": "AK",
+  "division": "ak/state",
+  "kind": "candidate",
+  "choices": [
+    {
+      "name": "Gerald L. Heikes",
+      "party": "Republican"
+    },
+    {
+      "name": "Mary Peltola",
+      "party": "Democrat"
+    },
+    {
+      "name": "Dan S. Sullivan",
+      "party": "Republican"
+    },
+    {
+      "name": "Daniel J. Sullivan Jr.",
+      "party": "Republican"
+    }
+  ]
+}

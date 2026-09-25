@@ -1,0 +1,19 @@
+{
+  "office": "Measure U",
+  "district": "Escalon Unified School District",
+  "division": "ca/school-escalon-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Escalon Unified School District to issue up to $26,000,000 in general obligation bonds, repaid by property tax levies, to modernize, construct, rehabilitate, and equip school facilities.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

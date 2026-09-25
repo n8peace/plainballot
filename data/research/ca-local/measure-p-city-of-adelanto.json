@@ -1,0 +1,18 @@
+{
+  "office": "Measure P",
+  "district": "City of Adelanto",
+  "division": "ca/place-adelanto",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a transactions and use (sales) tax in the City of Adelanto to fund city services.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

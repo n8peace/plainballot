@@ -1,0 +1,18 @@
+{
+  "office": "Measure H",
+  "district": "City of Ontario",
+  "division": "ca/place-ontario",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a transactions and use (sales) tax in the City of Ontario to fund city services.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

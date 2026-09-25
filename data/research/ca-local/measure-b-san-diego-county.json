@@ -1,0 +1,18 @@
+{
+  "office": "Measure B",
+  "district": "San Diego County",
+  "division": "ca/county-san-diego",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a half-cent countywide sales tax, raising the rate from 7.75% to 8.25%, to fund Tijuana River Valley sewage cleanup, wildfire prevention, emergency response, healthcare access, food assistance, and childhood development services, with citizen oversight and audits, lasting until ended by voters.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

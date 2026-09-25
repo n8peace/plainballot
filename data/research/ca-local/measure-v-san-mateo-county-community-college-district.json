@@ -1,0 +1,19 @@
+{
+  "office": "Measure V",
+  "district": "San Mateo County Community College District",
+  "division": "ca/school-san-mateo-county-community-college-district",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes San Mateo County Community College District to issue $848,000,000 in general obligation bonds, levied at about $18 per $100,000 of assessed value while bonds are outstanding, to repair and construct classrooms and facilities at College of San Mateo, Cañada College, and Skyline College.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
