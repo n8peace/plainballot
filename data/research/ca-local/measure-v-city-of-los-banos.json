@@ -1,0 +1,16 @@
+{
+  "office": "Measure V",
+  "district": "City of Los Banos",
+  "division": "ca/place-los-banos",
+  "kind": "measure",
+  "summary": "A Yes vote changes the City of Los Banos city clerk office from elected to appointed.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "office": "Measure U",
+  "district": "Madera County",
+  "division": "ca/county-madera",
+  "kind": "measure",
+  "summary": "A Yes vote increases the transient occupancy tax charged to guests staying at lodging in the unincorporated areas of Madera County.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

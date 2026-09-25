@@ -1,0 +1,18 @@
+{
+  "office": "Measure T",
+  "district": "City of El Centro",
+  "division": "ca/place-el-centro",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a 1/2-cent city sales tax, estimated to raise about $8.4 million per year until ended by voters, to fund emergency response, public safety, street repairs, parks maintenance, and other city services in the City of El Centro.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

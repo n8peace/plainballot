@@ -1,0 +1,18 @@
+{
+  "office": "Measure P",
+  "district": "Marin County",
+  "division": "ca/county-marin",
+  "kind": "measure",
+  "summary": "A Yes vote imposes a Marin County parcel tax of 5 cents per building square foot to fund child care and early childhood education programs.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

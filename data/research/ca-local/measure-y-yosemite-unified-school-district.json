@@ -1,0 +1,19 @@
+{
+  "office": "Measure Y",
+  "district": "Yosemite Unified School District",
+  "division": "ca/school-yosemite-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes up to $61.2 million in bonds for Yosemite High School districtwide, repaid by a property tax levied on property owners within Yosemite Unified School District.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

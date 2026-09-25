@@ -1,0 +1,18 @@
+{
+  "office": "Measure B",
+  "district": "City of Merced",
+  "division": "ca/place-merced",
+  "kind": "measure",
+  "summary": "A Yes vote establishes a 1% local transactions and use tax until ended by voters for City of Merced general services.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

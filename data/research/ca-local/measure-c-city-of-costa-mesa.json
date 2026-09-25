@@ -1,0 +1,18 @@
+{
+  "office": "Measure C",
+  "district": "City of Costa Mesa",
+  "division": "ca/place-costa-mesa",
+  "kind": "measure",
+  "summary": "A Yes vote changes the City of Costa Mesa's business license requirements.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

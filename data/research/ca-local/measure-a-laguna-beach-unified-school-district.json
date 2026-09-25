@@ -1,0 +1,19 @@
+{
+  "office": "Measure A",
+  "district": "Laguna Beach Unified School District",
+  "division": "ca/school-laguna-beach-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Laguna Beach Unified School District to issue general obligation bonds for school facilities.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

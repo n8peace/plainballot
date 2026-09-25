@@ -1,0 +1,16 @@
+{
+  "office": "Measure E",
+  "district": "City of Laguna Beach",
+  "division": "ca/place-laguna-beach",
+  "kind": "measure",
+  "summary": "A Yes vote establishes term limits for City of Laguna Beach City Council members.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

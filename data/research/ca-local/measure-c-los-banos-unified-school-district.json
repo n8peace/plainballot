@@ -1,0 +1,19 @@
+{
+  "office": "Measure C",
+  "district": "Los Banos Unified School District",
+  "division": "ca/school-los-banos-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Los Banos Unified School District to issue up to $99,000,000 in general obligation bonds for school facilities and classrooms.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

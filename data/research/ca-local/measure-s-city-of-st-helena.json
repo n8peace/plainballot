@@ -1,0 +1,18 @@
+{
+  "office": "Measure S",
+  "district": "City of St. Helena",
+  "division": "ca/place-st-helena",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a half-cent (0.5%) sales tax in the City of St. Helena, raising the rate from 8.25% to 8.75%, with revenue going to the city's general fund for services such as fire and public safety response, road repair, and parks.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

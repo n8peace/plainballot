@@ -1,0 +1,16 @@
+{
+  "office": "Measure F",
+  "district": "City of Lake Forest",
+  "division": "ca/place-lake-forest",
+  "kind": "measure",
+  "summary": "A Yes vote adopts changes to the City of Lake Forest's election system.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

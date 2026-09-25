@@ -1,0 +1,16 @@
+{
+  "office": "Measure U",
+  "district": "City of Livingston",
+  "division": "ca/place-livingston",
+  "kind": "measure",
+  "summary": "A Yes vote changes the City of Livingston city treasurer office from elected to appointed beginning in 2028.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

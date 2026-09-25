@@ -1,0 +1,19 @@
+{
+  "office": "Measure W",
+  "district": "Acalanes Union High School District",
+  "division": "ca/school-acalanes-union-high",
+  "kind": "measure",
+  "summary": "A Yes vote levies a $168 parcel tax for eight years, raising about $6,000,000 per year for the district.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

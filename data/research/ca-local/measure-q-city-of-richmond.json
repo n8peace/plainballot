@@ -1,0 +1,18 @@
+{
+  "office": "Measure Q",
+  "district": "City of Richmond",
+  "division": "ca/place-richmond",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the City of Richmond to issue $120,000,000 in bonds, repaid by a property tax estimated at $22.15 per $100,000 of assessed valuation.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

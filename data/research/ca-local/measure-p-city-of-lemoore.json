@@ -1,0 +1,18 @@
+{
+  "office": "Measure P",
+  "district": "City of Lemoore",
+  "division": "ca/place-lemoore",
+  "kind": "measure",
+  "summary": "A Yes vote amends the Lemoore Municipal Code to increase the maximum transient occupancy (hotel) tax paid by hotel and vacation rental guests from 8% to 12%, with the revenue going to general city services.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

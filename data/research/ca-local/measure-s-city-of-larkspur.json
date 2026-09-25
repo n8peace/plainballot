@@ -1,0 +1,18 @@
+{
+  "office": "Measure S",
+  "district": "City of Larkspur",
+  "division": "ca/place-larkspur",
+  "kind": "measure",
+  "summary": "A Yes vote extends the City of Larkspur's paramedic services special tax of up to $107.50 per unit for four years.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

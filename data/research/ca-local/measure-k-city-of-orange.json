@@ -1,0 +1,16 @@
+{
+  "office": "Measure K",
+  "district": "City of Orange",
+  "division": "ca/place-orange",
+  "kind": "measure",
+  "summary": "A Yes vote adopts a proposed charter for the City of Orange.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

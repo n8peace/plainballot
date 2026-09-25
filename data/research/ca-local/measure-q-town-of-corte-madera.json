@@ -1,0 +1,18 @@
+{
+  "office": "Measure Q",
+  "district": "Town of Corte Madera",
+  "division": "ca/place-corte-madera",
+  "kind": "measure",
+  "summary": "A Yes vote continues the Town of Corte Madera's paramedic services special tax of up to $94.50 per residential living unit or per 1,000 square feet of nonresidential property for four years.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

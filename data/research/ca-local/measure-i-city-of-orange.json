@@ -1,0 +1,19 @@
+{
+  "office": "Measure I",
+  "district": "City of Orange",
+  "division": "ca/place-orange",
+  "kind": "measure",
+  "summary": "A Yes vote enacts funding for public safety and essential services in the City of Orange.",
+  "issues": [
+    "tax",
+    "safety"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

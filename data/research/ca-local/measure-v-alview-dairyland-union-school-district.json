@@ -1,0 +1,19 @@
+{
+  "office": "Measure V",
+  "district": "Alview-Dairyland Union School District",
+  "division": "ca/school-alview-dairyland-union",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes Alview-Dairyland Union School District to issue bonds for school facilities, repaid by a property tax levied on property owners within the district.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "office": "Measure U",
+  "district": "Town of Ross",
+  "division": "ca/place-ross",
+  "kind": "measure",
+  "summary": "A Yes vote continues the Town of Ross's paramedic services special tax of up to $107.50 per unit for four years.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
