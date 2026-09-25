@@ -1,0 +1,18 @@
+{
+  "office": "Measure Y",
+  "district": "City of Benicia",
+  "division": "ca/place-benicia",
+  "kind": "measure",
+  "summary": "A Yes vote adopts a limited city charter that would enable a real property transfer tax if Measure Z also passes.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

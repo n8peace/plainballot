@@ -1,0 +1,18 @@
+{
+  "office": "Measure D",
+  "district": "City of Los Altos",
+  "division": "ca/place-los-altos",
+  "kind": "measure",
+  "summary": "A Yes vote bars the sale or alteration of ten downtown parking plazas without voter approval, while allowing two of them to be used for affordable housing without a vote.",
+  "issues": [
+    "housing"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

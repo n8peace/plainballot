@@ -1,0 +1,18 @@
+{
+  "office": "Measure Y",
+  "district": "City of Woodland",
+  "division": "ca/place-woodland",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a one-cent sales tax to fund road repair, public safety, parks, and maintenance until ended by voters.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

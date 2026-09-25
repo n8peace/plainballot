@@ -1,0 +1,19 @@
+{
+  "office": "Measure I",
+  "district": "Town of Windsor",
+  "division": "ca/place-windsor",
+  "kind": "measure",
+  "summary": "A Yes vote establishes a 1% general sales tax in Windsor, providing about $5,700,000 annually until ended by voters, for street repair, police patrols and emergency response, parks, disaster preparedness and fire prevention, and general government use, with independent audits and citizen oversight.",
+  "issues": [
+    "tax",
+    "safety"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

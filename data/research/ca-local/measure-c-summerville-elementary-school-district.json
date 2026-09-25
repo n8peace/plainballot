@@ -1,0 +1,19 @@
+{
+  "office": "Measure C",
+  "district": "Summerville Elementary School District",
+  "division": "ca/school-summerville-elementary",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Summerville Elementary School District to issue $3.4 million in general obligation bonds, repaid through a property tax on district property owners, to fund repairs and improvements to district facilities.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

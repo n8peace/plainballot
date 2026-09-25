@@ -1,0 +1,19 @@
+{
+  "office": "Measure Q",
+  "district": "Cambrian School District",
+  "division": "ca/school-cambrian",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a $148-per-parcel tax for eight years, raising about $1 million per year for core academic programs.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

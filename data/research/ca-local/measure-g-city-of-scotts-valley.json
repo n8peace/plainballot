@@ -1,0 +1,18 @@
+{
+  "office": "Measure G",
+  "district": "City of Scotts Valley",
+  "division": "ca/place-scotts-valley",
+  "kind": "measure",
+  "summary": "A Yes vote raises the City of Scotts Valley's transient occupancy (hotel/motel) tax rate from 11 percent to 13 percent, with revenue deposited into the City's General Fund for general municipal purposes.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

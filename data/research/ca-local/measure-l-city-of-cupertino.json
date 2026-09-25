@@ -1,0 +1,18 @@
+{
+  "office": "Measure L",
+  "district": "City of Cupertino",
+  "division": "ca/place-cupertino",
+  "kind": "measure",
+  "summary": "A Yes vote requires a two-thirds vote of the electorate to rezone parkland or develop city parks.",
+  "issues": [
+    "housing"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "office": "Measure O",
+  "district": "Alum Rock Union Elementary School District",
+  "division": "ca/school-alum-rock-union-elementary",
+  "kind": "measure",
+  "summary": "A Yes vote replaces the district's existing parcel tax with a $310-per-parcel tax for seven years, raising about $6.5 million per year.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

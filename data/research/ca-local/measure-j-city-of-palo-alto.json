@@ -1,0 +1,18 @@
+{
+  "office": "Measure J",
+  "district": "City of Palo Alto",
+  "division": "ca/place-palo-alto",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a 0.5% (half-cent) sales tax, estimated to raise about $15.6 million per year for general city purposes such as community center repairs, infrastructure, and disaster preparedness.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

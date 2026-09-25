@@ -1,0 +1,19 @@
+{
+  "office": "Measure B",
+  "district": "Winters Joint Unified School District",
+  "division": "ca/school-winters-joint-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes $29.9 million in bonds for school facility improvements, repaid by a property tax levy.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

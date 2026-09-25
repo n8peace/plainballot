@@ -1,0 +1,19 @@
+{
+  "office": "Measure G",
+  "district": "Sutter County",
+  "division": "ca/county-sutter",
+  "kind": "measure",
+  "summary": "A Yes vote enacts a countywide one-cent sales tax with no expiration date, estimated to raise about $22.5 million annually for general county purposes including drinking water supply, fire and emergency medical response, sheriff's and police patrols, and road repair.",
+  "issues": [
+    "tax",
+    "safety"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

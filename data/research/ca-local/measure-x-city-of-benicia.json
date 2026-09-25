@@ -1,0 +1,18 @@
+{
+  "office": "Measure X",
+  "district": "City of Benicia",
+  "division": "ca/place-benicia",
+  "kind": "measure",
+  "summary": "A Yes vote replaces the city's business license tax with a restructured tax that sets graduated rates.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

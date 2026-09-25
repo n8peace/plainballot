@@ -1,0 +1,19 @@
+{
+  "office": "Measure E",
+  "district": "Waugh School District",
+  "division": "ca/school-waugh",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes $16,000,000 in bonds at legal interest rates, levying about $30 per $100,000 of assessed valuation (roughly $917,000 annually) while bonds are outstanding, to replace heating, ventilation and air-conditioning systems and modernize classrooms, restrooms, and facilities, with a citizens' oversight committee and annual audits.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

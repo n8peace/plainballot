@@ -1,0 +1,16 @@
+{
+  "office": "Measure C",
+  "district": "City of Santa Clara",
+  "division": "ca/place-santa-clara",
+  "kind": "measure",
+  "summary": "A Yes vote amends the city charter to set the threshold for City Council approval and formal competitive bidding of public works contracts at $250,000.",
+  "issues": [],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

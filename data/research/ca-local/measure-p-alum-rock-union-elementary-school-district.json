@@ -1,0 +1,19 @@
+{
+  "office": "Measure P",
+  "district": "Alum Rock Union Elementary School District",
+  "division": "ca/school-alum-rock-union-elementary",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the district to issue $100 million in bonds for facility repairs, repaid by a property tax below $26 per $100,000 of assessed value.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

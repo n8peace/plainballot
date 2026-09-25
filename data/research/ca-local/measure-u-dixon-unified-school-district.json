@@ -1,0 +1,19 @@
+{
+  "office": "Measure U",
+  "district": "Dixon Unified School District",
+  "division": "ca/school-dixon-unified",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the district to issue $49 million in bonds to repair and upgrade school facilities.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

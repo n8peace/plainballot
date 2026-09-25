@@ -1,0 +1,18 @@
+{
+  "office": "Measure F",
+  "district": "City of Mountain View",
+  "division": "ca/place-mountain-view",
+  "kind": "measure",
+  "summary": "A Yes vote raises Mountain View's hotel and short-term rental tax from 10% to up to 15%, estimated to raise up to $5.2 million per year for general city purposes.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

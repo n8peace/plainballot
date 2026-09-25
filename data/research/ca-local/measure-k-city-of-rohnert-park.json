@@ -1,0 +1,18 @@
+{
+  "office": "Measure K",
+  "district": "City of Rohnert Park",
+  "division": "ca/place-rohnert-park",
+  "kind": "measure",
+  "summary": "A Yes vote establishes a half-cent (0.5%) general sales tax, providing about $5,500,000 annually until ended by voters, for 911 response, fire protection and wildfire preparedness, drinking water, parks, crime prevention, street repair, and other city services, with audits and public spending disclosure.",
+  "issues": [
+    "tax"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}

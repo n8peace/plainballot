@@ -1,0 +1,19 @@
+{
+  "office": "Measure J",
+  "district": "Julian Union High School District",
+  "division": "ca/school-julian-union-high",
+  "kind": "measure",
+  "summary": "A Yes vote authorizes the Julian Union High School District to issue $9 million in general obligation bonds, repaid through property taxes, to construct, rehabilitate, and equip school facilities, including career technical education spaces.",
+  "issues": [
+    "tax",
+    "schools"
+  ],
+  "choices": [
+    {
+      "name": "Yes"
+    },
+    {
+      "name": "No"
+    }
+  ]
+}
