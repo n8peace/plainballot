@@ -186,3 +186,14 @@ describe('escalation size', () => {
     expect(hasConflict(['guns'], [{ guns: s(-1) }, {}, {}])).toBe(false);
   });
 });
+
+describe('congressional district keys', () => {
+  it('uses one key for at-large seats, matching research files', async () => {
+    const { cdKey } = await import('../lib/address/census');
+    const { divisionFor } = await import('../lib/research/divisions');
+    expect(cdKey('Congressional District (at Large)')).toBe('cd-at-large');
+    expect(cdKey('Delegate District (at Large)')).toBe('cd-at-large');
+    expect(cdKey('07')).toBe('cd-7');
+    expect(`wy/${cdKey('Congressional District (at Large)')}`).toBe(divisionFor('WY', 'U.S. Representative', 'At-Large'));
+  });
+});

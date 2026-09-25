@@ -30,6 +30,14 @@ Chatbots get voting facts wrong. Plain Ballot is built so no single model's word
 - **Every change is checked for bias.** Three models from different companies review each pull request for loaded wording and one-sided logic, and tests require that matching treats both ends of every dial the same.
 - **Every word is public.** The dial wording ([lib/issues.ts](lib/issues.ts)), the agreement rules ([lib/research/consensus.ts](lib/research/consensus.ts)) and every researched position ([data/positions](data/positions)) live in this repo.
 
+## Why not just use Ballotpedia?
+
+Ballotpedia is a great reference, and the research agents read it. But it can't be the whole answer:
+
+- **It tells you who's running, not where they stand on your issues.** Its candidate survey is the closest thing, and many candidates never answer it. Plain Ballot needs every candidate placed on the same 18 dials so they can be compared.
+- **Its data isn't open.** Bulk access is a paid product, and its pages aren't ours to republish. Everything here is free to copy, check and reuse.
+- **Every claim needs the candidate's own words.** A summary of a position isn't enough; agents follow it back to the candidate's site, voting record or interview and quote that.
+
 ## Research your state with your own subscription
 
 The research runs on your own Claude or ChatGPT plan, so anyone can add coverage without paying for API credits.
