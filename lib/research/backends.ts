@@ -68,12 +68,17 @@ function parseJson(text: string): z.infer<typeof Result> {
 }
 
 async function viaClaudeCode(prompt: string): Promise<string> {
-  const { stdout } = await run('claude', ['-p', prompt, '--allowedTools', 'WebSearch,WebFetch', '--output-format', 'json', '--max-turns', '16'], {
+  // 14 issues take many search and read steps; a low step cap made agents fail before answering.
+  const stdout = await run('claude', ['-p', prompt, '--allowedTools', 'WebSearch,WebFetch', '--output-format', 'json', '--max-turns', '45'], {
     maxBuffer: 20 * 1024 * 1024,
-    timeout: 10 * 60 * 1000,
+    timeout: 15 * 60 * 1000,
+  }).then((r) => r.stdout, (e: { stdout?: string }) => {
+    // It can exit non-zero (e.g. out of steps) yet still print a usable result.
+    if (e.stdout?.includes('"result"')) return e.stdout;
+    throw e;
   });
   const out = JSON.parse(stdout) as { result?: string; is_error?: boolean };
-  if (out.is_error || !out.result) throw new Error('Claude Code returned no result');
+  if (!out.result || !out.result.includes('{')) throw new Error('Claude Code returned no result');
   return out.result;
 }
 
