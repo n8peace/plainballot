@@ -37,7 +37,7 @@ export function IssuePicker({
         <h4>Choose your issues</h4>
         <span className="count">{selected.length} of {ISSUES.length} chosen</span>
       </div>
-      <p className="hint">Only the issues you choose count toward your matches. The number is how many contests on your ballot each one affects.</p>
+      <p className="hint">The number is how many races on your ballot each issue affects.</p>
       {showAll ? (
         <div className="groups">
           {GROUPS.map((g, gi) => (

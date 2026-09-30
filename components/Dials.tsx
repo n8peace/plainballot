@@ -22,7 +22,7 @@ export function Dials({
   onRemove: (id: IssueId) => void;
 }) {
   const chosen = ISSUES.filter((i) => prefs.sel.includes(i.id));
-  if (!chosen.length) return <p className="empty">Choose at least one issue above, or describe your priorities in your own words.</p>;
+  if (!chosen.length) return <p className="empty">Pick an issue above to set its dial.</p>;
 
   return (
     <div>

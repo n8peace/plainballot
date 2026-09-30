@@ -30,18 +30,21 @@ function Src({ url }: { url?: string }) {
 }
 
 function Basis({ contest, prefs, onAdd }: { contest: Contest; prefs: Prefs; onAdd: (id: IssueId) => void }) {
+  const [all, setAll] = useState(false);
   const used = contest.issues.filter((id) => prefs.sel.includes(id));
   const unused = contest.issues.filter((id) => !prefs.sel.includes(id));
   if (!contest.issues.length) return null;
+  const shown = all ? unused : unused.slice(0, 5);
   return (
     <p className="basis">
       {used.length > 0 && <>Matched on <b>{used.map((id) => issueById[id].name).join(', ')}</b>. </>}
       {unused.length > 0 && (
         <>
-          {used.length ? 'Also at stake here: ' : 'At stake here: '}
-          {unused.map((id) => (
+          {used.length ? 'Also at stake: ' : 'Pick an issue to see a match: '}
+          {shown.map((id) => (
             <button key={id} className="add" onClick={() => onAdd(id)}>+ {issueById[id].name}</button>
           ))}
+          {unused.length > shown.length && <button className="add more" onClick={() => setAll(true)}>{unused.length - shown.length} more</button>}
         </>
       )}
     </p>
@@ -139,7 +142,7 @@ export function ContestCard({ contest, prefs, showParty, place, onAdd }: { conte
   const reportUi = report ? (
     <ReportForm contest={contest} initial={report} onClose={() => setReport(null)} />
   ) : (
-    <button className="notright" onClick={() => setReport({})}>Report a problem with this race</button>
+    <button className="notright" onClick={() => setReport({})}>Report a problem</button>
   );
   const head = (
     <div className="race-head"><span className="office">{contest.office}</span><span className="sub">{contest.sub}</span></div>
@@ -198,13 +201,11 @@ export function ContestCard({ contest, prefs, showParty, place, onAdd }: { conte
         </ul>
         <Basis contest={contest} prefs={prefs} onAdd={onAdd} />
         <div className="why">
-          {none ? (
-            <p><b>None of your issues are at stake in this contest.</b> Add one above to see a match, or decide this one yourself.</p>
-          ) : (
-            <Why contest={contest} prefs={prefs} ranked={ranked} onReport={(candidate, issue) => setReport({ candidate, issue })} />
-          )}
-          {contest.sources && <p className="src">Sources: {contest.sources} <Link href="/methodology">How matching works</Link></p>}
-          <p className="src">{contest.reviewedByPerson ? 'Researched by independent AI agents and reviewed by a person.' : 'Researched by independent AI agents; not reviewed by a person.'} Every quote is checked against its source.</p>
+          {!none && <Why contest={contest} prefs={prefs} ranked={ranked} onReport={(candidate, issue) => setReport({ candidate, issue })} />}
+          <p className="src">
+            {contest.sources && <>Sources: {contest.sources.replace(/\.$/, '')} · </>}
+            {contest.reviewedByPerson ? 'Researched by AI agents and reviewed by a person' : 'Researched by AI agents, not yet reviewed by a person'}. Every quote is checked against its source. <Link href="/methodology">How it works</Link>
+          </p>
           {reportUi}
         </div>
       </div>

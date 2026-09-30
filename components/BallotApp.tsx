@@ -146,7 +146,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
   return (
     <>
       <div className="wrap">
-        {ballot.notice && <p className="mock-note">{ballot.notice}</p>}
+        {ballot.notice && !ballot.sample && <p className="mock-note">{ballot.notice}</p>}
 
         <header className="mast">
           <div className="mast-top">
@@ -159,14 +159,14 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
         <hr className="double" />
 
         <section className="hero">
-          <h2>Every race on your ballot, matched to what you care about. We show our work.</h2>
-          <p>Tell us your priorities in your own words, or pick the issues you care about and set the dials. We’ll go through your whole ballot, from Congress to school board, and show why each choice fits you better than the others. <em>We don’t take sides. You do.</em></p>
+          <h2>Every race on your ballot, matched to what you care about.</h2>
+          <p>Pick your issues, or say them in your own words. We’ll show who fits you, why, and where it came from. <em>We don’t take sides. You do.</em></p>
         </section>
 
         <section className="ask" aria-labelledby="askH" ref={askRef}>
           <div>
-            <h3 id="askH">Free, and open source.</h3>
-            <p>No ads, no account, no data sold. Every line of code, every dial’s wording and every source is public, so anyone can check our work. If this helped, the only thing we ask is a star or a follow.</p>
+            <h3 id="askH">Free and open source.</h3>
+            <p>No ads, no account, no data sold. If it helps, give us a star or a follow.</p>
           </div>
           <div className="ask-btns">
             <a className="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">★ Star the code on GitHub{starLabel}</a>
@@ -186,7 +186,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           {lookupError && <p className="err" role="alert">{lookupError}</p>}
           <p className="notice" style={{ marginTop: 12 }}>
             {ballot.sample
-              ? <>Showing a <b>sample ballot</b>{address ? ' for now' : ' until you enter your address'}. Your address is only used to look up your ballot and isn’t stored.</>
+              ? <>Your address is only used to find your ballot. It isn’t stored.</>
               : <>We found <b>{ballot.contests.length} contests</b> on your ballot{ballot.place ? ` in ${ballot.place}` : ''}. {researched < ballot.contests.length && <>We’ve researched {researched} so far.</>}</>}
           </p>
           {ballot.districts && ballot.districts.length > 0 && (
@@ -199,7 +199,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
         </section>
 
         <section className="step" aria-labelledby="s2" ref={dialsRef}>
-          <div className="step-head"><span className="step-num">2</span><h3 id="s2">What you care about</h3><span className="aside">Change anything. Your ballot updates as you go.</span></div>
+          <div className="step-head"><span className="step-num">2</span><h3 id="s2">What you care about</h3><span className="aside">Your ballot updates as you go.</span></div>
           {friend && showCompare && (
             <ComparePanel mine={prefs} theirs={friend} onAdd={addFromBallot} onClose={() => setShowCompare(false)} />
           )}
@@ -213,7 +213,7 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           <div hidden={tab !== 'dials'}>
             <IssuePicker selected={prefs.sel} countFor={countFor} onToggle={(id) => (prefs.sel.includes(id) ? removeIssue(id) : addIssue(id))} />
             <Dials prefs={prefs} flash={flash} countFor={countFor} onPosition={setPos} onImportance={setImp} onRemove={removeIssue} />
-            <p className="hint" style={{ marginTop: 14 }}>The dials aren’t lined up left to right by party. Each one stands on its own, and each end is worded the way its own supporters would say it.</p>
+            <p className="hint" style={{ marginTop: 14 }}>Each end of a dial is worded the way its own supporters would say it.</p>
           </div>
         </section>
 
@@ -224,9 +224,9 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
           </div>
           <div className="ballot-tools">
             <label className="switch"><input type="checkbox" id="showParty" checked={showParty} onChange={(e) => setShowParty(e.target.checked)} /> Show party labels</label>
-            <span className="hint">Hidden by default, so you see the issues before the party.</span>
+            <span className="hint">Hidden, so you see the issues first.</span>
           </div>
-          <p className="fit-note"><b>What the percentages mean:</b> how closely each choice’s record fits the dials you set above. 100% means their record lines up exactly with your dials. It’s not a poll, and it doesn’t predict who will win.</p>
+          <p className="fit-note"><b>Fit</b> is how closely each record matches your dials. It’s not a poll or a prediction.</p>
           <div className={`ballot-stack ${ballot.sample && !sampleDismissed ? 'blurred' : ''}`}>
             {ballot.sample && !sampleDismissed && (
               <form className="sample-gate" onSubmit={lookup} aria-labelledby="gateH">
