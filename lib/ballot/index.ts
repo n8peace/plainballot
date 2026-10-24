@@ -60,6 +60,12 @@ export async function getBallot(address: string): Promise<Ballot> {
     if (live?.contests.length) return { ...live, districts };
   }
 
+  // The district lookup (U.S. Census) failed, not the address: say so, instead of
+  // implying the address was found and nothing is researched.
+  if (!loc) {
+    throw new BallotLookupError('We couldn’t look up your districts right now. The U.S. Census address service we use isn’t responding. Please try again in a few minutes.');
+  }
+
   const researched = await contestsForDivisions(districts.map((d) => d.key));
   if (researched.length) {
     return {
