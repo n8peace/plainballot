@@ -50,32 +50,28 @@ export async function getBallot(address: string): Promise<Ballot> {
       notice: `Plain Ballot covers every race in California, plus U.S. House and Senate races in all 50 states. ${stateName}’s races aren’t researched yet, so here’s a sample ballot with fictional candidates for now.`,
     };
   }
-  const key = process.env.GOOGLE_CIVIC_API_KEY;
+  // Our researched races come first. Google's official ballot data has returned stale
+  // or partial contests (on Oct 24 it listed three 2006 California measures and no
+  // candidates), so it only fills in when we have nothing researched for the address.
+  const researched = loc ? await contestsForDivisions(districts.map((d) => d.key)) : [];
+  if (researched.length) {
+    return { ...ELECTION, place, sample: false, districts, contests: researched };
+  }
 
+  const key = process.env.GOOGLE_CIVIC_API_KEY;
   if (key) {
     const live = await lookupGoogleCivic(loc?.matchedAddress ?? address, key).catch((e) => {
       if (!(e instanceof BallotLookupError)) console.error('civic lookup failed', e);
       return null;
     });
-    if (live?.contests.length) return { ...live, districts };
+    // Only use it when it lists actual candidates or choices.
+    if (live?.contests.some((c) => c.choices.length)) return { ...live, districts };
   }
 
   // The district lookup (U.S. Census) failed, not the address: say so, instead of
   // implying the address was found and nothing is researched.
   if (!loc) {
     throw new BallotLookupError('We couldn’t look up your districts right now. The U.S. Census address service we use isn’t responding. Please try again in a few minutes.');
-  }
-
-  const researched = await contestsForDivisions(districts.map((d) => d.key));
-  if (researched.length) {
-    return {
-      ...ELECTION,
-      place,
-      sample: false,
-      districts,
-      contests: researched,
-      notice: 'The official candidate list for your address isn’t published yet. These are the races we’ve researched for your districts so far.',
-    };
   }
 
   return {
