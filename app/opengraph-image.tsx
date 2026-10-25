@@ -35,43 +35,40 @@ export default async function OpengraphImage() {
 
   const race = SAMPLE_BALLOT.contests.find((c) => c.id === 'state-senate-14')!;
   const [a, b] = race.choices;
-  const rows: IssueId[] = ['tax', 'housing', 'schools'];
+  const rows: IssueId[] = ['tax', 'schools', 'safety'];
   const cell = (pos: number | undefined, id: IssueId) => {
     if (pos === undefined) return <div style={{ display: 'flex', flex: 1, fontFamily: 'Franklin', fontSize: 22, color: '#77776f' }}>No public position</div>;
     const i = issueById[id];
     const side = pos === 0 ? 'neither side' : pos < 0 ? i.l : i.r;
-    return (
-      <div style={{ display: 'flex', flex: 1, fontSize: 28, gap: 8 }}>
-        {Math.abs(pos) === 2 && <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Strongly</span>}
-        <span style={{ fontWeight: 400 }}>{Math.abs(pos) === 2 ? side : side[0].toUpperCase() + side.slice(1)}</span>
-      </div>
-    );
+    // One text run per cell: the image renderer can't mix italic and roman inline.
+    const text = Math.abs(pos) === 2 ? `Strongly for ${side}` : side[0].toUpperCase() + side.slice(1);
+    return <div style={{ display: 'flex', flex: 1, fontSize: 26, paddingRight: 20 }}>{text}</div>;
   };
 
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#ffffff', color: INK, padding: '48px 72px', fontFamily: 'Newsreader, serif' }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#ffffff', color: INK, padding: '44px 72px 40px', fontFamily: 'Newsreader, serif' }}>
         {/* The renderer has no double borders: draw the masthead rule as two lines. */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: `2px solid ${INK}`, paddingBottom: 12 }}>
           <div style={{ display: 'flex', fontSize: 56, fontWeight: 600, letterSpacing: -1 }}>Plain Ballot</div>
           <div style={{ display: 'flex', fontFamily: 'Franklin', fontSize: 22, color: INK2 }}>plainballot.com</div>
         </div>
         <div style={{ display: 'flex', height: 1, background: INK, marginTop: 3 }} />
-        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 60, fontWeight: 600, lineHeight: 1.08, letterSpacing: -1, marginTop: 28 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 54, fontWeight: 600, lineHeight: 1.06, letterSpacing: -1, marginTop: 22 }}>
           <span>Who’s on your ballot,</span>
           <span>and where they stand.</span>
         </div>
-        <div style={{ display: 'flex', fontSize: 30, fontStyle: 'italic', fontWeight: 400, color: INK2, marginTop: 10 }}>In the candidates’ own words.</div>
-        <div style={{ display: 'flex', flexDirection: 'column', marginTop: 'auto' }}>
-          <div style={{ display: 'flex', fontFamily: 'Franklin', fontSize: 18, letterSpacing: 2, color: INK2, marginBottom: 6 }}>SAMPLE BALLOT · STATE SENATE</div>
+        <div style={{ display: 'flex', fontSize: 26, fontStyle: 'italic', fontWeight: 400, color: INK2, marginTop: 8 }}>Every position backed by the candidates’ own words.</div>
+        <div style={{ display: 'flex', flexDirection: 'column', marginTop: 'auto', paddingTop: 24 }}>
+          <div style={{ display: 'flex', fontFamily: 'Franklin', fontSize: 18, letterSpacing: 2, color: INK2, marginBottom: 16 }}>SAMPLE BALLOT · STATE SENATE</div>
           <div style={{ display: 'flex', borderBottom: `1px solid ${RULE}`, paddingBottom: 8 }}>
-            <div style={{ display: 'flex', width: 250 }} />
-            <div style={{ display: 'flex', flex: 1, fontSize: 30, fontWeight: 600 }}>{a.name}</div>
-            <div style={{ display: 'flex', flex: 1, fontSize: 30, fontWeight: 600 }}>{b.name}</div>
+            <div style={{ display: 'flex', width: 220 }} />
+            <div style={{ display: 'flex', flex: 1, fontSize: 28, fontWeight: 600 }}>{a.name}</div>
+            <div style={{ display: 'flex', flex: 1, fontSize: 28, fontWeight: 600 }}>{b.name}</div>
           </div>
           {rows.map((id) => (
-            <div key={id} style={{ display: 'flex', alignItems: 'baseline', borderBottom: `1px solid ${RULE}`, padding: '10px 0' }}>
-              <div style={{ display: 'flex', width: 250, fontFamily: 'Franklin', fontSize: 22, color: INK2 }}>{issueById[id].name}</div>
+            <div key={id} style={{ display: 'flex', alignItems: 'baseline', borderBottom: `1px solid ${RULE}`, padding: '8px 0' }}>
+              <div style={{ display: 'flex', width: 220, fontFamily: 'Franklin', fontSize: 22, color: INK2 }}>{issueById[id].name}</div>
               {cell(a.stances[id]?.pos, id)}
               {cell(b.stances[id]?.pos, id)}
             </div>

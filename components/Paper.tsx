@@ -49,7 +49,7 @@ export function Paper({ sample }: { sample: Ballot }) {
 
   const lookup = async (e?: React.FormEvent, addr = address) => {
     e?.preventDefault();
-    if (addr.trim().length < 5) { setError('Enter your street address and ZIP code first.'); return; }
+    if (addr.trim().length < 5) { setError('Enter your street address first.'); return; }
     setLooking(true);
     setError(null);
     try {
@@ -101,7 +101,7 @@ export function Paper({ sample }: { sample: Ballot }) {
               <button className="pp-btn" type="submit" aria-busy={looking} disabled={looking}>{looking ? 'Finding…' : 'See my ballot'}</button>
             </div>
             {error && <p className="pp-error" role="alert">{error}</p>}
-            <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored.</p>
+            <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored.</p>
             <div className="pp-or"><span>or</span></div>
             <button type="button" className="pp-btn ghost" onClick={() => setBallot(sample)}>Browse a sample ballot</button>
           </form>
@@ -220,7 +220,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                   return (
                     <div key={choice.id} role="cell" className="pp-cell">
                       <button className="pp-stance" aria-expanded={open === key} onClick={() => setOpen(open === key ? null : key)}>
-                        {side.strong ? <><span className="pp-strong">Strongly</span> {side.label.toLowerCase()}</> : side.label}
+                        {side.strong ? <><span className="pp-strong">Strongly</span> for {side.label.toLowerCase()}</> : side.label}
                       </button>
                     </div>
                   );
