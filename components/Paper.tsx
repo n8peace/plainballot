@@ -209,7 +209,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                   return (
                     <div key={choice.id} role="cell" className="pp-cell">
                       <button className="pp-stance" aria-expanded={open === key} onClick={() => setOpen(open === key ? null : key)}>
-                        {side.strong && <span className="pp-strong">Strongly </span>}{side.label}
+                        {side.strong ? <><span className="pp-strong">Strongly</span> {side.label.toLowerCase()}</> : side.label}
                       </button>
                     </div>
                   );
