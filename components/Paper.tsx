@@ -49,7 +49,7 @@ export function Paper({ sample }: { sample: Ballot }) {
 
   const lookup = async (e?: React.FormEvent, addr = address) => {
     e?.preventDefault();
-    if (addr.trim().length < 5) return;
+    if (addr.trim().length < 5) { setError('Enter your street address and ZIP code first.'); return; }
     setLooking(true);
     setError(null);
     try {
@@ -92,16 +92,18 @@ export function Paper({ sample }: { sample: Ballot }) {
 
       {!ballot ? (
         <main className="pp-front">
-          <h2 className="pp-headline">Who’s on your ballot, and where they stand.</h2>
+          <h2 className="pp-headline"><span>Who’s on your ballot,</span> <span>and where they stand.</span></h2>
           <p className="pp-deck">Every race, side by side, <em>in the candidates’ own words</em>, with a link to where they said it. We don’t take sides.</p>
           <form className="pp-ask" onSubmit={lookup}>
             <label className="pp-label" htmlFor="pp-address">Your street address</label>
             <div className="pp-ask-row">
               <AddressInput id="pp-address" value={address} onChange={setAddress} onPick={(a) => lookup(undefined, a)} />
-              <button className="pp-btn" type="submit" disabled={looking || address.trim().length < 5}>{looking ? 'Finding…' : 'See my ballot'}</button>
+              <button className="pp-btn" type="submit" aria-busy={looking} disabled={looking}>{looking ? 'Finding…' : 'See my ballot'}</button>
             </div>
             {error && <p className="pp-error" role="alert">{error}</p>}
-            <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored. <button type="button" className="pp-link" onClick={() => setBallot(sample)}>Or browse a sample ballot</button>.</p>
+            <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored.</p>
+            <div className="pp-or"><span>or</span></div>
+            <button type="button" className="pp-btn ghost" onClick={() => setBallot(sample)}>Browse a sample ballot</button>
           </form>
           <div className="pp-front-cols">
             <p><b>In their own words.</b> Every position is something the candidate said or did, quoted exactly, with the page it came from. Never a guess from their party.</p>
