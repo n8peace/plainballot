@@ -5,6 +5,8 @@ export interface Stance {
   pos: Position;
   /** One neutral sentence a voter can read. */
   text: string;
+  /** The exact passage from the source that backs this claim. */
+  quote?: string;
   sourceUrl?: string;
   /** How many independent research agents agreed, e.g. "3/3". */
   agreement?: string;

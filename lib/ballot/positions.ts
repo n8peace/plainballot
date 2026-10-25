@@ -128,7 +128,7 @@ export function fileToContest(f: PositionsFile): Contest {
       name: ch.name,
       party: ch.party,
       stances: Object.fromEntries(
-        Object.entries(ch.stances).filter(([, s]) => s).map(([id, s]) => [id, { pos: s!.pos, text: s!.text, sourceUrl: s!.sourceUrl, agreement: s!.agreement }]),
+        Object.entries(ch.stances).filter(([, s]) => s).map(([id, s]) => [id, { pos: s!.pos, text: s!.text, quote: s!.quote, sourceUrl: s!.sourceUrl, agreement: s!.agreement }]),
       ),
     })),
   };
