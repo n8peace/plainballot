@@ -32,6 +32,8 @@ function sideOf(id: IssueId, s: Stance): { label: string; strong: boolean } {
   return { label: side[0].toUpperCase() + side.slice(1), strong: Math.abs(s.pos) === 2 };
 }
 
+const isMeasure = (c: Contest) => c.kind === 'measure';
+
 function hostOf(url?: string) {
   try { return url ? new URL(url).hostname.replace(/^www\./, '') : ''; } catch { return ''; }
 }
@@ -91,7 +93,7 @@ export function Paper({ sample }: { sample: Ballot }) {
       {!ballot ? (
         <main className="pp-front">
           <h2 className="pp-headline">Who’s on your ballot, and where they stand.</h2>
-          <p className="pp-deck">Every race, side by side, with the candidate’s own words and a link to where they said it. We don’t take sides.</p>
+          <p className="pp-deck">Every race, side by side, <em>in the candidates’ own words</em>, with a link to where they said it. We don’t take sides.</p>
           <form className="pp-ask" onSubmit={lookup}>
             <label className="pp-label" htmlFor="pp-address">Your street address</label>
             <div className="pp-ask-row">
@@ -102,7 +104,7 @@ export function Paper({ sample }: { sample: Ballot }) {
             <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored. <button type="button" className="pp-link" onClick={() => setBallot(sample)}>Or browse a sample ballot</button>.</p>
           </form>
           <div className="pp-front-cols">
-            <p><b>Every claim is quoted.</b> Each position comes with the candidate’s exact words and the page they’re from.</p>
+            <p><b>In their own words.</b> Every position is something the candidate said or did, quoted exactly, with the page it came from. Never a guess from their party.</p>
             <p><b>Party labels are hidden</b> until you ask, so you see the issues first.</p>
             <p><b>Free and open.</b> The research is <a href={DATA_REPO_URL}>open data</a> anyone can check, and <a href={GITHUB_URL}>so is the code</a>.</p>
           </div>
@@ -152,6 +154,7 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
         <div>
           <p className="pp-kicker">{ballot.sample ? 'Sample ballot · fictional candidates' : `Your ballot${ballot.place ? ` · ${ballot.place}` : ''}`}</p>
           <h2 className="pp-headline sm">{researched.length} {researched.length === 1 ? 'race' : 'races'} on your ballot</h2>
+          <p className="pp-fine">Every position below is in the candidate’s own words. Tap one to read the quote.</p>
           {ballot.notice && <p className="pp-fine">{ballot.notice}</p>}
           {(ballot.needsResearch || ballot.partial) && (
             <p className="pp-fine"><a href={stateResearchUrl(ballot.districts?.find((d) => d.key.endsWith('/state'))?.label)} target="_blank" rel="noopener noreferrer">Help research your area</a>: pick one race, about 20 minutes, no coding needed.</p>
@@ -227,7 +230,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                 return (
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
-                    {s.quote && <blockquote>“{s.quote}”</blockquote>}
+                    {s.quote && <><p className="pp-kicker pp-own">In {isMeasure(contest) ? 'the measure’s' : 'their'} own words</p><blockquote>“{s.quote}”</blockquote></>}
                     {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
                   </div>
                 );

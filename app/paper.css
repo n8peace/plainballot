@@ -80,3 +80,5 @@
   .pp-cell, .pp-cand { min-width: 0; overflow-wrap: anywhere; }
   .pp-tools { width: 100%; justify-content: space-between; }
 }
+
+.pp-own { margin: 10px 0 2px; }
