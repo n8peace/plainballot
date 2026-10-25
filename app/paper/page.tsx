@@ -1,10 +1,6 @@
-import type { Metadata } from 'next';
-import { Paper } from '@/components/Paper';
-import { SAMPLE_BALLOT } from '@/lib/ballot/sample';
-import './paper.css';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = { title: 'Plain Ballot', robots: { index: false } };
-
+// The newspaper edition was previewed here; it's now the home page.
 export default function PaperPage() {
-  return <Paper sample={SAMPLE_BALLOT} />;
+  redirect('/');
 }

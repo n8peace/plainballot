@@ -10,10 +10,11 @@ import { useMemo, useState } from 'react';
 import { AddressInput } from './AddressInput';
 import { Dials } from './Dials';
 import { IssuePicker } from './IssuePicker';
+import { ReportForm } from './ReportForm';
 import { WordsInput } from './WordsInput';
 import { issueById, ISSUES, type Importance, type IssueId, type Position } from '@/lib/issues';
 import { rank, score } from '@/lib/match';
-import { DATA_REPO_URL, GITHUB_URL } from '@/lib/share';
+import { DATA_REPO_URL, GITHUB_URL, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
 
@@ -133,6 +134,7 @@ export function Paper({ sample }: { sample: Ballot }) {
       <footer className="pp-foot">
         <div className="pp-rule" />
         <p>Researched by independent AI agents that have to agree; every quote is checked against its source. <Link href="/methodology">How it works</Link> · <a href={DATA_REPO_URL}>Open data</a> · <a href={GITHUB_URL}>Code</a></p>
+        <p>Free and open source. If it helps, <a href={GITHUB_URL}>star it on GitHub</a> or <a href={X_URL}>follow @n8peace</a>.</p>
       </footer>
     </div>
   );
@@ -151,6 +153,9 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
           <p className="pp-kicker">{ballot.sample ? 'Sample ballot · fictional candidates' : `Your ballot${ballot.place ? ` · ${ballot.place}` : ''}`}</p>
           <h2 className="pp-headline sm">{researched.length} {researched.length === 1 ? 'race' : 'races'} on your ballot</h2>
           {ballot.notice && <p className="pp-fine">{ballot.notice}</p>}
+          {(ballot.needsResearch || ballot.partial) && (
+            <p className="pp-fine"><a href={stateResearchUrl(ballot.districts?.find((d) => d.key.endsWith('/state'))?.label)} target="_blank" rel="noopener noreferrer">Help research your area</a>: pick one race, about 20 minutes, no coding needed.</p>
+          )}
           <button className="pp-link" onClick={onChangeAddress}>Change address</button>
         </div>
         <div className="pp-tools">
@@ -166,6 +171,7 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
 
 function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; showParty: boolean }) {
   const [open, setOpen] = useState<string | null>(null);
+  const [report, setReport] = useState<{ candidate?: string; issue?: string } | null>(null);
   const personalized = prefs.sel.some((id) => contest.issues.includes(id));
   const choices: { choice: Choice; fit: number | null }[] = useMemo(() => {
     if (!personalized) return contest.choices.map((choice) => ({ choice, fit: null }));
@@ -176,7 +182,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
   const rows = contest.issues
     .filter((id) => contest.choices.some((ch) => ch.stances[id]))
     .sort((a, b) => Number(prefs.sel.includes(b)) - Number(prefs.sel.includes(a)) || ISSUES.findIndex((i) => i.id === a) - ISSUES.findIndex((i) => i.id === b));
-  const cols = { gridTemplateColumns: `minmax(120px, 0.8fr) repeat(${choices.length}, minmax(140px, 1fr))` };
+  const cols = { gridTemplateColumns: `minmax(120px, 0.8fr) repeat(${choices.length}, minmax(140px, 1fr))`, '--n': choices.length } as React.CSSProperties;
 
   return (
     <article className="pp-story">
@@ -188,7 +194,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
       ) : (
         <div className="pp-table" role="table" aria-label={contest.office}>
           <div className="pp-row head" role="row" style={cols}>
-            <div role="columnheader" />
+            <div role="columnheader" className="pp-corner" />
             {choices.map(({ choice, fit }, n) => (
               <div key={choice.id} role="columnheader" className={`pp-cand ${personalized && n === 0 ? 'top' : ''}`}>
                 <span className="pp-name">{choice.name}</span>
@@ -222,7 +228,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
                     {s.quote && <blockquote>“{s.quote}”</blockquote>}
-                    {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''}</p>}
+                    {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
                   </div>
                 );
               })}
@@ -230,6 +236,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
           ))}
         </div>
       )}
+      {report && <ReportForm contest={contest} initial={report} onClose={() => setReport(null)} />}
     </article>
   );
 }

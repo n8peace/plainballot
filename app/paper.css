@@ -70,3 +70,13 @@
   .pp-name { font-size: 18px; }
   .pp-cell { font-size: 15px; }
 }
+
+/* Phones: each issue gets its own line, with the candidates sharing the width below it. */
+@media (max-width: 720px) {
+  .pp-table { overflow-x: visible; }
+  .pp-row { grid-template-columns: repeat(var(--n), minmax(0, 1fr)) !important; min-width: 0; gap: 2px 12px; }
+  .pp-corner { display: none; }
+  .pp-issue { grid-column: 1 / -1; padding-bottom: 2px; }
+  .pp-cell, .pp-cand { min-width: 0; overflow-wrap: anywhere; }
+  .pp-tools { width: 100%; justify-content: space-between; }
+}
