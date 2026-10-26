@@ -138,6 +138,7 @@ export function Paper({ sample }: { sample: Ballot }) {
       <footer className="pp-foot">
         <div className="pp-rule" />
         <p>Researched by independent AI agents that have to agree; every quote is checked against its source. <Link href="/methodology">How it works</Link> · <a href={DATA_REPO_URL}>Open data</a> · <a href={GITHUB_URL}>Code</a></p>
+        <p>Using an AI assistant? Send it to <a href="https://github.com/n8peace/plainballot#send-your-agent">plainballot.com/mcp</a>.</p>
         <p>Free and open source. If it helps, <a href={GITHUB_URL}>star it on GitHub</a> or <a href={X_URL}>follow @n8peace</a>.</p>
       </footer>
     </div>

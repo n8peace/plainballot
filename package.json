@@ -14,9 +14,11 @@
     "check:issues": "node --import tsx scripts/check-issues.ts"
   },
   "dependencies": {
+    "@modelcontextprotocol/server": "^2.4.0",
     "@vercel/analytics": "^2.0.1",
     "ai": "^7.0.145",
     "botid": "^1.5.11",
+    "mcp-handler": "^2.3.0",
     "next": "16.4.2",
     "react": "19.3.1",
     "react-dom": "19.3.1",
