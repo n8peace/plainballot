@@ -4,6 +4,11 @@
 
 Matching is deterministic arithmetic in the browser, not AI. Candidate positions are researched by independent AI agents on models from different companies; a position is published only when the agents agree and its quote is found word for word on the cited page. Party labels are hidden until the voter asks.
 
+## For agents
+
+- MCP server: https://plainballot.com/mcp (tools: list_issues, get_ballot, score_fit). Read-only, nonpartisan; fit is plain arithmetic on the voter's stated priorities.
+- JSON: GET https://plainballot.com/api/ballot?address=<street address>
+
 ## Key pages
 
 - [Home](https://plainballot.com): pick issues, set dials, enter an address

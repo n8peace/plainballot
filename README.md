@@ -45,6 +45,24 @@ curl -s https://n8peace.github.io/open-election-data/v1/divisions/ca/cd-10.json
 
 Use it for anything, including commercial products, under the Open Database License: credit it, and share improvements to the data under the same terms.
 
+## Send your agent
+
+Plain Ballot works without a browser. Point any AI agent that supports MCP (Claude, ChatGPT, Cursor and others) at:
+
+```
+https://plainballot.com/mcp
+```
+
+It has three read-only tools:
+
+- `list_issues`: the 18 issues and how each side is worded.
+- `get_ballot`: every researched race for a street address, with each choice's position, the exact quote, and the source.
+- `score_fit`: how closely each choice fits the priorities the voter gave, using the same arithmetic as the site. No model is involved.
+
+The agent is told the same rules the site follows: stay nonpartisan, quote and link sources, never fill in a missing position, and only score priorities the voter actually stated. Addresses aren't stored.
+
+Prefer plain JSON? `GET https://plainballot.com/api/ballot?address=...` returns the same ballot, and the research itself is a [free static API](https://n8peace.github.io/open-election-data/).
+
 ## What already exists, and why we still built this
 
 Good sources are already out there, and Plain Ballot learns from them:
