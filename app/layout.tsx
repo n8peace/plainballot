@@ -7,8 +7,9 @@ import './globals.css';
 const newsreader = Newsreader({ variable: '--font-newsreader', subsets: ['latin'], style: ['normal', 'italic'], weight: ['400', '500', '600'] });
 const franklin = Libre_Franklin({ variable: '--font-franklin', subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
+// One promise everywhere: the hero line, this description, and the share image say the same thing.
 const description =
-  'Match every race on your ballot to your own priorities, from Congress to school board, and see exactly why. Free, open source, nonpartisan.';
+  'Who’s on your ballot, and where they stand, in the candidates’ own words with a link to every source. Free, nonpartisan, no account.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
