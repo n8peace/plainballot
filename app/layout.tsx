@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import { Libre_Franklin, Newsreader } from 'next/font/google';
 import { SITE_URL } from '@/lib/share';
+import { THEME_SCRIPT } from '@/lib/theme';
 import './globals.css';
 
 const newsreader = Newsreader({ variable: '--font-newsreader', subsets: ['latin'], style: ['normal', 'italic'], weight: ['400', '500', '600'] });
@@ -29,7 +30,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${franklin.variable}`}>
+    // The head script may set data-theme before React hydrates, hence suppressHydrationWarning.
+    <html lang="en" className={`${newsreader.variable} ${franklin.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         {children}
         {/* Cookie-free page counts on Vercel; nothing personal is collected. */}

@@ -99,3 +99,25 @@
 .pp-headline > span { display: inline-block; }
 .pp-headline, .pp-office { text-wrap: balance; }
 .pp-deck, .pp-fine, .pp-front-cols p { text-wrap: pretty; }
+
+/* Light/dark switch: top right of the masthead, 44px target. The outgoing icon dims and
+   turns away while the incoming one brightens in (about 250ms); a plain crossfade under
+   Reduce Motion. */
+.pp-mast { position: relative; }
+.pp-mast-tools { position: absolute; right: 0; top: 40px; }
+.theme-toggle { position: relative; width: 44px; height: 44px; display: grid; place-items: center; background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink); border-radius: 999px; }
+.theme-toggle:hover { background: var(--wash); }
+.theme-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.tt-icon { position: absolute; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  transition: opacity 250ms cubic-bezier(0.23, 1, 0.32, 1), transform 250ms cubic-bezier(0.23, 1, 0.32, 1), filter 250ms; }
+.tt-moon { fill: currentColor; stroke: none; }
+.tt-sun circle { fill: currentColor; }
+/* Before the theme is known (first render), show neither so it can't flicker the wrong way. */
+.theme-toggle:not([data-theme-now]) .tt-icon { opacity: 0; }
+.theme-toggle[data-theme-now="light"] .tt-sun, .theme-toggle[data-theme-now="dark"] .tt-moon { opacity: 0; transform: rotate(-90deg) scale(0.6); filter: blur(1px); }
+.theme-toggle[data-theme-now="light"] .tt-moon, .theme-toggle[data-theme-now="dark"] .tt-sun { opacity: 1; transform: none; filter: none; }
+.theme-toggle:active .tt-icon { transform: scale(0.92); }
+@media (prefers-reduced-motion: reduce) {
+  .tt-icon { transition: opacity 150ms linear; transform: none !important; filter: none !important; }
+}
+@media (max-width: 720px) { .pp-mast-tools { top: 52px; right: -4px; } }
