@@ -8,6 +8,7 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { AddressInput } from './AddressInput';
+import { ThemeToggle } from './ThemeToggle';
 import { Dials } from './Dials';
 import { IssuePicker } from './IssuePicker';
 import { ReportForm } from './ReportForm';
@@ -86,6 +87,7 @@ export function Paper({ sample }: { sample: Ballot }) {
           <span>Tuesday, November 3, 2026 · General Election</span>
           <span><b>{daysToGo()} days</b> to go · Free · No ads · No account</span>
         </div>
+        <div className="pp-mast-tools"><ThemeToggle /></div>
         <h1 className="pp-title"><button onClick={() => setBallot(null)}>Plain Ballot</button></h1>
         <div className="pp-rule" />
       </header>
