@@ -44,13 +44,20 @@ export function Paper({ sample }: { sample: Ballot }) {
   const [address, setAddress] = useState('');
   const [looking, setLooking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [canRetry, setCanRetry] = useState(false);
   const [prefs, setPrefs] = useState<Prefs>({ sel: [], pos: {}, imp: {} });
   const [personalizing, setPersonalizing] = useState(false);
   const [showParty, setShowParty] = useState(false);
 
+  // Closing the panel hands focus back to the button that opened it.
+  const closePanel = () => {
+    setPersonalizing(false);
+    requestAnimationFrame(() => document.getElementById('pp-personalize')?.focus());
+  };
   useEffect(() => {
     if (!personalizing) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setPersonalizing(false); };
+    document.getElementById('pp-drawer-done')?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closePanel(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [personalizing]);
@@ -60,6 +67,7 @@ export function Paper({ sample }: { sample: Ballot }) {
     if (addr.trim().length < 5) { setError('Enter your street address first.'); return; }
     setLooking(true);
     setError(null);
+    setCanRetry(false);
     try {
       const res = await fetch(`/api/ballot?address=${encodeURIComponent(addr)}`);
       const data = await res.json();
@@ -68,6 +76,7 @@ export function Paper({ sample }: { sample: Ballot }) {
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError((err as Error).message);
+      setCanRetry(true);
     } finally {
       setLooking(false);
     }
@@ -88,7 +97,7 @@ export function Paper({ sample }: { sample: Ballot }) {
   });
 
   return (
-    <div className="paper">
+    <div className="paper" id="top">
       <header className="pp-mast">
         <div className="pp-dateline">
           <span>Tuesday, November 3, 2026 · General Election</span>
@@ -109,7 +118,7 @@ export function Paper({ sample }: { sample: Ballot }) {
               <AddressInput id="pp-address" value={address} onChange={setAddress} onPick={(a) => lookup(undefined, a)} />
               <button className="pp-btn" type="submit" aria-busy={looking} disabled={looking}>{looking ? 'Finding…' : 'See my ballot'}</button>
             </div>
-            {error && <p className="pp-error" role="alert">{error}</p>}
+            {error && <p className="pp-error" role="alert">{error}{canRetry && <> <button type="submit" className="pp-link">Try again</button></>}</p>}
             <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored.</p>
             <div className="pp-or"><span>or</span></div>
             <button type="button" className="pp-btn ghost" onClick={() => { setBallot(sample); window.scrollTo({ top: 0 }); }}>Browse a sample ballot</button>
@@ -131,12 +140,12 @@ export function Paper({ sample }: { sample: Ballot }) {
         />
       )}
 
-      {personalizing && ballot && <div className="pp-scrim" onClick={() => setPersonalizing(false)} aria-hidden="true" />}
+      {personalizing && ballot && <div className="pp-scrim" onClick={closePanel} aria-hidden="true" />}
       {personalizing && ballot && (
         <aside className="pp-drawer" aria-label="Personalize">
           <div className="pp-drawer-head">
             <h3>Personalize</h3>
-            <button className="pp-link" onClick={() => setPersonalizing(false)}>Done</button>
+            <button id="pp-drawer-done" className="pp-link" onClick={closePanel}>Done</button>
           </div>
           <p className="pp-fine">Pick the issues you care about and set where you stand. Each race then shows how closely each choice fits you. Nothing is stored.</p>
           <WordsInput onApply={applyWords} onDone={() => undefined} />
@@ -179,12 +188,19 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
           <button className="pp-link" onClick={onChangeAddress}>Change address</button>
         </div>
         <div className="pp-tools">
-          <button className="pp-btn" onClick={onPersonalize}>{personalized ? `Personalized · ${plural(set, 'issue', 'issues')}` : 'Personalize'}</button>
+          <button id="pp-personalize" className="pp-btn" onClick={onPersonalize}>{personalized ? `Personalized · ${plural(set, 'issue', 'issues')}` : 'Personalize'}</button>
           <label className="pp-switch"><input type="checkbox" checked={showParty} onChange={(e) => onParty(e.target.checked)} /> Show party</label>
         </div>
       </div>
       <div className="pp-rule thin" />
+      {ballot.contests.length > 5 && (
+        <nav className="pp-index" aria-label="Races on this ballot">
+          <p className="pp-kicker">On this ballot</p>
+          <ol>{ballot.contests.map((c) => <li key={c.id}><a href={`#race-${c.id}`}>{c.office}</a></li>)}</ol>
+        </nav>
+      )}
       {ballot.contests.map((c) => <Story key={c.id} contest={c} prefs={prefs} showParty={showParty} />)}
+      {ballot.contests.length > 5 && <p className="pp-top"><a href="#top">Back to the top ↑</a></p>}
     </main>
   );
 }
@@ -207,7 +223,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
   const cols = { gridTemplateColumns: `minmax(120px, 0.8fr) repeat(${choices.length}, minmax(140px, 1fr))`, '--n': choices.length } as React.CSSProperties;
 
   return (
-    <article className="pp-story">
+    <article className="pp-story" id={`race-${contest.id}`}>
       <p className="pp-kicker">{contest.sub.split(' · ')[0]}</p>
       <h3 className="pp-office">{contest.office}</h3>
       {contest.summary && <p className="pp-deck sm">{contest.summary}</p>}
@@ -253,7 +269,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                 return (
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
-                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : 'Quoted from the source'}</p><blockquote>“{s.quote}”</blockquote></>}
+                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${hostOf(s.sourceUrl)}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
                     {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
                   </div>
                 );

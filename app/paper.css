@@ -122,3 +122,10 @@
   .tt-icon { transition: opacity 150ms linear; transform: none !important; filter: none !important; }
 }
 @media (max-width: 720px) { .pp-mast-tools { top: 52px; right: -4px; } }
+
+/* Race list on long ballots, and the way back up. */
+.pp-index { padding: 14px 0 6px; border-bottom: 1px solid var(--rule); }
+.pp-index ol { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--sans); font-size: 15px; }
+.pp-index a, .pp-top a { color: var(--ink); text-underline-offset: 3px; }
+.pp-story { scroll-margin-top: 12px; }
+.pp-top { font-family: var(--sans); font-size: 15px; text-align: right; margin: 18px 0 0; }
