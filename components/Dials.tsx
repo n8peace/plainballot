@@ -32,7 +32,7 @@ export function Dials({
         return (
           <div key={i.id} id={`dial-${i.id}`} className={`dial ${flash === i.id ? 'new' : ''}`}>
             <div className="dial-top">
-              <span className="dial-name">{i.name}<small>{countFor(i.id)} contests</small></span>
+              <span className="dial-name">{i.name}<small>{countFor(i.id)} {countFor(i.id) === 1 ? 'race' : 'races'}</small></span>
               <span className="dial-read">{unset ? 'Slide to set where you stand' : readout(i, v)}</span>
             </div>
             <div className="track">

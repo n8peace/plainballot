@@ -41,6 +41,7 @@
 .pp-name { font-family: var(--serif); font-weight: 600; font-size: 20px; line-height: 1.2; }
 .pp-party { font-family: var(--sans); font-size: 13px; color: var(--ink-2); }
 .pp-fit { font-family: var(--sans); font-size: 13px; font-weight: 700; }
+.pp-basis { font-family: var(--sans); font-size: 12px; color: var(--ink-2); }
 .pp-cand.top .pp-name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .pp-issue { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-2); }
 .pp-issue.mine { color: var(--ink); }
@@ -55,7 +56,7 @@
 .pp-quote p { margin: 0; }
 .pp-quote blockquote { margin: 8px 0; padding-left: 12px; border-left: 3px solid var(--ink); font-style: italic; }
 
-.pp-scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 49; }
+.pp-scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 49; }
 .pp-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); background: var(--paper); border-left: 1px solid var(--rule-strong); padding: 18px 20px 40px; overflow-y: auto; z-index: 50; box-shadow: -12px 0 30px rgba(0,0,0,0.12); }
 .pp-drawer-head { display: flex; justify-content: space-between; align-items: center; }
 .pp-drawer-head h3 { font-family: var(--serif); font-size: 26px; margin: 0; }
@@ -75,6 +76,8 @@
 /* Phones: each issue gets its own line, with the candidates sharing the width below it. */
 @media (max-width: 720px) {
   .pp-table { overflow-x: visible; }
+  /* Keep the names in view while scrolling a long race. */
+  .pp-row.head { position: sticky; top: 0; background: var(--paper); z-index: 2; }
   .pp-row { grid-template-columns: repeat(var(--n), minmax(0, 1fr)) !important; min-width: 0; gap: 2px 12px; }
   .pp-corner { display: none; }
   .pp-issue { grid-column: 1 / -1; padding-bottom: 2px; }

@@ -57,7 +57,14 @@ export function Paper({ sample }: { sample: Ballot }) {
   useEffect(() => {
     if (!personalizing) return;
     document.getElementById('pp-drawer-done')?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closePanel(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return closePanel();
+      if (e.key !== 'Tab') return;
+      const items = [...document.querySelectorAll<HTMLElement>('.pp-drawer button, .pp-drawer input, .pp-drawer textarea, .pp-drawer a[href]')].filter((el) => !el.hasAttribute('disabled'));
+      const [first, last] = [items[0], items[items.length - 1]];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+    };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [personalizing]);
@@ -71,12 +78,15 @@ export function Paper({ sample }: { sample: Ballot }) {
     try {
       const res = await fetch(`/api/ballot?address=${encodeURIComponent(addr)}`);
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Something went wrong. Please try again.');
+      if (!res.ok) {
+        setCanRetry(res.status === 429 || res.status >= 500);
+        throw new Error(data.error ?? 'Something went wrong. Please try again.');
+      }
       setBallot(data);
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError((err as Error).message);
-      setCanRetry(true);
+      if ((err as Error).name !== 'Error') setCanRetry(true); // network failure or a non-JSON reply
     } finally {
       setLooking(false);
     }
@@ -115,7 +125,7 @@ export function Paper({ sample }: { sample: Ballot }) {
           <form className="pp-ask" onSubmit={lookup}>
             <label className="pp-label" htmlFor="pp-address">Your street address</label>
             <div className="pp-ask-row">
-              <AddressInput id="pp-address" value={address} onChange={setAddress} onPick={(a) => lookup(undefined, a)} />
+              <AddressInput id="pp-address" value={address} onChange={(v) => { setAddress(v); setError(null); }} onPick={(a) => lookup(undefined, a)} />
               <button className="pp-btn" type="submit" aria-busy={looking} disabled={looking}>{looking ? 'Finding…' : 'See my ballot'}</button>
             </div>
             {error && <p className="pp-error" role="alert">{error}{canRetry && <> <button type="submit" className="pp-link">Try again</button></>}</p>}
@@ -142,7 +152,7 @@ export function Paper({ sample }: { sample: Ballot }) {
 
       {personalizing && ballot && <div className="pp-scrim" onClick={closePanel} aria-hidden="true" />}
       {personalizing && ballot && (
-        <aside className="pp-drawer" aria-label="Personalize">
+        <aside className="pp-drawer" role="dialog" aria-modal="true" aria-label="Personalize">
           <div className="pp-drawer-head">
             <h3>Personalize</h3>
             <button id="pp-drawer-done" className="pp-link" onClick={closePanel}>Done</button>
@@ -209,10 +219,14 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
   const [open, setOpen] = useState<string | null>(null);
   const [report, setReport] = useState<{ candidate?: string; issue?: string } | null>(null);
   const personalized = prefs.sel.some((id) => contest.issues.includes(id) && prefs.pos[id] !== undefined);
-  const choices: { choice: Choice; fit: number | null }[] = useMemo(() => {
-    if (!personalized) return contest.choices.map((choice) => ({ choice, fit: null }));
-    return rank(contest, prefs).map((r) => ({ choice: r.choice, fit: score(r.choice, contest, prefs).match }));
-  }, [contest, prefs, personalized]);
+  const used = contest.issues.filter((id) => prefs.sel.includes(id) && prefs.pos[id] !== undefined).length;
+  const choices: { choice: Choice; fit: number | null; on: number }[] = useMemo(() => {
+    if (!personalized) return contest.choices.map((choice) => ({ choice, fit: null, on: 0 }));
+    return rank(contest, prefs).map((r) => {
+      const s = score(r.choice, contest, prefs);
+      return { choice: r.choice, fit: s.match, on: used - s.missing.length };
+    });
+  }, [contest, prefs, personalized, used]);
 
   // Issues where at least one choice has a sourced position; the voter's issues first.
   const rows = contest.issues
@@ -237,11 +251,12 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
         <div className="pp-table" role="table" aria-label={contest.office}>
           <div className="pp-row head" role="row" style={cols}>
             <div role="columnheader" className="pp-corner" />
-            {choices.map(({ choice, fit }, n) => (
+            {choices.map(({ choice, fit, on }, n) => (
               <div key={choice.id} role="columnheader" className={`pp-cand ${leads && n === 0 ? 'top' : ''}`}>
                 <span className="pp-name">{choice.name}</span>
                 {showParty && choice.party && <span className="pp-party">{choice.party}</span>}
-                {fit !== null && <span className="pp-fit">{fit}% fit</span>}
+                {fit !== null && <span className="pp-fit">{fit}% fit{!leads && fit === choices[0].fit ? ' · tied' : ''}</span>}
+                {fit !== null && <span className="pp-basis">based on {on} {on === 1 ? 'issue' : 'issues'}</span>}
               </div>
             ))}
           </div>

@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
   try {
     return Response.json(await getBallot(address), { headers: { 'cache-control': 'private, no-store' } });
   } catch (e) {
-    if (e instanceof BallotLookupError) return Response.json({ error: e.message }, { status: 404 });
+    if (e instanceof BallotLookupError) return Response.json({ error: e.message }, { status: e.retryable ? 503 : 404 });
     console.error('ballot lookup failed', e);
     return Response.json({ error: 'Ballot lookup is down right now. Try again in a minute.' }, { status: 502 });
   }

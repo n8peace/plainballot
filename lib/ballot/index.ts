@@ -71,7 +71,7 @@ export async function getBallot(address: string): Promise<Ballot> {
   // The district lookup (U.S. Census) failed, not the address: say so, instead of
   // implying the address was found and nothing is researched.
   if (!loc) {
-    throw new BallotLookupError('We couldn’t look up your districts right now. The U.S. Census address service we use isn’t responding. Please try again in a few minutes.');
+    throw new BallotLookupError('We couldn’t look up your districts right now. The U.S. Census address service we use isn’t responding. Please try again in a few minutes.', true);
   }
 
   return {
