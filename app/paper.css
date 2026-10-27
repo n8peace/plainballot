@@ -22,7 +22,7 @@
 .pp-btn:disabled { opacity: 0.5; cursor: default; }
 .pp-link { background: none; border: 0; padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; color: inherit; }
 .pp-fine { font-family: var(--sans); font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
-.pp-error { font-family: var(--sans); font-size: 14px; color: #b3261e; margin: 10px 0 0; }
+.pp-error { font-family: var(--sans); font-size: 14px; color: var(--error); margin: 10px 0 0; }
 .pp-front-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left; margin-top: 56px; border-top: 1px solid var(--rule); padding-top: 18px; font-size: 16px; color: var(--ink-2); }
 .pp-front-cols p { margin: 0; }
 .pp-front-cols b { color: var(--ink); }
@@ -55,6 +55,7 @@
 .pp-quote p { margin: 0; }
 .pp-quote blockquote { margin: 8px 0; padding-left: 12px; border-left: 3px solid var(--ink); font-style: italic; }
 
+.pp-scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 49; }
 .pp-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); background: var(--paper); border-left: 1px solid var(--rule-strong); padding: 18px 20px 40px; overflow-y: auto; z-index: 50; box-shadow: -12px 0 30px rgba(0,0,0,0.12); }
 .pp-drawer-head { display: flex; justify-content: space-between; align-items: center; }
 .pp-drawer-head h3 { font-family: var(--serif); font-size: 26px; margin: 0; }

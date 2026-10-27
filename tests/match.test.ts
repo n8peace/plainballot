@@ -26,6 +26,14 @@ describe('score', () => {
     expect(s.match).toBe(94);
   });
 
+  it('leaves out issues the voter picked but has not set a side on, instead of treating them as neutral', () => {
+    const c = contest('us-house-7');
+    const picked: Prefs = { sel: ['housing'], pos: {}, imp: {} };
+    expect(score(c.choices[0], c, picked).match).toBeNull();
+    const neutral: Prefs = { ...picked, pos: { housing: 0 } };
+    expect(score(c.choices[0], c, neutral).match).not.toBeNull();
+  });
+
   it('ignores issues the voter did not choose', () => {
     const c = contest('us-house-7');
     const withAbortion: Prefs = { ...voter, pos: { ...voter.pos, abortion: 2 }, imp: { ...voter.imp, abortion: 'high' } };
