@@ -22,7 +22,7 @@
 .pp-btn:disabled { opacity: 0.5; cursor: default; }
 .pp-link { background: none; border: 0; padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; color: inherit; }
 .pp-fine { font-family: var(--sans); font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
-.pp-error { font-family: var(--sans); font-size: 14px; color: #b3261e; margin: 10px 0 0; }
+.pp-error { font-family: var(--sans); font-size: 14px; color: var(--error); margin: 10px 0 0; }
 .pp-front-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left; margin-top: 56px; border-top: 1px solid var(--rule); padding-top: 18px; font-size: 16px; color: var(--ink-2); }
 .pp-front-cols p { margin: 0; }
 .pp-front-cols b { color: var(--ink); }
@@ -41,6 +41,7 @@
 .pp-name { font-family: var(--serif); font-weight: 600; font-size: 20px; line-height: 1.2; }
 .pp-party { font-family: var(--sans); font-size: 13px; color: var(--ink-2); }
 .pp-fit { font-family: var(--sans); font-size: 13px; font-weight: 700; }
+.pp-basis { font-family: var(--sans); font-size: 12px; color: var(--ink-2); }
 .pp-cand.top .pp-name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .pp-issue { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-2); }
 .pp-issue.mine { color: var(--ink); }
@@ -55,6 +56,7 @@
 .pp-quote p { margin: 0; }
 .pp-quote blockquote { margin: 8px 0; padding-left: 12px; border-left: 3px solid var(--ink); font-style: italic; }
 
+.pp-scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 49; }
 .pp-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); background: var(--paper); border-left: 1px solid var(--rule-strong); padding: 18px 20px 40px; overflow-y: auto; z-index: 50; box-shadow: -12px 0 30px rgba(0,0,0,0.12); }
 .pp-drawer-head { display: flex; justify-content: space-between; align-items: center; }
 .pp-drawer-head h3 { font-family: var(--serif); font-size: 26px; margin: 0; }
@@ -74,6 +76,8 @@
 /* Phones: each issue gets its own line, with the candidates sharing the width below it. */
 @media (max-width: 720px) {
   .pp-table { overflow-x: visible; }
+  /* Keep the names in view while scrolling a long race. */
+  .pp-row.head { position: sticky; top: 0; background: var(--paper); z-index: 2; }
   .pp-row { grid-template-columns: repeat(var(--n), minmax(0, 1fr)) !important; min-width: 0; gap: 2px 12px; }
   .pp-corner { display: none; }
   .pp-issue { grid-column: 1 / -1; padding-bottom: 2px; }
@@ -121,3 +125,10 @@
   .tt-icon { transition: opacity 150ms linear; transform: none !important; filter: none !important; }
 }
 @media (max-width: 720px) { .pp-mast-tools { top: 52px; right: -4px; } }
+
+/* Race list on long ballots, and the way back up. */
+.pp-index { padding: 14px 0 6px; border-bottom: 1px solid var(--rule); }
+.pp-index ol { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--sans); font-size: 15px; }
+.pp-index a, .pp-top a { color: var(--ink); text-underline-offset: 3px; }
+.pp-story { scroll-margin-top: 12px; }
+.pp-top { font-family: var(--sans); font-size: 15px; text-align: right; margin: 18px 0 0; }

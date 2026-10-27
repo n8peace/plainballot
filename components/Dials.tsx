@@ -27,12 +27,13 @@ export function Dials({
   return (
     <div>
       {chosen.map((i) => {
+        const unset = prefs.pos[i.id] === undefined;
         const v = prefs.pos[i.id] ?? 0;
         return (
           <div key={i.id} id={`dial-${i.id}`} className={`dial ${flash === i.id ? 'new' : ''}`}>
             <div className="dial-top">
-              <span className="dial-name">{i.name}<small>{countFor(i.id)} contests</small></span>
-              <span className="dial-read">{readout(i, v)}</span>
+              <span className="dial-name">{i.name}<small>{countFor(i.id)} {countFor(i.id) === 1 ? 'race' : 'races'}</small></span>
+              <span className="dial-read">{unset ? 'Slide to set where you stand' : readout(i, v)}</span>
             </div>
             <div className="track">
               <div className="ticks" aria-hidden="true"><i /><i /><i /><i /><i /></div>
@@ -44,8 +45,11 @@ export function Dials({
                 step={1}
                 value={v}
                 aria-label={`${i.name}: from ${i.left} to ${i.right}`}
-                aria-valuetext={readout(i, v)}
+                aria-valuetext={unset ? 'Not set' : readout(i, v)}
                 onChange={(e) => onPosition(i.id, Number(e.target.value) as Position)}
+                // Tapping the dial without moving it means "neither side": count it as set.
+                onPointerUp={() => unset && onPosition(i.id, 0)}
+                onKeyUp={(e) => unset && (e.key === ' ' || e.key === 'Enter') && onPosition(i.id, 0)}
               />
             </div>
             <div className="poles"><span>{i.left}</span><span>{i.right}</span></div>

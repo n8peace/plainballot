@@ -25,7 +25,12 @@ interface CivicResponse {
   error?: { message?: string };
 }
 
-export class BallotLookupError extends Error {}
+export class BallotLookupError extends Error {
+  /** True when the same request may work later (a service is down), not when the address is wrong. */
+  constructor(message: string, readonly retryable = false) {
+    super(message);
+  }
+}
 
 export async function lookupGoogleCivic(address: string, apiKey: string): Promise<Ballot> {
   const url = new URL('https://www.googleapis.com/civicinfo/v2/voterinfo');

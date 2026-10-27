@@ -4,7 +4,8 @@
 // For each issue the voter chose that a contest decides, distance is how far the
 // voter's dial sits from the choice's position (0–4), weighted by importance.
 // Match % = 100 − weighted average distance scaled to 0–100.
-// An issue where a choice has no sourced position is left out, never guessed.
+// An issue where a choice has no sourced position is left out, never guessed. So is an
+// issue the voter picked but hasn't set a side on yet: it isn't treated as "neither side".
 
 import { WEIGHT, type IssueId } from './issues';
 import type { Choice, Contest, Prefs } from './types';
@@ -12,7 +13,7 @@ import type { Choice, Contest, Prefs } from './types';
 export type WeightFn = (id: IssueId) => number;
 
 export const weightFor = (prefs: Prefs): WeightFn => (id) =>
-  prefs.sel.includes(id) ? WEIGHT[prefs.imp[id] ?? 'medium'] : 0;
+  prefs.sel.includes(id) && prefs.pos[id] !== undefined ? WEIGHT[prefs.imp[id] ?? 'medium'] : 0;
 
 const userPos = (prefs: Prefs, id: IssueId) => prefs.pos[id] ?? 0;
 

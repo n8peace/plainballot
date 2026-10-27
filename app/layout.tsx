@@ -10,7 +10,7 @@ const franklin = Libre_Franklin({ variable: '--font-franklin', subsets: ['latin'
 
 // One promise everywhere: the hero line, this description, and the share image say the same thing.
 const description =
-  'Who’s on your ballot, and where they stand, in the candidates’ own words with a link to every source. Free, nonpartisan, no account.';
+  'Who’s on your ballot, and where they stand, what each candidate said or did, quoted exactly, with a link to every source. Free, nonpartisan, no account.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
