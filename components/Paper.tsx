@@ -15,6 +15,7 @@ import { ReportForm } from './ReportForm';
 import { WordsInput } from './WordsInput';
 import { issueById, ISSUES, type Importance, type IssueId, type Position } from '@/lib/issues';
 import { rank, score } from '@/lib/match';
+import { countPull } from '@/lib/pulled';
 import { DATA_REPO_URL, GITHUB_URL, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
@@ -83,6 +84,7 @@ export function Paper({ sample }: { sample: Ballot }) {
         throw new Error(data.error ?? 'Something went wrong. Please try again.');
       }
       setBallot(data);
+      countPull(data);
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError((err as Error).message);
@@ -157,7 +159,7 @@ export function Paper({ sample }: { sample: Ballot }) {
             <h3>Personalize</h3>
             <button id="pp-drawer-done" className="pp-link" onClick={closePanel}>Done</button>
           </div>
-          <p className="pp-fine">Pick the issues you care about and set where you stand. Each race then shows how closely each choice fits you. Nothing is stored.</p>
+          <p className="pp-fine">Pick the issues you care about and set where you stand. Each race then shows how closely each choice fits you. Your choices aren’t stored.</p>
           <WordsInput onApply={applyWords} onDone={() => undefined} />
           <IssuePicker selected={prefs.sel} countFor={countFor} onToggle={toggle} />
           <Dials prefs={prefs} flash={null} countFor={countFor} onPosition={setPos} onImportance={setImp} onRemove={toggle} />

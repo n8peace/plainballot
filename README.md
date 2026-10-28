@@ -14,7 +14,7 @@
 
 </div>
 
-Who's running, and where do they stand? Pick the issues you care about, set a dial for each, and enter your address. Plain Ballot goes through your ballot and shows who fits you, why, and where that came from. Party labels stay hidden until you ask. No ads, no account, nothing stored.
+Who's running, and where do they stand? Pick the issues you care about, set a dial for each, and enter your address. Plain Ballot goes through your ballot and shows who fits you, why, and where that came from. Party labels stay hidden until you ask. No ads, no account, and your address isn’t stored.
 
 Covering every race in California, plus U.S. House and Senate races in all 50 states, for Nov 3, 2026.
 
