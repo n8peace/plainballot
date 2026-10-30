@@ -16,10 +16,10 @@
   "dependencies": {
     "@modelcontextprotocol/server": "^2.4.0",
     "@vercel/analytics": "^2.0.1",
-    "ai": "^7.0.145",
+    "ai": "^7.0.154",
     "botid": "^1.5.11",
     "mcp-handler": "^2.3.0",
-    "next": "16.4.2",
+    "next": "16.4.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "zod": "^4.6.7"
@@ -29,7 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.2",
+    "eslint-config-next": "16.4.3",
     "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.0.5"
