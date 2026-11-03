@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import { RefCount } from '@/components/RefCount';
 import type { Metadata, Viewport } from 'next';
 import { Libre_Franklin, Newsreader } from 'next/font/google';
 import { SITE_URL } from '@/lib/share';
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         {children}
         {/* Cookie-free page counts on Vercel; nothing personal is collected. */}
         <Analytics />
+        <RefCount />
       </body>
     </html>
   );

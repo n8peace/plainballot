@@ -32,7 +32,7 @@ export default function Methodology() {
       </ul>
 
       <h2>What we count</h2>
-      <p>We count page visits and how many people look up a ballot, by state only. Your browser keeps one note that you’ve looked this election, so you’re counted once. Your address, your district and your choices are never sent or stored.</p>
+      <p>We count page visits, how many people look up a ballot (by state only), and which post a link came from when it carries a tag like ?ref=li-1102. Your browser keeps one note that you’ve looked this election, so you’re counted once. Your address, your district and your choices are never sent or stored.</p>
 
       <h2>The dials, word for word</h2>
       <p>Each end is worded the way its own supporters would put it. The ends aren’t all lined up left to right by party. Think a label is unfair? <a href={`${DATA_REPO_URL}/issues/new?template=wording.yml`}>Tell us</a>.</p>
