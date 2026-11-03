@@ -124,7 +124,8 @@
 @media (prefers-reduced-motion: reduce) {
   .tt-icon { transition: opacity 150ms linear; transform: none !important; filter: none !important; }
 }
-@media (max-width: 720px) { .pp-mast-tools { top: 52px; right: -4px; } }
+/* On phones the dateline wraps to a varying height, so center the switch on the title from below, clear of the dateline's rule. */
+@media (max-width: 720px) { .pp-mast-tools { top: auto; bottom: calc(13px + (clamp(48px, 9vw, 96px) - 48px) / 2); right: 0; } }
 
 /* Race list on long ballots, and the way back up. */
 .pp-index { padding: 14px 0 6px; border-bottom: 1px solid var(--rule); }
