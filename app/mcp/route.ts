@@ -58,9 +58,14 @@ function forAgents(b: Ballot) {
   };
 }
 
+// Every tool only reads: nothing it does changes anything for anyone, so app stores and
+// clients can call it without asking the voter to confirm.
+const READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } as const;
+
 const mcp = createMcpHandler((server) => {
   server.registerTool('list_issues', {
     title: 'List the issues',
+    annotations: READ_ONLY,
     description: 'The 18 issues Plain Ballot tracks. Each has two sides, each worded the way its own supporters would say it. Use the short side labels ("l" and "r") when giving priorities to score_fit.',
     inputSchema: z.object({}),
   }, async () => {
@@ -70,6 +75,7 @@ const mcp = createMcpHandler((server) => {
 
   server.registerTool('get_ballot', {
     title: 'Get a ballot',
+    annotations: READ_ONLY,
     description: 'Every researched race on the ballot for a U.S. street address, with each choice\'s position on the issues that office decides, the exact quote, and the source URL.',
     inputSchema: z.object({ address: z.string().min(5).max(200).describe('Full street address with city, state and ZIP') }),
   }, async ({ address }) => {
@@ -84,6 +90,7 @@ const mcp = createMcpHandler((server) => {
 
   server.registerTool('score_fit', {
     title: 'Score fit with the voter\'s priorities',
+    annotations: READ_ONLY,
     description: 'How closely each choice on the voter\'s ballot fits the priorities the voter stated, from 0 to 100. Plain arithmetic, the same as plainballot.com: issues where a choice has no sourced position are left out, never guessed. Only use priorities the voter actually gave you.',
     inputSchema: z.object({
       address: z.string().min(5).max(200),
