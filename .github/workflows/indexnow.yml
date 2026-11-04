@@ -1,0 +1,18 @@
+name: IndexNow
+# After Vercel finishes a production deploy, tell search engines the site's pages changed.
+on:
+  deployment_status:
+permissions:
+  contents: read
+jobs:
+  ping:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run indexnow
