@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { BallotLookupError, getBallot } from '@/lib/ballot';
 import { ISSUE_IDS, ISSUES, issueById, NEITHER, toPosition, type IssueId } from '@/lib/issues';
 import { score } from '@/lib/match';
+import { countAgent, withAgent } from '@/lib/agents';
+import { ballotState } from '@/lib/pulled';
 import { allow, clientIp } from '@/lib/ratelimit';
 import { DATA_REPO_URL, SITE_URL } from '@/lib/share';
 import type { Ballot, Prefs } from '@/lib/types';
@@ -69,6 +71,7 @@ const mcp = createMcpHandler((server) => {
     description: 'The 18 issues Plain Ballot tracks. Each has two sides, each worded the way its own supporters would say it. Use the short side labels ("l" and "r") when giving priorities to score_fit.',
     inputSchema: z.object({}),
   }, async () => {
+    await countAgent('Agent tool call', { tool: 'list_issues' });
     const issues = ISSUES.map((i) => ({ id: i.id, name: i.name, sides: { [i.l]: i.left, [i.r]: i.right } }));
     return { content: [{ type: 'text', text: JSON.stringify({ issues, neither: NEITHER }) }], structuredContent: { issues } };
   });
@@ -79,8 +82,12 @@ const mcp = createMcpHandler((server) => {
     description: 'Every researched race on the ballot for a U.S. street address, with each choice\'s position on the issues that office decides, the exact quote, and the source URL.',
     inputSchema: z.object({ address: z.string().min(5).max(200).describe('Full street address with city, state and ZIP') }),
   }, async ({ address }) => {
+    await countAgent('Agent tool call', { tool: 'get_ballot' });
     try {
-      const ballot = forAgents(await getBallot(address));
+      const found = await getBallot(address);
+      const state = ballotState(found);
+      if (state) await countAgent('Agent ballot pulled', { state });
+      const ballot = forAgents(found);
       return { content: [{ type: 'text', text: JSON.stringify(ballot) }], structuredContent: ballot };
     } catch (e) {
       const msg = e instanceof BallotLookupError ? e.message : 'Ballot lookup is down right now. Try again in a minute.';
@@ -102,6 +109,7 @@ const mcp = createMcpHandler((server) => {
       })).min(1).max(18),
     }),
   }, async ({ address, priorities }) => {
+    await countAgent('Agent tool call', { tool: 'score_fit' });
     const prefs: Prefs = { sel: [], pos: {}, imp: {} };
     for (const p of priorities) {
       const pos = toPosition(p.issue, p.side, p.strength);
@@ -112,6 +120,8 @@ const mcp = createMcpHandler((server) => {
     }
     try {
       const ballot = await getBallot(address);
+      const state = ballotState(ballot);
+      if (state) await countAgent('Agent ballot pulled', { state });
       const contests = ballot.contests.filter((c) => c.issues.some((id) => prefs.sel.includes(id))).map((c) => ({
         id: c.id,
         office: c.office,
@@ -138,7 +148,7 @@ async function handler(req: Request): Promise<Response> {
   if (req.method === 'POST' && !allow(`mcp:${clientIp(req)}`, 120)) {
     return Response.json({ error: 'Too many requests in a few minutes. Wait a bit and try again.' }, { status: 429 });
   }
-  return mcp(req);
+  return withAgent(req, () => mcp(req));
 }
 
 export { handler as GET, handler as POST, handler as DELETE };

@@ -7,10 +7,16 @@ const KEY = 'pb-pulled';
 
 /** What gets sent for a lookup, or null when there's nothing to count (address not found). */
 export function pulledEvent(ballot: Ballot, lastCycle: string | null) {
-  const state = ballot.districts?.[0]?.key.split('/')[0];
-  if (!state || !/^[a-z]{2}$/.test(state)) return null;
+  const state = ballotState(ballot);
+  if (!state) return null;
   const cycle = ballot.electionDate.slice(0, 7);
-  return { cycle, event: { state: state.toUpperCase(), first: lastCycle === cycle ? 'no' : 'yes' } };
+  return { cycle, event: { state, first: lastCycle === cycle ? 'no' : 'yes' } };
+}
+
+/** The ballot's 2-letter state ("CA"), or null when no districts were found. */
+export function ballotState(ballot: Ballot): string | null {
+  const state = ballot.districts?.[0]?.key.split('/')[0];
+  return state && /^[a-z]{2}$/.test(state) ? state.toUpperCase() : null;
 }
 
 export function countPull(ballot: Ballot) {
