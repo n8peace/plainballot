@@ -2,6 +2,7 @@
 // app sent them. Events carry only the tool, the app and the state; never the address.
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { track } from '@vercel/analytics/server';
+import { SITE_URL } from './share';
 
 /** Which AI app a request came from, read from its User-Agent. */
 export function agentClient(userAgent: string | null): string {
@@ -23,6 +24,10 @@ export function withAgent<T>(req: Request, fn: () => T): T {
 }
 
 export async function countAgent(event: 'Agent tool call' | 'Agent ballot pulled', props: Record<string, string>) {
+  // By default server-side events go to the deployment's own vercel.app URL, which Deployment
+  // Protection answers with a 401, so every event was dropped. Send them to the public domain.
+  // Production only, so local runs and previews never count.
+  if (process.env.VERCEL_ENV === 'production') process.env.VERCEL_WEB_ANALYTICS_ENDPOINT ??= `${SITE_URL}/_vercel/insights/event`;
   const ctx = current.getStore();
   try {
     await track(event, { ...props, client: ctx?.client ?? 'other' }, { headers: ctx?.headers });
