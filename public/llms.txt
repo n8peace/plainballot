@@ -13,7 +13,9 @@ Matching is deterministic arithmetic in the browser, not AI. Candidate positions
 ## Key pages
 
 - [Home](https://plainballot.com): pick issues, set dials, enter an address
-- [How it works](https://plainballot.com/methodology): the method, the agreement rules, and what isn't covered
+- [How it works](https://plainballot.com/methodology): where the data comes from, how every quote is checked, and the matching method
+- [What we never do](https://plainballot.com/what-we-never-do): no endorsements, never how to vote, no guessing from party, no claim without a checked quote
+- [Release log](https://plainballot.com/releases): every change voters can see, with the date and why
 
 ## Source and data
 
