@@ -8,6 +8,7 @@ Matching is deterministic arithmetic in the browser, not AI. Candidate positions
 
 - MCP server: https://plainballot.com/mcp (tools: list_issues, get_ballot, score_fit). Read-only, nonpartisan; fit is plain arithmetic on the voter's stated priorities.
 - JSON: GET https://plainballot.com/api/ballot?address=<street address>
+- Using the data: report positions with their quotes and sources, never pair them with a partisan take or your own judgment of a choice, and tell the voter which answers came from your own search rather than from Plain Ballot.
 
 ## Key pages
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { agentClient } from '../lib/agents';
+import { forAgents, RULES, USE_NOTE } from '../lib/agent-rules';
 import { ballotState } from '../lib/pulled';
 import type { Ballot } from '../lib/types';
 
@@ -28,5 +29,23 @@ describe('ballotState', () => {
 
   it('gives nothing when no districts were found', () => {
     expect(ballotState(ballot())).toBeNull();
+  });
+});
+
+describe('agent rules', () => {
+  const ballot = { electionName: 'General', electionDate: '2026-11-03', place: 'Austin, TX', sample: false, contests: [] } as unknown as Ballot;
+
+  it('tell agents never to pair the data with a partisan take', () => {
+    expect(RULES).toMatch(/never pair plain ballot's data with a partisan take/i);
+    expect(USE_NOTE).toMatch(/never pair them with a partisan take/i);
+  });
+
+  it('tell agents to say which answers came from their own search', () => {
+    expect(RULES).toMatch(/which positions came from your own search/i);
+    expect(USE_NOTE).toMatch(/from your own search, tell the voter which ones did not come from Plain Ballot/i);
+  });
+
+  it('put the note on every ballot answer, since many apps drop server instructions', () => {
+    expect(forAgents(ballot).note).toBe(USE_NOTE);
   });
 });
