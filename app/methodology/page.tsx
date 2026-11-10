@@ -3,12 +3,20 @@ import type { Metadata } from 'next';
 import { ISSUES } from '@/lib/issues';
 import { INTERPRET_MODEL } from '@/lib/ai/interpret';
 import { DATA_REPO_URL, GITHUB_URL } from '@/lib/share';
+import { articleJsonLd, citablePage } from '@/lib/citable';
 
-export const metadata: Metadata = { title: 'How Plain Ballot works', description: 'The matching method, the dial wording, and where the AI is and isn’t used.' };
+const page = citablePage('/methodology');
+
+export const metadata: Metadata = {
+  title: page.title,
+  description: page.description,
+  alternates: { canonical: page.path },
+};
 
 export default function Methodology() {
   return (
     <div className="wrap prose">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(page)) }} />
       <p className="back"><Link href="/">← Back to your ballot</Link></p>
       <h1 className="wordmark" style={{ fontSize: 44, textAlign: 'left' }}>How it works</h1>
       <hr className="double" />
@@ -49,6 +57,7 @@ export default function Methodology() {
 
       <h2>Check our work</h2>
       <p>This site’s code is public at <a href={GITHUB_URL}>{GITHUB_URL.replace('https://', '')}</a>. The research, including every position, quote and source and the dial wording, is free open data at <a href={DATA_REPO_URL}>{DATA_REPO_URL.replace('https://', '')}</a>. Corrections are welcome, and every change is public.</p>
+      <p>The rules we hold to: <Link href="/what-we-never-do">What we never do</Link>. What changed and when: <Link href="/releases">Release log</Link>.</p>
     </div>
   );
 }
