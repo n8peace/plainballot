@@ -26,6 +26,10 @@
 .pp-front-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left; margin-top: 56px; border-top: 1px solid var(--rule); padding-top: 18px; font-size: 16px; color: var(--ink-2); }
 .pp-front-cols p { margin: 0; }
 .pp-front-cols b { color: var(--ink); }
+.pp-faq { text-align: left; margin-top: 48px; border-top: 1px solid var(--rule); padding-top: 18px; max-width: 680px; }
+.pp-faq h2 { font-family: var(--serif); font-size: 26px; margin: 0 0 4px; }
+.pp-faq h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--ink); margin: 18px 0 4px; }
+.pp-faq p { margin: 0; font-size: 16px; color: var(--ink-2); text-wrap: pretty; }
 
 .pp-edition-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-top: 26px; }
 .pp-kicker { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); margin: 0; }

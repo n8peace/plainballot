@@ -16,6 +16,7 @@ import { WordsInput } from './WordsInput';
 import { issueById, ISSUES, type Importance, type IssueId, type Position } from '@/lib/issues';
 import { rank, score } from '@/lib/match';
 import { countPull } from '@/lib/pulled';
+import { FAQ } from '@/lib/faq';
 import { DATA_REPO_URL, GITHUB_URL, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
@@ -140,6 +141,15 @@ export function Paper({ sample }: { sample: Ballot }) {
             <p><b>Party labels are hidden</b> until you ask, so you see the issues first.</p>
             <p><b>Free and open.</b> The research is <a href={DATA_REPO_URL}>open data</a> anyone can check, and <a href={GITHUB_URL}>so is the code</a>.</p>
           </div>
+          <section className="pp-faq" aria-labelledby="pp-faq-head">
+            <h2 id="pp-faq-head">Questions</h2>
+            {FAQ.map(({ q, a }) => (
+              <div key={q}>
+                <h3>{q}</h3>
+                <p>{a}</p>
+              </div>
+            ))}
+          </section>
         </main>
       ) : (
         <Edition
