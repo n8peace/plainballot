@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { RefCount } from '@/components/RefCount';
 import type { Metadata, Viewport } from 'next';
 import { Libre_Franklin, Newsreader } from 'next/font/google';
+import { SITE_DESCRIPTION } from '@/lib/seo';
 import { SITE_URL } from '@/lib/share';
 import { THEME_SCRIPT } from '@/lib/theme';
 import './globals.css';
@@ -9,9 +10,7 @@ import './globals.css';
 const newsreader = Newsreader({ variable: '--font-newsreader', subsets: ['latin'], style: ['normal', 'italic'], weight: ['400', '500', '600'] });
 const franklin = Libre_Franklin({ variable: '--font-franklin', subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
-// One promise everywhere: the hero line, this description, and the share image say the same thing.
-const description =
-  'Who’s on your ballot, and where they stand, what each candidate said or did, quoted exactly, with a link to every source. Free, nonpartisan, no account.';
+const description = SITE_DESCRIPTION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
