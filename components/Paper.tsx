@@ -17,6 +17,7 @@ import { issueById, ISSUES, type Importance, type IssueId, type Position } from 
 import { rank, score } from '@/lib/match';
 import { countPull } from '@/lib/pulled';
 import { FAQ } from '@/lib/faq';
+import { CURSOR_INSTALL_URL, SETUP_PROMPT } from '@/lib/setup';
 import { DATA_REPO_URL, GITHUB_URL, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
@@ -179,10 +180,27 @@ export function Paper({ sample }: { sample: Ballot }) {
       <footer className="pp-foot">
         <div className="pp-rule" />
         <p>Researched by independent AI agents that have to agree; every quote is checked against its source. <Link href="/methodology">How it works</Link> · <a href={DATA_REPO_URL}>Open data</a> · <a href={GITHUB_URL}>Code</a> · <Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link></p>
-        <p>Using an AI assistant? Send it to <a href="https://github.com/n8peace/plainballot#send-your-agent">plainballot.com/mcp</a>.</p>
+        <AgentSetup />
         <p>Free and open source. If it helps, <a href={GITHUB_URL}>star it on GitHub</a> or <a href={X_URL}>follow @n8peace</a>.</p>
       </footer>
     </div>
+  );
+}
+
+/** "Set up with your agent": one line a voter pastes into their own AI app. */
+function AgentSetup() {
+  const [copied, setCopied] = useState(false);
+  // Where the browser blocks the clipboard, select the line so it can be copied by hand.
+  const selectLine = () => {
+    const line = document.getElementById('pp-setup-prompt');
+    if (line) window.getSelection()?.selectAllChildren(line);
+  };
+  const copy = () => {
+    if (!navigator.clipboard) return selectLine();
+    navigator.clipboard.writeText(SETUP_PROMPT).then(() => setCopied(true), selectLine);
+  };
+  return (
+    <p>Using an AI assistant? Tell it: “<span id="pp-setup-prompt">{SETUP_PROMPT}</span>” <button className="pp-link" onClick={copy}>{copied ? 'Copied' : 'Copy'}</button> · <a href={CURSOR_INSTALL_URL}>Add to Cursor</a></p>
   );
 }
 
