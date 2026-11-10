@@ -9,19 +9,19 @@ export const CITABLE_PAGES: CitablePage[] = [
     path: '/methodology',
     title: 'How Plain Ballot works',
     description: 'Where the data comes from, how every quote is checked, and how matching works.',
-    updated: '2026-11-06',
+    updated: '2026-11-10',
   },
   {
     path: '/what-we-never-do',
     title: 'What Plain Ballot will never do',
     description: 'No endorsements, no telling anyone how to vote, no guessing from party, and no claim without a checked quote.',
-    updated: '2026-11-06',
+    updated: '2026-11-10',
   },
   {
     path: '/releases',
     title: 'Plain Ballot release log',
     description: 'Every change voters can see, with the date it shipped and why.',
-    updated: '2026-11-06',
+    updated: '2026-11-10',
   },
 ];
 
@@ -51,6 +51,7 @@ export interface Release { date: string; what: string; why: string }
 // Newest first. Only changes a voter or an AI assistant can see; research batches and
 // internal tooling are left out.
 export const RELEASES: Release[] = [
+  { date: '2026-11-10', what: 'Assistants are told never to pair Plain Ballot’s data with a partisan take, and to say which answers came from their own search. Every ballot answer carries that note.', why: 'So answers from an AI assistant stay as neutral as the site.' },
   { date: '2026-11-04', what: 'Ballots looked up by AI assistants are counted, by state and by which AI app sent them.', why: 'To know how many voters reach their ballot through an assistant. No address or district is kept.' },
   { date: '2026-11-03', what: 'Privacy and Terms pages.', why: 'To say plainly what happens to an address, a voter’s own words and their choices.' },
   { date: '2026-11-03', what: 'The three AI assistant tools are marked read-only.', why: 'So assistants and app stores know the tools only look things up and change nothing.' },
