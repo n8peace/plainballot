@@ -228,9 +228,10 @@
 /* Front page masthead: the wordmark as a nameplate bar, so the headline leads. */
 .pp-mast.is-front { display: grid; grid-template-columns: 1fr auto; align-items: center; text-align: left; }
 .is-front .pp-dateline { grid-column: 2; grid-row: 1; border: 0; padding: 0; }
-.is-front .pp-dateline > span:first-child { display: none; }
 .is-front .pp-title { grid-column: 1; grid-row: 1; margin: 0; font-size: 32px; letter-spacing: -0.015em; }
-.is-front .pp-rule { grid-column: 1 / -1; margin-top: 14px; height: 0; border-bottom: 0; border-top-color: var(--rule); }
+.is-front .pp-rule { grid-column: 1 / -1; margin-top: 14px; }
+.pp-ask .pp-btn { background: var(--accent-fill); color: var(--on-accent); }
+.pp-ask .pp-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
 /* The live sample race (components/LiveRace.tsx). The candidates stand on the issue's dial;
    the voter's marker slides along it; the race re-sorts by fit below; the quote box is sized
@@ -244,7 +245,7 @@
 .lr-stand { margin-top: 24px; }
 .lr-stand-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
 .lr-issue { font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: 0.02em; }
-.lr-issue::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-right: 8px; vertical-align: 2px; }
+.lr-issue::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 2px; }
 .lr-read { font-family: var(--serif); font-style: italic; font-size: 20px; }
 .lr-stand[data-set="false"] .lr-read { color: var(--ink-3); }
 
@@ -258,12 +259,12 @@
 .lr-mark[aria-expanded="true"] .lr-mark-name { text-decoration-color: var(--ink); }
 .lr-mark-side { font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
 .lr-mark:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-.lr-line { position: absolute; left: 0; right: 0; top: var(--line); height: 2px; margin-top: -1px; background: var(--ink); }
-.lr-line i { position: absolute; top: -6px; width: 1px; height: 14px; background: var(--ink); }
+.lr-line { position: absolute; left: 0; right: 0; top: var(--line); height: 3px; margin-top: -1.5px; background: var(--accent); }
+.lr-line i { position: absolute; top: -6px; width: 1px; height: 14px; background: var(--accent); }
 .lr-line i:nth-child(1) { left: 0; } .lr-line i:nth-child(2) { left: 25%; } .lr-line i:nth-child(3) { left: 50%; top: -10px; height: 22px; } .lr-line i:nth-child(4) { left: 75%; } .lr-line i:nth-child(5) { left: calc(100% - 1px); }
-.lr-line b { position: absolute; top: 1px; left: var(--x); width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); transform: translate(-50%, -50%); }
+.lr-line b { position: absolute; top: 1.5px; left: var(--x); width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); transform: translate(-50%, -50%); }
 .lr-line b::before { content: ""; position: absolute; left: 50%; bottom: 100%; width: 1px; height: 18px; margin-left: -0.5px; background: var(--ink); }
-.lr-you { position: absolute; top: var(--line); left: var(--x); width: 30px; height: 30px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 5px var(--paper), 0 6px 14px -6px rgba(0, 0, 0, 0.45); transform: translate(-50%, -50%); transition: left 620ms cubic-bezier(0.23, 1, 0.32, 1), opacity 240ms; pointer-events: none; }
+.lr-you { position: absolute; top: var(--line); left: var(--x); width: 30px; height: 30px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px var(--paper), 0 6px 14px -6px rgba(0, 0, 0, 0.45); transform: translate(-50%, -50%); transition: left 620ms cubic-bezier(0.23, 1, 0.32, 1), opacity 240ms; pointer-events: none; }
 .lr-you span { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%); font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .lr-stand[data-set="false"] .lr-you { opacity: 0; }
 .lr-scale input { position: absolute; left: -15px; right: -15px; top: calc(var(--line) - 22px); width: calc(100% + 30px); height: 44px; margin: 0; opacity: 0; cursor: pointer; }
@@ -273,9 +274,9 @@
 .lr-poles span + span { text-align: right; }
 
 /* Fit with you, closest first. */
-.lr-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; margin-top: 28px; }
+.lr-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; margin-top: 20px; }
 .lr-rank { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-bottom: 1px solid var(--rule); }
-.lr-row { display: grid; grid-template-columns: 136px minmax(0, 1fr); grid-template-rows: auto auto; align-items: baseline; column-gap: 16px; border-top: 1px solid var(--rule); padding: 10px 0 14px; background: var(--paper); }
+.lr-row { display: grid; grid-template-columns: 136px minmax(0, 1fr); grid-template-rows: auto auto; align-items: baseline; column-gap: 16px; border-top: 1px solid var(--rule); padding: 6px 0 10px; background: var(--paper); }
 .lr-row:first-child { border-top-color: var(--rule-strong); }
 .lr-fit { grid-row: 1 / span 2; display: flex; align-items: baseline; gap: 4px; font-variant-numeric: tabular-nums; min-height: 48px; }
 .lr-fit b { font-family: var(--serif); font-weight: 500; font-size: 48px; line-height: 1; letter-spacing: -0.02em; }

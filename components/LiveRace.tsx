@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { issueById, readout, type IssueId, type Position } from '@/lib/issues';
 import { rank } from '@/lib/match';
+import { sampleSource } from '@/lib/ballot/sample';
 import type { Contest, Prefs, Stance } from '@/lib/types';
 
 /** "Lower taxes", "Strongly for lower taxes" or "Neither side". */
@@ -232,7 +233,7 @@ export function LiveRace({ contest, issue, note }: { contest: Contest; issue: Is
             return (
               <figure key={c.id} className="lr-q" data-on={on} aria-hidden={!on}>
                 <blockquote>“{s.quote}”</blockquote>
-                <figcaption><b>{c.name}</b>, {s.source}</figcaption>
+                <figcaption><b>{c.name}</b>, {sampleSource(c.id, issue)}</figcaption>
               </figure>
             );
           })}

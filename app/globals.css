@@ -8,6 +8,10 @@
   --ink-3:#77776f;
   --rule:#d6d6d2;
   --rule-strong:#121212;
+  /* One accent, muted amber: the voter's own marker, the dial, the main button. No party meaning. */
+  --accent:#b9770e;
+  --accent-fill:#e8a93c;
+  --on-accent:#121212;
   --serif:var(--font-newsreader), "Iowan Old Style", Georgia, "Times New Roman", serif;
   --sans:var(--font-franklin), "Helvetica Neue", Arial, sans-serif;
 }
@@ -15,14 +19,14 @@
   :root:not([data-theme="light"]){
     color-scheme:dark;
     --paper:#131313; --wash:#1c1c1b; --error:#ff8a80; --scrim:rgba(0,0,0,.65); --ink:#ececea; --ink-2:#b8b8b4; --ink-3:#8a8a85;
-    --rule:#343432; --rule-strong:#ececea;
+    --rule:#343432; --rule-strong:#ececea; --accent:#e8a93c;
   }
 }
 :root[data-theme="light"]{color-scheme:light}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --paper:#131313; --wash:#1c1c1b; --error:#ff8a80; --scrim:rgba(0,0,0,.65); --ink:#ececea; --ink-2:#b8b8b4; --ink-3:#8a8a85;
-  --rule:#343432; --rule-strong:#ececea;
+  --rule:#343432; --rule-strong:#ececea; --accent:#e8a93c;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}

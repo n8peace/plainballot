@@ -88,7 +88,6 @@
           "text": { "type": "string", "description": "One neutral sentence on what the candidate said or did." },
           "quote": { "type": "string", "description": "Exact passage from the source." },
           "sourceUrl": { "type": "string" },
-          "source": { "type": "string", "description": "The source named in words where there is no link. Only on the fictional sample ballot." },
           "agreement": { "type": "string", "description": "Research agents that agreed, for example 3/3." }
         }
       }

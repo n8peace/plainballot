@@ -7,14 +7,27 @@ import type { Ballot, Choice, Stance } from '../types';
 // [side, claim] or, for the rows the front page shows, [side, claim, quote, source].
 type Raw = Partial<Record<IssueId, [Position, string] | [Position, string, string, string]>>;
 
-const choice = (name: string, party: string | undefined, raw: Raw): Choice => ({
-  id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-  name,
-  party,
-  stances: Object.fromEntries(
-    Object.entries(raw).map(([id, [pos, text, quote, source]]) => [id, { pos, text, quote, source } satisfies Stance]),
-  ),
-});
+// The sample's sources are named in words, not linked, so they live here rather than in the
+// Stance type the real ballot and the API share. Keyed "choice-id/issue".
+const SOURCES = new Map<string, string>();
+
+/** Where a sample quote came from, in words (the sample ballot only). */
+export const sampleSource = (choiceId: string, issue: IssueId) => SOURCES.get(`${choiceId}/${issue}`);
+
+const choice = (name: string, party: string | undefined, raw: Raw): Choice => {
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return {
+    id,
+    name,
+    party,
+    stances: Object.fromEntries(
+      Object.entries(raw).map(([issue, [pos, text, quote, source]]) => {
+        if (source) SOURCES.set(`${id}/${issue}`, source);
+        return [issue, { pos, text, quote } satisfies Stance];
+      }),
+    ),
+  };
+};
 
 export const SAMPLE_BALLOT: Ballot = {
   electionName: 'General Election',

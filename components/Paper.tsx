@@ -16,6 +16,7 @@ import { WordsInput } from './WordsInput';
 import { LiveRace, sideOf } from './LiveRace';
 import { issueById, ISSUES, type Importance, type IssueId, type Position } from '@/lib/issues';
 import { rank, score } from '@/lib/match';
+import { sampleSource } from '@/lib/ballot/sample';
 import { countPull } from '@/lib/pulled';
 import { FAQ } from '@/lib/faq';
 import { CURSOR_INSTALL_URL, SETUP_PROMPT } from '@/lib/setup';
@@ -254,13 +255,13 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
           <ol>{ballot.contests.map((c) => <li key={c.id}><a href={`#race-${c.id}`}>{c.office}</a></li>)}</ol>
         </nav>
       )}
-      {ballot.contests.map((c) => <Story key={c.id} contest={c} prefs={prefs} showParty={showParty} />)}
+      {ballot.contests.map((c) => <Story key={c.id} contest={c} prefs={prefs} showParty={showParty} sample={ballot.sample} />)}
       {ballot.contests.length > 5 && <p className="pp-top"><a href="#top">Back to the top ↑</a></p>}
     </main>
   );
 }
 
-function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; showParty: boolean }) {
+function Story({ contest, prefs, showParty, sample }: { contest: Contest; prefs: Prefs; showParty: boolean; sample?: boolean }) {
   const [open, setOpen] = useState<string | null>(null);
   const [report, setReport] = useState<{ candidate?: string; issue?: string } | null>(null);
   const personalized = prefs.sel.some((id) => contest.issues.includes(id) && prefs.pos[id] !== undefined);
@@ -331,7 +332,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                 return (
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
-                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${hostOf(s.sourceUrl)}` : s.source ? `Quoted from: ${s.source}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
+                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${hostOf(s.sourceUrl)}` : sample && sampleSource(choice.id, id) ? `Quoted from: ${sampleSource(choice.id, id)}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
                     {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
                   </div>
                 );
