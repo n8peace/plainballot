@@ -4,16 +4,30 @@
 import type { IssueId, Position } from '../issues';
 import type { Ballot, Choice, Stance } from '../types';
 
-type Raw = Partial<Record<IssueId, [Position, string]>>;
+// [side, claim] or, for the rows the front page shows, [side, claim, quote, source].
+type Raw = Partial<Record<IssueId, [Position, string] | [Position, string, string, string]>>;
 
-const choice = (name: string, party: string | undefined, raw: Raw): Choice => ({
-  id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-  name,
-  party,
-  stances: Object.fromEntries(
-    Object.entries(raw).map(([id, [pos, text]]) => [id, { pos, text } satisfies Stance]),
-  ),
-});
+// The sample's sources are named in words, not linked, so they live here rather than in the
+// Stance type the real ballot and the API share. Keyed "choice-id/issue".
+const SOURCES = new Map<string, string>();
+
+/** Where a sample quote came from, in words (the sample ballot only). */
+export const sampleSource = (choiceId: string, issue: IssueId) => SOURCES.get(`${choiceId}/${issue}`);
+
+const choice = (name: string, party: string | undefined, raw: Raw): Choice => {
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return {
+    id,
+    name,
+    party,
+    stances: Object.fromEntries(
+      Object.entries(raw).map(([issue, [pos, text, quote, source]]) => {
+        if (source) SOURCES.set(`${id}/${issue}`, source);
+        return [issue, { pos, text, quote } satisfies Stance];
+      }),
+    ),
+  };
+};
 
 export const SAMPLE_BALLOT: Ballot = {
   electionName: 'General Election',
@@ -28,10 +42,10 @@ export const SAMPLE_BALLOT: Ballot = {
       sources: 'Congressional roll-call votes 2023–26 · 2026 candidate questionnaire · campaign platforms.',
       choices: [
         choice('Dana Whitfield', 'Democratic', {
-          tax: [2, 'Voted for the 2025 child-care package, paid for by a surtax on incomes over $1M.'],
+          tax: [2, 'Voted for the 2025 child-care package, paid for by a surtax on incomes over $1M.', 'Families shouldn’t pay more for child care so that incomes over a million dollars can pay less. This package asks the very top to cover it.', 'House floor statement, March 2025'],
           wages: [-2, 'Co-sponsored the bill raising the federal minimum wage to $17.'],
-          trade: [0, 'Voted for tariffs on steel, and against broader ones on consumer goods.'],
-          debt: [-2, 'Signed a pledge to oppose any cut to Social Security benefits.'],
+          trade: [0, 'Voted for tariffs on steel, and against broader ones on consumer goods.', 'Steel is a national-security industry, so I voted to protect it. Tariffs on groceries and sneakers are paid by families, so I voted no.', 'Statement on two tariff votes, June 2025'],
+          debt: [-2, 'Signed a pledge to oppose any cut to Social Security benefits.', 'I signed the pledge: no cuts to the Social Security benefits people paid in for.', 'Campaign website, issues page'],
           housing: [1, 'Co-sponsored a bill tying transit grants to local zoning reform.'],
           schools: [2, 'Voted against a federal voucher pilot in 2024.'],
           safety: [1, 'Backs federal grants for crisis-response teams alongside police hiring.'],
@@ -45,10 +59,10 @@ export const SAMPLE_BALLOT: Ballot = {
           voting: [-2, 'Co-sponsored a bill requiring every state to offer mail voting.'],
         }),
         choice('Tom Brandt', 'Republican', {
-          tax: [-2, 'Signed a pledge to oppose any federal income-tax increase.'],
+          tax: [-2, 'Signed a pledge to oppose any federal income-tax increase.', 'I signed the pledge because I mean it. I will vote against any increase in the federal income tax.', 'Campaign website, issues page'],
           wages: [2, 'Opposes a federal minimum-wage increase and says states should set it.'],
-          trade: [-2, 'Supports a 20% tariff on most imports.'],
-          debt: [0, 'Wants a debt commission, but says benefits for current retirees are off the table.'],
+          trade: [-2, 'Supports a 20% tariff on most imports.', 'A 20 percent tariff on most imports brings factories home. I will vote for it on day one.', 'Candidate debate, October 2026'],
+          debt: [0, 'Wants a debt commission, but says benefits for current retirees are off the table.', 'Set up a debt commission and give it real power. Benefits for today’s retirees stay off the table.', '2026 candidate questionnaire'],
           housing: [1, 'Wants to cut federal permitting rules that slow construction.'],
           schools: [-2, 'Sponsored a school-choice tax credit as a state legislator.'],
           safety: [-2, 'Endorsed by the state police association and backs more enforcement grants.'],
@@ -62,10 +76,10 @@ export const SAMPLE_BALLOT: Ballot = {
           voting: [2, 'Co-sponsored a bill requiring photo ID in federal elections.'],
         }),
         choice('Ruth Kessler', 'Independent', {
-          tax: [0, 'Proposes freezing both tax rates and program budgets for two years.'],
+          tax: [0, 'Proposes freezing both tax rates and program budgets for two years.', 'Freeze the rates and freeze the budgets, for two years. Then take an honest look at what we pay for.', '2026 candidate questionnaire'],
           wages: [-1, 'Supports a $15 federal minimum wage, phased in by region.'],
-          trade: [1, 'Opposes broad tariffs and supports targeted ones on chips and steel.'],
-          debt: [1, 'Proposes raising the retirement age by two years for people under 45.'],
+          trade: [1, 'Opposes broad tariffs and supports targeted ones on chips and steel.', 'Broad tariffs are a tax on shoppers. Targeted ones on chips and steel protect what we can’t afford to lose.', 'Candidate debate, October 2026'],
+          debt: [1, 'Proposes raising the retirement age by two years for people under 45.', 'For people under 45, raise the retirement age by two years. Nobody near retirement should see a change.', 'Campaign platform, page 4'],
           housing: [2, 'Her main promise: federal incentives for cities that allow apartments near transit.'],
           safety: [-1, 'Wants more officers, with mental-health responders sent on some 911 calls.'],
           immigration: [0, 'Supports more border agents and more work visas in the same bill.'],
@@ -87,7 +101,7 @@ export const SAMPLE_BALLOT: Ballot = {
         choice('Priya Raman', 'Democratic', {
           tax: [1, 'Voted for the 2025 teacher raise, funded by a franchise-tax increase.'],
           wages: [-1, 'Voted to let cities set their own minimum wage.'],
-          housing: [-1, 'Voted against the 2025 bill overriding local minimum lot sizes.'],
+          housing: [-1, 'Voted against the 2025 bill overriding local minimum lot sizes.', 'Our towns should decide how they grow. I voted no because this bill took that choice away from them.', 'Senate floor statement, April 2025'],
           schools: [2, 'Voted against the 2025 education savings account (voucher) bill.'],
           safety: [1, 'Wrote the bill funding police and mental-health co-responder teams.'],
           sentencing: [-2, 'Wrote the 2025 law expanding drug-court diversion.'],
@@ -103,7 +117,7 @@ export const SAMPLE_BALLOT: Ballot = {
         choice('Gene Castillo', 'Republican', {
           tax: [-1, 'Voted against the teacher raise, citing the tax increase.'],
           wages: [1, 'Voted to stop cities from setting their own minimum wage.'],
-          housing: [2, 'Wrote the bill overriding local minimum lot sizes to allow more homes.'],
+          housing: [2, 'Wrote the bill overriding local minimum lot sizes to allow more homes.', 'Our kids can’t afford to live where they grew up. This bill lets builders put more homes on the land we already have.', 'Bill announcement, January 2025'],
           schools: [-1, 'Voted for the education savings account bill.'],
           safety: [-1, 'Voted to raise state trooper funding by 12%.'],
           sentencing: [1, 'Voted for longer sentences for fentanyl dealing.'],
