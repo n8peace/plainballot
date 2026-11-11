@@ -5,8 +5,8 @@
 /* Masthead: the wordmark, the promise, the theme switch. One line, no rules. */
 .pp-mast { display: flex; align-items: center; gap: 16px; min-height: 56px; }
 .pp-title { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 24px; line-height: 1; letter-spacing: -0.01em; }
-.pp-title button { all: unset; cursor: pointer; padding: 10px 0; }
-.pp-title button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.pp-title button, .pp-title a { all: unset; cursor: pointer; padding: 10px 0; }
+.pp-title button:focus-visible, .pp-title a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .pp-promise { margin-left: auto; font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
 .pp-mast .theme-toggle { flex: none; margin-right: -12px; }
 @media (max-width: 560px) { .pp-promise { display: none; } .pp-mast .theme-toggle { margin-left: auto; } }
@@ -72,6 +72,8 @@
 .pp-story { padding: 48px 0; border-top: 1px solid var(--rule-strong); }
 .pp-office { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; font-family: var(--serif); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 24px; }
 .pp-district { font-family: var(--sans); font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); white-space: nowrap; }
+.pp-race-share { margin: -12px 0 24px; font-family: var(--sans); font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+.pp-race-share a { color: var(--ink); }
 .pp-table { overflow-x: auto; }
 .pp-row { display: grid; gap: 0 24px; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--rule); min-width: max-content; }
 .pp-row.head { border-top: 0; padding-bottom: 8px; align-items: end; }
@@ -95,6 +97,9 @@
 .pp-quote { background: var(--wash); padding: 16px 20px; margin: 0 0 12px; font-size: 16px; }
 .pp-quote p { margin: 0; }
 .pp-quote blockquote { margin: 8px 0; padding-left: 12px; border-left: 3px solid var(--ink); font-style: italic; }
+.pp-review { margin-top: 20px; }
+.pp-review a { color: var(--ink); }
+.pp-race-return { margin: 24px 0 0; padding-top: 24px; border-top: 1px solid var(--rule-strong); font-family: var(--sans); font-size: 16px; }
 
 .pp-scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 49; }
 .pp-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); background: var(--paper); border-left: 1px solid var(--rule-strong); padding: 18px 20px 40px; overflow-y: auto; z-index: 50; box-shadow: -12px 0 30px rgba(0,0,0,0.12); }

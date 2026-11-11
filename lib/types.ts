@@ -29,6 +29,8 @@ export type ContestKind = 'candidate' | 'measure' | 'retention';
 
 export interface Contest {
   id: string;
+  /** Research division key used only to link this contest, never the voter's other districts. */
+  division?: string;
   kind: ContestKind;
   office: string;
   sub: string;

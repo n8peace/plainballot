@@ -6,7 +6,7 @@
 // with the quote and source a tap away. Matching is optional ("Personalize").
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AddressInput } from './AddressInput';
 import { ThemeToggle } from './ThemeToggle';
 import { Dials } from './Dials';
@@ -20,7 +20,7 @@ import { sampleSource } from '@/lib/ballot/sample';
 import { countPull } from '@/lib/pulled';
 import { FAQ } from '@/lib/faq';
 import { CURSOR_INSTALL_URL, SETUP_PROMPT } from '@/lib/setup';
-import { DATA_REPO_URL, GITHUB_URL, stateResearchUrl, X_URL } from '@/lib/share';
+import { DATA_REPO_URL, GITHUB_URL, raceShareUrl, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
 
@@ -242,13 +242,48 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
           <ol>{ballot.contests.map((c) => <li key={c.id}><a href={`#race-${c.id}`}>{c.office}</a></li>)}</ol>
         </nav>
       )}
-      {ballot.contests.map((c) => <Story key={c.id} contest={c} prefs={prefs} showParty={showParty} sample={ballot.sample} />)}
+      {ballot.contests.map((c) => <RaceStory key={c.id} contest={c} prefs={prefs} showParty={showParty} sample={ballot.sample} />)}
       {ballot.contests.length > 5 && <p className="pp-top"><a href="#top">Back to the top ↑</a></p>}
     </main>
   );
 }
 
-function Story({ contest, prefs, showParty, sample }: { contest: Contest; prefs: Prefs; showParty: boolean; sample?: boolean }) {
+function ShareRaceButton({ contest }: { contest: Contest }) {
+  const [result, setResult] = useState<'idle' | 'shared' | 'copied' | 'manual'>('idle');
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  if (!contest.division) return null;
+  const url = raceShareUrl(contest.division, contest.id);
+  const selectLink = () => {
+    setResult('manual');
+    requestAnimationFrame(() => {
+      if (linkRef.current) window.getSelection()?.selectAllChildren(linkRef.current);
+    });
+  };
+  const copy = () => {
+    if (!navigator.clipboard) return selectLink();
+    navigator.clipboard.writeText(url).then(() => setResult('copied'), selectLink);
+  };
+  const share = async () => {
+    if (!navigator.share) return copy();
+    try {
+      await navigator.share({ title: contest.office, url });
+      setResult('shared');
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') copy();
+    }
+  };
+  const label = result === 'shared' ? 'Shared' : result === 'copied' ? 'Copied' : 'Share this race';
+  return (
+    <p className="pp-race-share">
+      <button type="button" className="pp-link" onClick={share}>{label}</button>
+      {result === 'manual' && <> · <a ref={linkRef} href={url}>{url}</a> <span>Copy the selected link.</span></>}
+    </p>
+  );
+}
+
+export function RaceStory({ contest, prefs, showParty, sample, showAllQuotes = false, shareable = true }: {
+  contest: Contest; prefs: Prefs; showParty: boolean; sample?: boolean; showAllQuotes?: boolean; shareable?: boolean;
+}) {
   const [open, setOpen] = useState<string | null>(null);
   const [report, setReport] = useState<{ candidate?: string; issue?: string } | null>(null);
   const personalized = prefs.sel.some((id) => contest.issues.includes(id) && prefs.pos[id] !== undefined);
@@ -273,6 +308,7 @@ function Story({ contest, prefs, showParty, sample }: { contest: Contest; prefs:
     <article className="pp-story" id={`race-${contest.id}`}>
       <h3 className="pp-office">{contest.office} <span className="pp-district">{contest.sub.split(' · ')[0]}</span></h3>
       {contest.summary && <p className="pp-deck sm">{contest.summary}</p>}
+      {shareable && <ShareRaceButton contest={contest} />}
       {!contest.researched ? (
         <p className="pp-fine">Not researched yet. <a href={`${DATA_REPO_URL}/blob/main/CONTRIBUTING.md`}>Help research it</a>.</p>
       ) : !rows.length ? (
@@ -299,23 +335,25 @@ function Story({ contest, prefs, showParty, sample }: { contest: Contest; prefs:
                 {choices.map(({ choice }) => {
                   const s = choice.stances[id];
                   const key = `${id}|${choice.id}`;
+                  const expanded = showAllQuotes || open === key;
                   // The name inside each cell shows only on phones, where each choice gets its own line.
                   const who = <span className="pp-who">{choice.name}</span>;
                   if (!s) return <div key={choice.id} role="cell" className="pp-cell none">{who}<span>No public position found</span></div>;
                   const side = sideOf(id, s);
+                  const position = side.strong ? <><span className="pp-strong">Strongly</span> for {side.label.toLowerCase()}</> : side.label;
                   return (
                     <div key={choice.id} role="cell" className="pp-cell">
                       {who}
-                      <button className="pp-stance" aria-expanded={open === key} onClick={() => setOpen(open === key ? null : key)}>
-                        {side.strong ? <><span className="pp-strong">Strongly</span> for {side.label.toLowerCase()}</> : side.label}
-                      </button>
+                      {showAllQuotes
+                        ? <span>{position}</span>
+                        : <button className="pp-stance" aria-expanded={expanded} onClick={() => setOpen(open === key ? null : key)}>{position}</button>}
                     </div>
                   );
                 })}
               </div>
               {choices.map(({ choice }) => {
                 const s = choice.stances[id];
-                if (!s || open !== `${id}|${choice.id}`) return null;
+                if (!s || (!showAllQuotes && open !== `${id}|${choice.id}`)) return null;
                 return (
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
@@ -327,6 +365,11 @@ function Story({ contest, prefs, showParty, sample }: { contest: Contest; prefs:
             </div>
           ))}
         </div>
+      )}
+      {contest.researched && (
+        <p className="pp-fine pp-review">
+          {contest.reviewedByPerson ? 'Researched by AI agents and reviewed by a person' : 'Researched by AI agents, not yet reviewed by a person'}. Every quote is checked against its source. <Link href="/methodology">How it works</Link>
+        </p>
       )}
       {report && <ReportForm contest={contest} initial={report} onClose={() => setReport(null)} />}
     </article>
