@@ -8,6 +8,8 @@ export interface Stance {
   /** The exact passage from the source that backs this claim. */
   quote?: string;
   sourceUrl?: string;
+  /** The source named in words, where there is no link (the fictional sample ballot only). */
+  source?: string;
   /** How many independent research agents agreed, e.g. "3/3". */
   agreement?: string;
 }
