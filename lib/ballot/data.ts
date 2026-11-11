@@ -4,6 +4,7 @@
 
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { DIVISION_KEY_RE } from '../share';
 
 export const ELECTION_DATA_URL = (process.env.ELECTION_DATA_URL || 'https://n8peace.github.io/open-election-data/v1').replace(/\/$/, '');
 const LOCAL_DIR = process.env.ELECTION_DATA_DIR;
@@ -35,7 +36,7 @@ async function getJson(url: string): Promise<unknown | null> {
 /** The contests researched for one district, e.g. "ca/cd-10". */
 export function contestsForDivision(division: string): Promise<RawContest[]> {
   if (LOCAL_DIR) return localAll().then((all) => all.filter((c) => c.division === division));
-  if (!/^[a-z]{2}\/[a-z0-9-]+$/.test(division)) return Promise.resolve([]);
+  if (!DIVISION_KEY_RE.test(division)) return Promise.resolve([]);
   return cached(division, async () => {
     const d = (await getJson(`${ELECTION_DATA_URL}/divisions/${division}.json`)) as { contests?: RawContest[] } | null;
     return d?.contests ?? [];

@@ -57,6 +57,7 @@
         "required": ["id", "kind", "office", "issues", "choices", "researched"],
         "properties": {
           "id": { "type": "string" },
+          "division": { "type": "string", "pattern": "^[a-z]{2}/[a-z0-9-]+$", "description": "The research division key for this contest." },
           "kind": { "type": "string", "enum": ["candidate", "measure", "retention"] },
           "office": { "type": "string" },
           "sub": { "type": "string" },

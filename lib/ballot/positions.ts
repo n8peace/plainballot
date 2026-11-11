@@ -115,6 +115,7 @@ export function fileToContest(f: PositionsFile): Contest {
   const measure = f.kind === 'measure';
   return {
     id: contestKey(f.office, f.district),
+    division: f.division,
     kind: measure ? 'measure' : 'candidate',
     office: f.office,
     sub: [f.district, measure ? 'Yes or No' : 'Vote for one'].filter(Boolean).join(' · '),

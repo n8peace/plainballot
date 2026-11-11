@@ -8,6 +8,10 @@ export const GITHUB_URL = 'https://github.com/n8peace/plainballot';
 export const DATA_REPO_URL = 'https://github.com/n8peace/open-election-data';
 export const X_URL = 'https://x.com/n8peace';
 
+export const DIVISION_KEY_RE = /^[a-z]{2}\/[a-z0-9-]+$/;
+export const DIVISION_SEGMENT_RE = /^[a-z]{2}~[a-z0-9-]+$/;
+export const CONTEST_ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 const IMP: Importance[] = ['low', 'medium', 'high'];
 
 // Compact, address-free encoding of a voter's dials: "housing2h.tax1m.safety-1m"
@@ -49,6 +53,24 @@ export function compareUrl(p: Prefs): string {
 
 export function compareText(p: Prefs): string {
   return `Here's what I care about this election (${p.sel.length} issues). See where we agree, then get your own ballot, matched to you: ${compareUrl(p)}`;
+}
+
+/** Turn a research division key into one URL segment, e.g. "ca/cd-7" -> "ca~cd-7". */
+export function encodeDivision(division: string): string {
+  if (!DIVISION_KEY_RE.test(division)) throw new Error('Invalid research division');
+  return division.replace('/', '~');
+}
+
+/** Turn a race URL segment back into a research division key. */
+export function decodeDivision(segment: string): string | null {
+  if (!DIVISION_SEGMENT_RE.test(segment)) return null;
+  return segment.replace('~', '/');
+}
+
+/** An address-free link to one researched race or measure. */
+export function raceShareUrl(division: string, contestId: string): string {
+  if (!CONTEST_ID_RE.test(contestId)) throw new Error('Invalid contest id');
+  return `${SITE_URL}/r/${encodeDivision(division)}/${contestId}`;
 }
 
 export interface Agreement {

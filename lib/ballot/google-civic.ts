@@ -69,7 +69,8 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
 
   if (isMeasure) {
     return {
-      id: slug(`${office}-${i}`),
+      id: found ? contestKey(found.office, found.district) : slug(`${office}-${i}`),
+      division: found?.division,
       kind: 'measure',
       office,
       sub: [c.referendumSubtitle, 'Yes or No'].filter(Boolean).join(' · '),
@@ -97,7 +98,8 @@ function toContest(c: CivicContest, i: number, positions: Awaited<ReturnType<typ
 
   const voteFor = c.numberVotingFor && c.numberVotingFor !== '1' ? `Vote for ${c.numberVotingFor}` : 'Vote for one';
   return {
-    id: slug(`${office}-${district ?? ''}-${i}`),
+    id: found ? contestKey(found.office, found.district) : slug(`${office}-${district ?? ''}-${i}`),
+    division: found?.division,
     kind: 'candidate',
     office,
     sub: [district, voteFor].filter(Boolean).join(' · '),
