@@ -51,6 +51,7 @@ export interface Release { date: string; what: string; why: string }
 // Newest first. Only changes a voter or an AI assistant can see; research batches and
 // internal tooling are left out.
 export const RELEASES: Release[] = [
+  { date: '2026-11-10', what: 'A one-line setup for AI assistants: paste it into your own assistant and it connects Plain Ballot for you, with a one-click link for Cursor.', why: 'So a voter can look up their ballot from the assistant they already use.' },
   { date: '2026-11-10', what: 'Assistants are told never to pair Plain Ballot’s data with a partisan take, and to say which answers came from their own search. Every ballot answer carries that note.', why: 'So answers from an AI assistant stay as neutral as the site.' },
   { date: '2026-11-04', what: 'Ballots looked up by AI assistants are counted, by state and by which AI app sent them.', why: 'To know how many voters reach their ballot through an assistant. No address or district is kept.' },
   { date: '2026-11-03', what: 'Privacy and Terms pages.', why: 'To say plainly what happens to an address, a voter’s own words and their choices.' },
