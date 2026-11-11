@@ -3,11 +3,15 @@
 .paper a { text-underline-offset: 2px; }
 
 .pp-mast { text-align: center; }
-.pp-dateline { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--sans); font-size: 13px; color: var(--ink-2); border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
-.pp-title { margin: 14px 0 6px; font-family: var(--serif); font-weight: 600; font-size: clamp(48px, 9vw, 96px); line-height: 1; letter-spacing: -0.02em; }
+.pp-dateline { display: flex; align-items: center; gap: 12px; font-family: var(--sans); font-size: 13px; color: var(--ink-2); border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
+.pp-promise { margin-left: auto; }
+/* The light/dark switch ends the dateline, so the wordmark centers on its own row. Negative
+   margins keep the 44px target without making the dateline taller. */
+.pp-dateline .theme-toggle { flex: none; margin: -12px -12px -12px 0; }
+.pp-title { margin: 24px 0 16px; font-family: var(--serif); font-weight: 600; font-size: clamp(48px, 9vw, 96px); line-height: 1; letter-spacing: -0.02em; }
 .pp-title button { all: unset; cursor: pointer; }
-.pp-rule { border-top: 3px double var(--rule-strong); margin: 8px 0 0; }
-.pp-rule.thin { border-top: 1px solid var(--rule-strong); margin: 24px 0 0; }
+/* Rules: the masthead gets the heavy double (1px over 3px), sections a 1px ink rule, rows a hairline. */
+.pp-rule { height: 2px; box-sizing: content-box; border-top: 1px solid var(--rule-strong); border-bottom: 3px solid var(--rule-strong); margin: 0; }
 
 /* Front page: one hero, then two quiet sections, 128px apart (96 on phones). */
 .pp-front { margin: 0 auto; }
@@ -26,8 +30,17 @@
 .pp-fine { font-family: var(--sans); font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
 .pp-error { font-family: var(--sans); font-size: 14px; color: var(--error); margin: 10px 0 0; }
 .pp-ask .pp-fine, .pp-ask .pp-error { text-align: center; text-wrap: balance; }
-.pp-sample { display: block; margin: 24px auto 0; font-family: var(--sans); font-size: 14px; color: var(--ink-2); text-decoration-color: var(--rule); }
-.pp-sample:hover { color: var(--ink); text-decoration-color: currentColor; }
+.pp-sample { display: block; margin: 20px auto 0; padding: 8px 4px; font-family: var(--sans); font-size: 14px; font-weight: 500; color: var(--ink); text-underline-offset: 4px; text-decoration-color: var(--ink-3); }
+.pp-sample:hover { text-decoration-color: currentColor; }
+.pp-hero .pp-privacy { margin: 8px auto 0; text-align: center; color: var(--ink-2); text-wrap: balance; }
+
+/* The proof: one real race from the sample ballot, live (tap a position to read it). */
+.pp-proof { margin-top: 96px; border-top: 1px solid var(--rule-strong); padding-top: 24px; }
+.pp-proof .pp-story { padding: 0; border: 0; }
+.pp-proof .pp-office { margin-top: 0; }
+.pp-proof .pp-table { border-bottom: 1px solid var(--rule); }
+.pp-caption { font-family: var(--sans); font-size: 14px; line-height: 1.5; color: var(--ink-2); margin: 16px 0 0; }
+.pp-caption .pp-link { color: var(--ink); text-underline-offset: 3px; }
 
 /* Three newspaper columns, divided by column rules. */
 .pp-front-cols { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 128px; border-top: 1px solid var(--rule-strong); }
@@ -56,16 +69,17 @@
 .pp-faq summary:focus-visible { outline-offset: 4px; }
 .pp-faq details p { margin: 0; padding: 0 32px 20px 0; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 62ch; text-wrap: pretty; }
 
-.pp-edition-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-top: 48px; }
-.pp-change { display: inline-block; margin-top: 12px; font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
-.pp-change:hover { color: var(--ink); }
+.pp-edition-head { margin: 48px 0 32px; }
+.pp-edition-head .pp-headline.sm { margin: 0 0 12px; }
+.pp-meta { font-family: var(--sans); font-size: 14px; line-height: 1.5; color: var(--ink-2); margin: 4px 0 0; text-wrap: pretty; }
+.pp-meta .pp-link, .pp-meta a { color: var(--ink); text-underline-offset: 3px; }
 .pp-kicker { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); margin: 0; }
-.pp-tools { display: flex; gap: 24px; align-items: center; }
+.pp-tools { display: flex; gap: 24px; align-items: center; margin-top: 24px; }
 .pp-switch { font-family: var(--sans); font-size: 14px; display: flex; gap: 6px; align-items: center; cursor: pointer; }
 
-.pp-story { padding: 48px 0; border-bottom: 1px solid var(--rule); }
-.pp-district { font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: 0; color: var(--ink-2); margin-left: 8px; white-space: nowrap; }
-.pp-office { font-family: var(--serif); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.15; letter-spacing: -0.01em; margin: 8px 0 24px; }
+.pp-story { padding: 48px 0; border-top: 1px solid var(--rule-strong); }
+.pp-office { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; font-family: var(--serif); font-weight: 600; font-size: clamp(24px, 3vw, 32px); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 24px; }
+.pp-district { font-family: var(--sans); font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); white-space: nowrap; }
 .pp-table { overflow-x: auto; }
 .pp-row { display: grid; gap: 0 24px; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--rule); min-width: max-content; }
 .pp-row.head { border-top: 0; padding-bottom: 8px; align-items: end; }
@@ -80,8 +94,10 @@
 .pp-issue.mine::before { content: "● "; font-size: 9px; vertical-align: 2px; }
 .pp-cell { font-size: 16px; }
 .pp-cell.none { font-family: var(--sans); font-size: 13px; color: var(--ink-3); }
-.pp-stance { all: unset; cursor: pointer; border-bottom: 1px solid var(--rule); }
-.pp-stance:hover, .pp-stance[aria-expanded="true"] { border-bottom-style: solid; border-color: var(--ink); }
+.pp-stance { all: unset; cursor: pointer; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 4px; transition: text-decoration-color 150ms cubic-bezier(0.23, 1, 0.32, 1); }
+.pp-stance:hover { text-decoration-color: var(--ink-3); }
+.pp-stance[aria-expanded="true"] { text-decoration-color: var(--ink); }
+.pp-who { display: none; }
 .pp-stance:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .pp-strong { font-style: italic; }
 .pp-quote { background: var(--wash); padding: 16px 20px; margin: 0 0 12px; font-size: 16px; }
@@ -93,7 +109,7 @@
 .pp-drawer-head { display: flex; justify-content: space-between; align-items: center; }
 .pp-drawer-head h3 { font-family: var(--serif); font-size: 24px; margin: 0; }
 
-.pp-foot { margin-top: 128px; padding-top: 24px; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
+.pp-foot { margin-top: 128px; padding-top: 24px; border-top: 1px solid var(--rule-strong); font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
 .pp-edition + .pp-foot { margin-top: 96px; }
 .pp-foot nav { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .pp-foot a { color: var(--ink-2); text-decoration-color: var(--rule); }
@@ -106,7 +122,7 @@
 .pp-agent-acts .pp-link { color: var(--ink-2); }
 
 @media (max-width: 720px) {
-  .pp-dateline { justify-content: center; text-align: center; }
+  .pp-dateline .theme-toggle { margin-left: auto; }
   .pp-hero { margin-top: 48px; }
   .pp-headline { margin-bottom: 16px; }
   .pp-deck { font-size: 18px; margin-bottom: 32px; }
@@ -123,22 +139,27 @@
   .pp-faq details p { padding-right: 0; }
   .pp-foot { margin-top: 96px; }
   .pp-edition + .pp-foot { margin-top: 64px; }
-  .pp-edition-head { margin-top: 32px; }
+  .pp-edition-head { margin: 32px 0 24px; }
+  .pp-proof { margin-top: 64px; }
   .pp-story { padding: 40px 0; }
   .pp-name { font-size: 18px; }
   .pp-cell { font-size: 16px; }
 }
 
-/* Phones: each issue gets its own line, with the candidates sharing the width below it. */
-@media (max-width: 720px) {
+/* Phones: each issue is a small block, one choice per line: the name, then where they stand.
+   The column header only shows when it carries something (party or fit). */
+@media (max-width: 640px) {
   .pp-table { overflow-x: visible; }
-  /* Keep the names in view while scrolling a long race. */
-  .pp-row.head { position: sticky; top: 0; background: var(--paper); z-index: 2; }
-  .pp-row { grid-template-columns: repeat(var(--n), minmax(0, 1fr)) !important; min-width: 0; gap: 4px 16px; align-items: start; }
+  .pp-row { grid-template-columns: minmax(0, 1fr) !important; min-width: 0; gap: 8px; padding: 16px 0; align-items: start; }
   .pp-corner { display: none; }
-  .pp-issue { grid-column: 1 / -1; padding-bottom: 2px; }
-  .pp-cell, .pp-cand { min-width: 0; overflow-wrap: anywhere; }
-  .pp-tools { width: 100%; justify-content: space-between; }
+  .pp-row.head { gap: 8px; padding: 0 0 16px; }
+  .pp-table:not(.has-meta) .pp-row.head { display: none; }
+  .pp-table:not(.has-meta) [role="row"]:nth-child(2) .pp-row { border-top: 0; padding-top: 0; }
+  .pp-cand { flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: 12px; }
+  .pp-issue { color: var(--ink); }
+  .pp-cell { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 12px; align-items: baseline; min-width: 0; overflow-wrap: anywhere; }
+  .pp-who { display: block; font-family: var(--sans); font-size: 14px; line-height: 1.4; color: var(--ink-2); }
+  .pp-cell.none > :last-child { color: var(--ink-3); }
 }
 
 .pp-own { margin: 10px 0 2px; }
@@ -157,11 +178,9 @@
 .pp-front-cols h3, .pp-faq summary { text-wrap: balance; }
 @media (prefers-reduced-motion: reduce) { .pp-faq summary::after { transition: none; } }
 
-/* Light/dark switch: top right of the masthead, 44px target. The outgoing icon dims and
+/* Light/dark switch: end of the dateline, 44px target. The outgoing icon dims and
    turns away while the incoming one brightens in (about 250ms); a plain crossfade under
    Reduce Motion. */
-.pp-mast { position: relative; }
-.pp-mast-tools { position: absolute; right: 0; top: 40px; }
 .theme-toggle { position: relative; width: 44px; height: 44px; display: grid; place-items: center; background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink); border-radius: 999px; }
 .theme-toggle:hover { background: var(--wash); }
 .theme-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -177,13 +196,21 @@
 @media (prefers-reduced-motion: reduce) {
   .tt-icon { transition: opacity 150ms linear; transform: none !important; filter: none !important; }
 }
-/* On phones the dateline wraps to a varying height, so center the switch on the title from below, clear of the dateline's rule. */
-@media (max-width: 720px) { .pp-mast-tools { top: auto; bottom: calc(13px + (clamp(48px, 9vw, 96px) - 48px) / 2); right: 0; } }
 
 /* Race list on long ballots, and the way back up. */
-.pp-index { padding: 24px 0; border-bottom: 1px solid var(--rule); }
+.pp-index { padding: 16px 0; border-top: 1px solid var(--rule-strong); }
 .pp-index ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; font-family: var(--sans); font-size: 14px; }
 .pp-index a, .pp-top a { color: var(--ink); text-underline-offset: 4px; text-decoration-color: var(--rule); }
 .pp-index a:hover, .pp-top a:hover { text-decoration-color: currentColor; }
 .pp-story { scroll-margin-top: 12px; }
+@media (prefers-reduced-motion: reduce) { .pp-stance { transition: none; } }
 .pp-top { font-family: var(--sans); font-size: 14px; text-align: right; margin: 24px 0 0; }
+
+/* Phones: the race list is one row that scrolls sideways, fading at the edge, instead of wrapping. */
+@media (max-width: 640px) {
+  .pp-index ol { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 4px 16px; scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 48px), transparent);
+    mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 48px), transparent); }
+  .pp-index ol::-webkit-scrollbar { display: none; }
+  .pp-index li { flex: none; white-space: nowrap; }
+}

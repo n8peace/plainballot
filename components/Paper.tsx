@@ -37,6 +37,7 @@ function sideOf(id: IssueId, s: Stance): { label: string; strong: boolean } {
 }
 
 const isMeasure = (c: Contest) => c.kind === 'measure';
+const NO_PREFS: Prefs = { sel: [], pos: {}, imp: {} };
 
 function hostOf(url?: string) {
   try { return url ? new URL(url).hostname.replace(/^www\./, '') : ''; } catch { return ''; }
@@ -96,6 +97,7 @@ export function Paper({ sample }: { sample: Ballot }) {
     }
   };
 
+  const openSample = () => { setBallot(sample); window.scrollTo({ top: 0 }); };
   const countFor = (id: IssueId) => (ballot?.contests ?? []).filter((c) => c.issues.includes(id)).length;
   const toggle = (id: IssueId) => setPrefs((p) => (p.sel.includes(id) ? { ...p, sel: p.sel.filter((x) => x !== id) } : { ...p, sel: [...p.sel, id] }));
   const setPos = (id: IssueId, v: Position) => setPrefs((p) => ({ ...p, pos: { ...p.pos, [id]: v } }));
@@ -114,10 +116,10 @@ export function Paper({ sample }: { sample: Ballot }) {
     <div className="paper" id="top">
       <header className="pp-mast">
         <div className="pp-dateline">
-          <span>Tuesday, November 3, 2026 · General Election</span>
+          <span>November 3, 2026 edition</span>
           <span className="pp-promise">{daysToGo() > 0 && <><b>{daysToGo()} days</b> to go · </>}Free · No ads · No account</span>
+          <ThemeToggle />
         </div>
-        <div className="pp-mast-tools"><ThemeToggle /></div>
         <h1 className="pp-title"><button onClick={() => setBallot(null)}>Plain Ballot</button></h1>
         <div className="pp-rule" />
       </header>
@@ -134,10 +136,16 @@ export function Paper({ sample }: { sample: Ballot }) {
                 <button className="pp-btn" type="submit" aria-busy={looking} disabled={looking}>{looking ? 'Finding…' : 'See my ballot'}</button>
               </div>
               {error && <p className="pp-error" role="alert">{error}{canRetry && <> <button type="submit" className="pp-link">Try again</button></>}</p>}
-              <p className="pp-fine">Your address is only used to find your ballot. It isn’t stored.</p>
             </form>
-            <button type="button" className="pp-link pp-sample" onClick={() => { setBallot(sample); window.scrollTo({ top: 0 }); }}>Or browse a sample ballot</button>
+            <button type="button" className="pp-link pp-sample" onClick={openSample}>Or browse a sample ballot</button>
+            <p className="pp-fine pp-privacy">Your address is only used to find your ballot. It isn’t stored.</p>
           </section>
+          {sample.contests[0] && (
+            <section className="pp-proof" aria-label="An excerpt from the sample ballot">
+              <Story contest={sample.contests[0]} prefs={NO_PREFS} showParty={false} limit={3} />
+              <p className="pp-caption">From <button type="button" className="pp-link" onClick={openSample}>the sample ballot</button>, with fictional candidates. Tap a position to read it.</p>
+            </section>
+          )}
           <section className="pp-front-cols" aria-label="How Plain Ballot works">
             <div><h3>Quoted, never guessed</h3><p>Each position links to the page it came from. Nothing is inferred from party.</p></div>
             <div><h3>Party labels hidden</h3><p>Until you ask, so you see the issues first.</p></div>
@@ -218,21 +226,17 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
   return (
     <main className="pp-edition">
       <div className="pp-edition-head">
-        <div>
-          <p className="pp-kicker">{ballot.sample ? 'Sample ballot · fictional candidates' : `Your ballot${ballot.place ? ` · ${ballot.place}` : ''}`}</p>
-          <h2 className="pp-headline sm">{[races && plural(races, 'race', 'races'), measures && plural(measures, 'measure', 'measures')].filter(Boolean).join(' and ')} on your ballot</h2>
-          <p className="pp-fine">Every position below is quoted exactly from its source. Tap one to read it.{ballot.notice && !ballot.sample && <><br />{ballot.notice}</>}</p>
-          {(ballot.needsResearch || ballot.partial) && (
-            <p className="pp-fine"><a href={stateResearchUrl(ballot.districts?.find((d) => d.key.endsWith('/state'))?.label)} target="_blank" rel="noopener noreferrer">Help research your area</a>: pick one race, about 20 minutes, no coding needed.</p>
-          )}
-          <button className="pp-link pp-change" onClick={onChangeAddress}>Change address</button>
-        </div>
+        <h2 className="pp-headline sm">{[races && plural(races, 'race', 'races'), measures && plural(measures, 'measure', 'measures')].filter(Boolean).join(' and ')} on your ballot</h2>
+        <p className="pp-meta">{ballot.sample ? 'Sample ballot, fictional candidates' : `Your ballot${ballot.place ? `, ${ballot.place}` : ''}`} · <button className="pp-link" onClick={onChangeAddress}>{ballot.sample ? 'Look up your own' : 'Change address'}</button></p>
+        <p className="pp-meta">Every position below is quoted exactly from its source. Tap one to read it.{ballot.notice && !ballot.sample && <><br />{ballot.notice}</>}</p>
+        {(ballot.needsResearch || ballot.partial) && (
+          <p className="pp-meta"><a href={stateResearchUrl(ballot.districts?.find((d) => d.key.endsWith('/state'))?.label)} target="_blank" rel="noopener noreferrer">Help research your area</a>: pick one race, about 20 minutes, no coding needed.</p>
+        )}
         <div className="pp-tools">
           <button id="pp-personalize" className="pp-btn" onClick={onPersonalize}>{personalized ? `Personalized · ${plural(set, 'issue', 'issues')}` : 'Personalize'}</button>
           <label className="pp-switch"><input type="checkbox" checked={showParty} onChange={(e) => onParty(e.target.checked)} /> Show party</label>
         </div>
       </div>
-      <div className="pp-rule thin" />
       {ballot.contests.length > 5 && (
         <nav className="pp-index" aria-label="Races on this ballot">
           <ol>{ballot.contests.map((c) => <li key={c.id}><a href={`#race-${c.id}`}>{c.office}</a></li>)}</ol>
@@ -244,7 +248,7 @@ function Edition({ ballot, prefs, showParty, onParty, onPersonalize, onChangeAdd
   );
 }
 
-function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; showParty: boolean }) {
+function Story({ contest, prefs, showParty, limit }: { contest: Contest; prefs: Prefs; showParty: boolean; limit?: number }) {
   const [open, setOpen] = useState<string | null>(null);
   const [report, setReport] = useState<{ candidate?: string; issue?: string } | null>(null);
   const personalized = prefs.sel.some((id) => contest.issues.includes(id) && prefs.pos[id] !== undefined);
@@ -260,7 +264,8 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
   // Issues where at least one choice has a sourced position; the voter's issues first.
   const rows = contest.issues
     .filter((id) => contest.choices.some((ch) => ch.stances[id]))
-    .sort((a, b) => Number(prefs.sel.includes(b)) - Number(prefs.sel.includes(a)) || ISSUES.findIndex((i) => i.id === a) - ISSUES.findIndex((i) => i.id === b));
+    .sort((a, b) => Number(prefs.sel.includes(b)) - Number(prefs.sel.includes(a)) || ISSUES.findIndex((i) => i.id === a) - ISSUES.findIndex((i) => i.id === b))
+    .slice(0, limit);
   // Mark a leader only when one choice fits strictly better than every other. A tie shows no winner.
   const leads = personalized && choices.length > 1 && choices[0].fit !== null && choices[0].fit > (choices[1].fit ?? -1);
   const cols = { gridTemplateColumns: `minmax(120px, 0.8fr) repeat(${choices.length}, minmax(140px, 1fr))`, '--n': choices.length } as React.CSSProperties;
@@ -276,7 +281,7 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
           <p className="pp-fine">No public positions found yet on the issues we track. <a href={`${DATA_REPO_URL}/blob/main/CONTRIBUTING.md`}>Help research it</a>.</p>
         )
       ) : (
-        <div className="pp-table" role="table" aria-label={contest.office}>
+        <div className={`pp-table${showParty || personalized ? ' has-meta' : ''}`} role="table" aria-label={contest.office}>
           <div className="pp-row head" role="row" style={cols}>
             <div role="columnheader" className="pp-corner" />
             {choices.map(({ choice, fit, on }, n) => (
@@ -295,10 +300,13 @@ function Story({ contest, prefs, showParty }: { contest: Contest; prefs: Prefs; 
                 {choices.map(({ choice }) => {
                   const s = choice.stances[id];
                   const key = `${id}|${choice.id}`;
-                  if (!s) return <div key={choice.id} role="cell" className="pp-cell none">No public position found</div>;
+                  // The name inside each cell shows only on phones, where each choice gets its own line.
+                  const who = <span className="pp-who">{choice.name}</span>;
+                  if (!s) return <div key={choice.id} role="cell" className="pp-cell none">{who}<span>No public position found</span></div>;
                   const side = sideOf(id, s);
                   return (
                     <div key={choice.id} role="cell" className="pp-cell">
+                      {who}
                       <button className="pp-stance" aria-expanded={open === key} onClick={() => setOpen(open === key ? null : key)}>
                         {side.strong ? <><span className="pp-strong">Strongly</span> for {side.label.toLowerCase()}</> : side.label}
                       </button>
