@@ -3,9 +3,10 @@
 // it's how researched races are matched to a voter.
 
 import { Memo } from '../ratelimit';
+import { ccdAt } from './ccd';
 
 export interface District {
-  /** Stable key used in research files, e.g. "ca/cd-10", "ca/sldu-9", "ca/county-contra-costa". */
+  /** Stable key used in research files, e.g. "ca/cd-10", "ca/sldu-9", "ca/ccd-san-mateo-county". */
   key: string;
   label: string;
 }
@@ -63,6 +64,14 @@ export async function locate(address: string): Promise<Located | null> {
   add(first(g, (k) => k === 'Incorporated Places'), (b) => `place-${slug(b)}`, (x) => (x.NAME ?? '').replace(/ city$/, ''));
   for (const layer of ['Unified School Districts', 'Elementary School Districts', 'Secondary School Districts']) {
     add(first(g, (k) => k === layer), (b) => `school-${slug(b.replace(/ School District$/, ''))}`, (x) => x.NAME ?? '');
+  }
+  if (st === 'ca') {
+    const lon = m.coordinates?.x;
+    const lat = m.coordinates?.y;
+    if (typeof lon === 'number' && typeof lat === 'number') {
+      const ccd = ccdAt(lon, lat);
+      if (ccd) districts.push({ key: `${st}/${ccd.key}`, label: ccd.label });
+    }
   }
 
   const out: Located = { matchedAddress: m.matchedAddress, state: st.toUpperCase(), districts };
