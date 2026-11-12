@@ -23,7 +23,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'What if something is wrong?',
-    a: 'Tap “Not right?” on any claim. The report is public, and it starts a fresh check. If the answer changes, we publish the correction.',
+    a: 'Tap “Report a mistake” on any claim. The report is public, and it starts a fresh check. If the answer changes, we publish the correction.',
   },
 ];
 
