@@ -34,7 +34,7 @@ flowchart LR
 |---|---|---|
 | Dials | 18 issues, each end worded the way its supporters would say it | [lib/issues.ts](../lib/issues.ts) |
 | Own words | A small model reads a voter's sentence into dial settings. It names sides in words; code converts them to numbers. | [lib/ai/interpret.ts](../lib/ai/interpret.ts) |
-| Districts | U.S. Census geocoder turns an address into district keys like `ca/cd-10` | [lib/address/census.ts](../lib/address/census.ts) |
+| Districts | U.S. Census geocoder and California community college boundaries turn an address into district keys like `ca/cd-10` and `ca/ccd-san-mateo-county` | [lib/address/census.ts](../lib/address/census.ts) |
 | Ballot | Researched contests matched by district, in printed-ballot order. A sample ballot fills in when nothing's researched. | [lib/ballot/](../lib/ballot/) |
 | Matching | Weighted distance between a voter's dial and each choice's position. Unknown positions are left out, never guessed. | [lib/match.ts](../lib/match.ts) |
 | Research | Agents, agreement rules and quote checks | [open-election-data](https://github.com/n8peace/open-election-data) |
