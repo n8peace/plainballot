@@ -16,7 +16,7 @@ export default function Terms() {
         <li>A blank means we couldn’t find a sourced position. It isn’t a position for or against.</li>
         <li>The service is provided as is, without warranties.</li>
         <li>The research is open data under the ODbL. The site’s code is open source under the AGPL.</li>
-        <li>Found something wrong? Tap “Not right?” on any claim, or write to <a href="mailto:support@bananaintelligence.ai">support@bananaintelligence.ai</a>.</li>
+        <li>Found something wrong? Tap “Report a mistake” on any claim, or write to <a href="mailto:support@bananaintelligence.ai">support@bananaintelligence.ai</a>.</li>
       </ul>
     </div>
   );

@@ -92,6 +92,11 @@
 .pp-stance:hover { text-decoration-color: var(--ink-3); }
 .pp-stance[aria-expanded="true"] { text-decoration-color: var(--ink); }
 .pp-who { display: none; }
+/* Touch: grow the tap area of small inline controls to about 44 px tall without moving the layout. */
+@media (pointer: coarse) {
+  .pp-stance, .pp-fine .pp-link, .pp-fine a { position: relative; }
+  .pp-stance::after, .pp-fine .pp-link::after, .pp-fine a::after { content: ''; position: absolute; inset: -10px -4px; }
+}
 .pp-stance:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .pp-strong { font-style: italic; }
 .pp-quote { background: var(--wash); padding: 16px 20px; margin: 0 0 12px; font-size: 16px; }
