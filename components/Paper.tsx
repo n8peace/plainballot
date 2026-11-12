@@ -24,6 +24,7 @@ import { DATA_REPO_URL, GITHUB_URL, raceShareUrl, stateResearchUrl, X_URL } from
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
 import { VOICE_LABEL } from '@/lib/types';
+import { sourceLabel } from '@/lib/source-label';
 
 /** "Lower taxes", "Strongly: lower taxes" or "No strong view". */
 function sideOf(id: IssueId, s: Stance): { label: string; strong: boolean } {
@@ -34,10 +35,6 @@ function sideOf(id: IssueId, s: Stance): { label: string; strong: boolean } {
 }
 
 const isMeasure = (c: Contest) => c.kind === 'measure';
-
-function hostOf(url?: string) {
-  try { return url ? new URL(url).hostname.replace(/^www\./, '') : ''; } catch { return ''; }
-}
 
 export function Paper({ sample }: { sample: Ballot }) {
   const [ballot, setBallot] = useState<Ballot | null>(null);
@@ -358,8 +355,8 @@ export function RaceStory({ contest, prefs, showParty, sample, showAllQuotes = f
                 return (
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
-                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${hostOf(s.sourceUrl)}${s.voice ? ` · ${VOICE_LABEL[s.voice]}` : ''}` : sample && sampleSource(choice.id, id) ? `Quoted from: ${sampleSource(choice.id, id)}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
-                    {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
+                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${sourceLabel(s.sourceUrl)}${s.voice ? ` · ${VOICE_LABEL[s.voice]}` : ''}` : sample && sampleSource(choice.id, id) ? `Quoted from: ${sampleSource(choice.id, id)}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
+                    {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{sourceLabel(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
                   </div>
                 );
               })}
