@@ -134,7 +134,7 @@ export function Paper({ sample }: { sample: Ballot }) {
           <section className="bh" aria-label="Find your ballot">
             <div className="bh-copy">
               <h2 className="bh-head">Your ballot, and where each candidate stands.</h2>
-              <p className="bh-deck">Their own words, quoted exactly, with a link to the source.</p>
+              <p className="bh-deck">What they said and did, quoted exactly, with a link to the source.</p>
               {ask}
             </div>
             <div className="bh-table">
