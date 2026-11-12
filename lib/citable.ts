@@ -14,13 +14,13 @@ export const CITABLE_PAGES: CitablePage[] = [
   {
     path: '/what-we-never-do',
     title: 'What Plain Ballot will never do',
-    description: 'No endorsements, no telling anyone how to vote, no guessing from party, and no claim without a checked quote.',
+    description: 'Plain Ballot never endorses, never tells anyone how to vote, never guesses from party, and makes no claim without a checked quote.',
     updated: '2026-11-10',
   },
   {
     path: '/releases',
     title: 'Plain Ballot release log',
-    description: 'Every change voters can see, with the date it shipped and why.',
+    description: 'Every change to Plain Ballot that voters can see, with the date it shipped and why.',
     updated: '2026-11-10',
   },
 ];

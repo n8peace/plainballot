@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { Paper } from '@/components/Paper';
 import { SAMPLE_BALLOT } from '@/lib/ballot/sample';
-import { HOME_TITLE, homeJsonLd } from '@/lib/seo';
+import { HOME_TITLE, homeJsonLd, pageMetadata } from '@/lib/seo';
 import { faqJsonLd } from '@/lib/faq';
 import './paper.css';
 
 // Canonical here, not in the layout: a layout canonical would point every page at the home page.
-export const metadata: Metadata = { title: HOME_TITLE, alternates: { canonical: '/' } };
+export const metadata: Metadata = pageMetadata({ title: HOME_TITLE, path: '/' });
 
 export default function Home() {
   return (

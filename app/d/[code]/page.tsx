@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: PageProps<'/d/[code]'>): Prom
     title, description,
     alternates: { canonical: `/d/${code}` },
     robots: { index: false, follow: true },
-    openGraph: { title, description }, twitter: { title, description },
+    openGraph: { title, description, url: `/d/${code}` }, twitter: { title, description },
   };
 }
 
