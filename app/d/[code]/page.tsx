@@ -7,10 +7,17 @@ import { decodePrefs } from '@/lib/share';
 // The link carries only issue settings; no address, no picks.
 
 export async function generateMetadata({ params }: PageProps<'/d/[code]'>): Promise<Metadata> {
-  const prefs = decodePrefs(decodeURIComponent((await params).code));
+  const { code } = await params;
+  const prefs = decodePrefs(decodeURIComponent(code));
   const title = prefs ? `What I care about this election (${prefs.sel.length} issues)` : 'Plain Ballot';
   const description = 'See where we agree, then get your whole ballot matched to your own priorities. Free and nonpartisan.';
-  return { title, description, openGraph: { title, description }, twitter: { title, description } };
+  // One page per person's settings: linkable and shareable, but kept out of search results.
+  return {
+    title, description,
+    alternates: { canonical: `/d/${code}` },
+    robots: { index: false, follow: true },
+    openGraph: { title, description }, twitter: { title, description },
+  };
 }
 
 export default async function SharedDials({ params }: PageProps<'/d/[code]'>) {
