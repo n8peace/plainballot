@@ -51,6 +51,7 @@ export interface Release { date: string; what: string; why: string }
 // Newest first. Only changes a voter or an AI assistant can see; research batches and
 // internal tooling are left out.
 export const RELEASES: Release[] = [
+  { date: '2026-11-11', what: 'Each quote can now say whose words it is: “Their own words”, “Official record”, or “A description, not their words”. Labels start on California’s statewide races and are being added across every race, decided by the same multi-model agreement rule as positions.', why: 'So a voter can tell a candidate’s own words from a summary of them.' },
   { date: '2026-11-11', what: 'Share one race or measure: each race on a ballot has a “Share this race” link to a page with every choice, quote and source for that race. The link never includes an address or anyone’s choices.', why: 'So a voter can show someone a single race without sharing where they live or how they plan to vote.' },
   { date: '2026-11-10', what: 'A one-line setup for AI assistants: paste it into your own assistant and it connects Plain Ballot for you, with a one-click link for Cursor.', why: 'So a voter can look up their ballot from the assistant they already use.' },
   { date: '2026-11-10', what: 'Assistants are told never to pair Plain Ballot’s data with a partisan take, and to say which answers came from their own search. Every ballot answer carries that note.', why: 'So answers from an AI assistant stay as neutral as the site.' },
