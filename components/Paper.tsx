@@ -23,6 +23,7 @@ import { CURSOR_INSTALL_URL, SETUP_PROMPT } from '@/lib/setup';
 import { DATA_REPO_URL, GITHUB_URL, raceShareUrl, stateResearchUrl, X_URL } from '@/lib/share';
 import type { Interpretation } from '@/lib/ai/interpret';
 import type { Ballot, Choice, Contest, Prefs, Stance } from '@/lib/types';
+import { VOICE_LABEL } from '@/lib/types';
 
 /** "Lower taxes", "Strongly: lower taxes" or "No strong view". */
 function sideOf(id: IssueId, s: Stance): { label: string; strong: boolean } {
@@ -357,7 +358,7 @@ export function RaceStory({ contest, prefs, showParty, sample, showAllQuotes = f
                 return (
                   <div key={choice.id} className="pp-quote">
                     <p><b>{choice.name}:</b> {s.text}</p>
-                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${hostOf(s.sourceUrl)}` : sample && sampleSource(choice.id, id) ? `Quoted from: ${sampleSource(choice.id, id)}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
+                    {s.quote && <><p className="pp-kicker pp-own">{isMeasure(contest) ? 'From the measure' : s.sourceUrl ? `Quoted from ${hostOf(s.sourceUrl)}${s.voice ? ` · ${VOICE_LABEL[s.voice]}` : ''}` : sample && sampleSource(choice.id, id) ? `Quoted from: ${sampleSource(choice.id, id)}` : 'Quoted'}</p><blockquote>“{s.quote}”</blockquote></>}
                     {s.sourceUrl && <p className="pp-fine">Source: <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">{hostOf(s.sourceUrl)}</a>{s.agreement ? ` · found by ${s.agreement.replace('/', ' of ')} independent checks` : ''} · <button className="pp-link" onClick={() => setReport({ candidate: choice.name, issue: id })}>Not right?</button></p>}
                   </div>
                 );

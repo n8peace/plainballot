@@ -89,7 +89,8 @@
           "text": { "type": "string", "description": "One neutral sentence on what the candidate said or did." },
           "quote": { "type": "string", "description": "Exact passage from the source." },
           "sourceUrl": { "type": "string" },
-          "agreement": { "type": "string", "description": "Research agents that agreed, for example 3/3." }
+          "agreement": { "type": "string", "description": "Research agents that agreed, for example 3/3." },
+          "voice": { "type": "string", "enum": ["own", "record", "reported"], "description": "Whose words the quote is: the candidate's own, an official record, or a description of them. Present only when independent checks agreed." }
         }
       }
     }
