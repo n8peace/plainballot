@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { ISSUES } from '@/lib/issues';
 import { INTERPRET_MODEL } from '@/lib/ai/interpret';
 import { DATA_REPO_URL, GITHUB_URL } from '@/lib/share';
@@ -7,11 +8,7 @@ import { articleJsonLd, citablePage } from '@/lib/citable';
 
 const page = citablePage('/methodology');
 
-export const metadata: Metadata = {
-  title: page.title,
-  description: page.description,
-  alternates: { canonical: page.path },
-};
+export const metadata: Metadata = pageMetadata({ title: page.title, description: page.description, path: page.path });
 
 export default function Methodology() {
   return (

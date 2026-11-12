@@ -1,15 +1,12 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { RELEASES, articleJsonLd, citablePage } from '@/lib/citable';
 import { GITHUB_URL } from '@/lib/share';
 
 const page = citablePage('/releases');
 
-export const metadata: Metadata = {
-  title: page.title,
-  description: page.description,
-  alternates: { canonical: page.path },
-};
+export const metadata: Metadata = pageMetadata({ title: page.title, description: page.description, path: page.path });
 
 export default function Releases() {
   return (

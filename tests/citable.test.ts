@@ -19,7 +19,7 @@ describe('citable pages', () => {
     it(`${page.path} sets a canonical link and Article tags`, () => {
       const src = readFileSync(file, 'utf8');
       expect(src).toContain(`citablePage('${page.path}')`);
-      expect(src).toContain('canonical: page.path');
+      expect(src).toContain('path: page.path');
       expect(src).toContain('articleJsonLd(page)');
     });
   }

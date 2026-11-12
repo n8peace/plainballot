@@ -1,11 +1,8 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Privacy · Plain Ballot',
-  description: 'What happens to your address, your words and your choices on Plain Ballot.',
-  alternates: { canonical: '/privacy' },
-};
+export const metadata: Metadata = pageMetadata({ title: 'Privacy · Plain Ballot', description: 'What happens to your address, your words and your choices on Plain Ballot.', path: '/privacy' });
 
 export default function Privacy() {
   return (
