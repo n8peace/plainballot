@@ -13,7 +13,7 @@ export default function WhatWeNeverDo() {
     <div className="wrap prose">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(page)) }} />
       <p className="back"><Link href="/">← Back to your ballot</Link></p>
-      <h1 className="wordmark" style={{ fontSize: 44, textAlign: 'left' }}>What we never do</h1>
+      <h1 className="wordmark" style={{ fontSize: 'clamp(32px, 10vw, 44px)', textAlign: 'left', textWrap: 'balance' }}>What we never do</h1>
       <hr className="double" />
       <p>Plain Ballot shows how each race on your ballot lines up with the issues you chose. These rules hold for every race, every candidate and every party.</p>
       <ul>
