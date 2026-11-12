@@ -51,6 +51,7 @@ export interface Release { date: string; what: string; why: string }
 // Newest first. Only changes a voter or an AI assistant can see; research batches and
 // internal tooling are left out.
 export const RELEASES: Release[] = [
+  { date: '2026-11-12', what: 'Every race now carries the “whose words” labels: 9,740 quotes say whether they are the candidate’s own words, an official record, or a description. A quote whose source couldn’t be reached to decide stays unlabeled.', why: 'So the same check covers every race, not just California’s.' },
   { date: '2026-11-12', what: 'Community college district measures now reach the right ballots in California. An address is placed in its college district using the state’s district boundaries, checked on our own server.', why: 'College bond measures were missing from voters’ ballots because the federal address service has no college district boundaries.' },
   { date: '2026-11-12', what: 'When a quote has left its page, the source can be an Internet Archive copy that still shows it word for word, named by the original site and marked “archived copy”.', why: 'So every quote stays checkable after a campaign site changes or goes offline.' },
   { date: '2026-11-11', what: 'Each quote can now say whose words it is: “Their own words”, “Official record”, or “A description, not their words”. Labels start on California’s statewide races and are being added across every race, decided by the same multi-model agreement rule as positions.', why: 'So a voter can tell a candidate’s own words from a summary of them.' },
