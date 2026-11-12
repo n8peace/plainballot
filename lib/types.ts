@@ -10,7 +10,18 @@ export interface Stance {
   sourceUrl?: string;
   /** How many independent research agents agreed, e.g. "3/3". */
   agreement?: string;
+  /** Whose words the quote is, when independent checks agreed. Absent means not labeled. */
+  voice?: Voice;
 }
+
+export type Voice = 'own' | 'record' | 'reported';
+
+/** Shown after "Quoted from <site>". Same style for all three, so none reads as better. */
+export const VOICE_LABEL: Record<Voice, string> = {
+  own: 'Their own words',
+  record: 'Official record',
+  reported: 'A description, not their words',
+};
 
 export interface Choice {
   id: string;
