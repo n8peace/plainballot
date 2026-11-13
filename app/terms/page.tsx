@@ -18,6 +18,7 @@ export default function Terms() {
         <li>The research is open data under the ODbL. The site’s code is open source under the AGPL.</li>
         <li>Found something wrong? Tap “Report a mistake” on any claim, or write to <a href="mailto:support@bananaintelligence.ai">support@bananaintelligence.ai</a>.</li>
       </ul>
+      <p>Mail: Banana Intelligence, 131 Continental Dr, Suite 305, Newark, DE 19713, US</p>
     </div>
   );
 }

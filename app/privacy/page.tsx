@@ -19,6 +19,7 @@ export default function Privacy() {
         <li><b>AI assistants.</b> When an AI assistant looks up a ballot through our tool, the address is handled the same way. We count those lookups by state and by which AI app sent them.</li>
       </ul>
       <p>Questions: <a href="mailto:support@bananaintelligence.ai">support@bananaintelligence.ai</a></p>
+      <p>Mail: Banana Intelligence, 131 Continental Dr, Suite 305, Newark, DE 19713, US</p>
     </div>
   );
 }
