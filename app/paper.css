@@ -118,6 +118,7 @@
 .pp-foot a:hover { color: var(--ink); text-decoration-color: currentColor; }
 .pp-foot nav a { text-decoration: none; }
 .pp-foot nav a:hover { text-decoration: underline; }
+.pp-family { margin: 20px 0 0; }
 .pp-agent { margin: 16px 0 0; color: var(--ink-3); line-height: 1.6; }
 .pp-prompt { color: var(--ink-2); }
 .pp-agent-acts { white-space: nowrap; color: var(--ink-3); }

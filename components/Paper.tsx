@@ -189,6 +189,7 @@ export function Paper({ sample }: { sample: Ballot }) {
       <footer className="pp-foot">
         <nav aria-label="About Plain Ballot"><Link href="/methodology">How it works</Link><a href={DATA_REPO_URL}>Open data</a><a href={GITHUB_URL}>Code</a><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><a href={X_URL}>@n8peace</a></nav>
         <AgentSetup />
+        <p className="pp-family"><a href="https://bananaintelligence.ai/?ct=ballot">A Banana Intelligence app. See the others.</a> · <a href="https://louietheemail.com/?ct=ballot">A free morning paper, written for you</a></p>
       </footer>
     </div>
   );
