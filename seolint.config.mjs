@@ -1,6 +1,6 @@
 // Checks the built pages for search and social tags before every deploy (npm run build).
 // Errors fail the build; warnings only print. Docs: https://seolint.io/docs/
-export default {
+const config = {
   host: 'https://plainballot.com',
   inputs: ['.next/server/app'],
   // Not real pages: Next's error shells, and /paper, which only redirects home.
@@ -11,3 +11,5 @@ export default {
     'site.sitemap': false,
   },
 };
+
+export default config;
