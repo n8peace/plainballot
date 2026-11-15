@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Plain Ballot hub card. Render: 1600x1000, see README.md next to this file.
+     Content: data/positions/governor-california.json in open-election-data (human-reviewed),
+     housing and tax stances, placed with toPosition (strong = end of the dial). -->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Libre+Franklin:wght@500;700&display=block" rel="stylesheet">
+<style>
+  :root { --paper:#fbfaf6; --ink:#121212; --ink-2:#4a4a48; }
+  * { box-sizing:border-box; margin:0; }
+  html,body { width:1600px; height:1000px; background:var(--paper); color:var(--ink); }
+  body { padding:0 120px; display:flex; flex-direction:column; justify-content:center; gap:64px; font-family:"Libre Franklin",sans-serif; }
+  .race { font-weight:500; font-size:44px; line-height:1; color:var(--ink-2); margin-bottom:-24px; }
+  .dials { display:flex; flex-direction:column; gap:88px; }
+  .issue h2 { font-family:"Newsreader",serif; font-weight:600; font-size:96px; line-height:1; letter-spacing:-.02em; }
+  .track { position:relative; height:132px; margin-top:8px; }
+  .line { position:absolute; left:28px; right:28px; top:95px; height:6px; background:var(--ink); }
+  .tick { position:absolute; top:80px; width:6px; height:36px; background:var(--ink); transform:translateX(-50%); }
+  .dot { position:absolute; top:70px; width:56px; height:56px; border-radius:50%; background:var(--ink); transform:translateX(-50%); }
+  .who { position:absolute; top:0; font-size:48px; font-weight:600; line-height:1; white-space:nowrap; }
+  .ends { display:flex; justify-content:space-between; margin-top:10px; font-size:44px; color:var(--ink-2); font-weight:500; }
+</style></head>
+<body>
+  <div class="race">Governor of California</div>
+  <div class="dials" id="dials"></div>
+<script>
+  // position -2..2 from toPosition; names in ballot order.
+  const issues = [
+    { name: 'Housing', l: 'Slower growth', r: 'Building more housing', marks: [{ at: 2, names: ['Becerra', 'Hilton'] }] },
+    { name: 'Taxes & services', l: 'Lower taxes', r: 'More services', marks: [{ at: -2, names: ['Hilton'] }, { at: 2, names: ['Becerra'] }] },
+  ];
+  // Track runs from 28px to (width - 28px) so end dots stay inside the 120px margin.
+  const at = (p) => `calc(28px + (100% - 56px) * ${(p + 2) / 4})`;
+  document.getElementById('dials').innerHTML = issues.map((i) => `
+    <section class="issue">
+      <h2>${i.name}</h2>
+      <div class="track">
+        <div class="line"></div>
+        ${[-2, -1, 0, 1, 2].map((p) => `<div class="tick" style="left:${at(p)}"></div>`).join('')}
+        ${i.marks.map((m) => `
+          <div class="who" style="${m.at === 2 ? 'right:0' : m.at === -2 ? 'left:0' : `left:${at(m.at)};transform:translateX(-50%)`}">${m.names.join(' and ')}</div>
+          <div class="dot" style="left:${at(m.at)}"></div>`).join('')}
+      </div>
+      <div class="ends"><span>${i.l}</span><span>${i.r}</span></div>
+    </section>`).join('');
+</script>
+</body></html>
