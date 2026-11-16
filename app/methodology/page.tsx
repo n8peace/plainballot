@@ -22,7 +22,7 @@ export default function Methodology() {
       <p>You choose the issues that matter to you and where you stand on each. For every contest on your ballot, we compare your dials to each candidate’s or measure’s sourced positions and show the closest match, the main reason for it, and what would change it. Matching is plain arithmetic that runs in your browser. The same answers always give the same ballot.</p>
 
       <h2>The math</h2>
-      <p>Each dial runs from −2 to +2. For each issue you chose that a contest decides, we measure how far your dial is from the candidate’s position (0 to 4) and weight it by how much it matters to you (low 1, medium 2, high 3). The match is 100 minus the weighted average distance, scaled to 0–100.</p>
+      <p>Each dial runs from −2 to +2. For each issue you chose that a contest decides, we measure how far your dial is from the candidate’s position (0 to 4) and weight it by how much it matters to you (low 1, medium 2, high 3). The match is 100 minus the weighted average distance, scaled to 0 to 100.</p>
       <p>If a candidate has no sourced position on an issue, that issue is left out of their score. We never fill it in, and the ballot tells you when this happened.</p>
       <p>Judges can’t promise how they’ll rule, so appellate judges are matched only on opinions they’ve written, and trial judges only on sentencing records.</p>
 
