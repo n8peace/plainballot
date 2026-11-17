@@ -1,24 +1,30 @@
+import { lastChanged, newest } from './page-dates';
 import { SITE_URL } from './share';
 
 // The "How it works" pages search engines and AI assistants can cite. Each one gets a
 // canonical link, Article tags, a sitemap line and an llms.txt line (tests/citable.test.ts).
-export interface CitablePage { path: string; title: string; description: string; updated: string }
+// `sources` are the files whose change changes the page; its date comes from their git history.
+// `updated` is only the fallback for a build without git history.
+export interface CitablePage { path: string; title: string; description: string; sources: string[]; updated: string }
 
 export const CITABLE_PAGES: CitablePage[] = [
   {
     path: '/methodology',
+    sources: ['app/methodology'],
     title: 'How Plain Ballot works',
     description: 'Where the data comes from, how every quote is checked, and how matching works.',
     updated: '2026-11-10',
   },
   {
     path: '/what-we-never-do',
+    sources: ['app/what-we-never-do'],
     title: 'What Plain Ballot will never do',
     description: 'Plain Ballot never endorses, never tells anyone how to vote, never guesses from party, and makes no claim without a checked quote.',
     updated: '2026-11-10',
   },
   {
     path: '/releases',
+    sources: ['app/releases'],
     title: 'Plain Ballot release log',
     description: 'Every change to Plain Ballot that voters can see, with the date it shipped and why.',
     updated: '2026-11-10',
@@ -31,6 +37,11 @@ export function citablePage(path: string): CitablePage {
   return page;
 }
 
+/** When the page last changed: its files' newest commit, and for the release log its newest entry. */
+export function pageUpdated(page: CitablePage): string {
+  return newest(page.updated, lastChanged(page.sources), page.path === '/releases' ? RELEASES[0]?.date : undefined)!;
+}
+
 export function articleJsonLd(page: CitablePage) {
   const org = { '@type': 'Organization', name: 'Plain Ballot', url: SITE_URL };
   return {
@@ -40,7 +51,7 @@ export function articleJsonLd(page: CitablePage) {
     description: page.description,
     url: `${SITE_URL}${page.path}`,
     mainEntityOfPage: `${SITE_URL}${page.path}`,
-    dateModified: page.updated,
+    dateModified: pageUpdated(page),
     author: org,
     publisher: org,
   };
