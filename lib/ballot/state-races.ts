@@ -1,7 +1,8 @@
 import type { RawContest } from './data';
 import { SITE_URL, raceShareUrl } from '../share';
 import { STATES, stateSlug } from '../states';
-import { nextElectionFaq, todayEastern } from '../next-election';
+import { nextElectionChanged, nextElectionFaq, todayEastern } from '../next-election';
+import { newest } from '../page-dates';
 
 export const ELECTION_DATE = process.env.ELECTION_DATE || '2026-11-03';
 
@@ -61,6 +62,12 @@ export function stateUpdated(contests: RawContest[], code: string): string | und
     .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))
     .sort()
     .at(-1);
+}
+
+/** The day a state page last changed: its newest research check or its next-election line,
+ *  whichever is later. Used for the page's dateModified and its sitemap date. */
+export function statePageChanged(contests: RawContest[], code: string, today = todayEastern()): string | undefined {
+  return newest(stateUpdated(contests, code), nextElectionChanged(code, today));
 }
 
 /** "12 races and measures", "1 race", "3 measures": names only what the state has. */

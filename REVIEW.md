@@ -14,6 +14,7 @@ A new miss gets a check that fails on that exact case first, then the fix. When 
 | 6 | changes a status label shown with research ("Not researched yet", "No positions") | The label agrees with what is shown beside it. Researched items never say "not researched". | #86 all 14 measures said "Not researched yet" under their summary |
 | 7 | builds text from a count (`${n} issue`) | Singular and plural both read right (1 issue, 2 issues). | #86 "1 issues" |
 | 8 | edits a `concurrency:` block in a workflow | Runs on `main` are never cancelled by a newer push. Each push to `main` gets its own group. | Nov 17 review: a shared group would have cancelled waiting `main` runs |
+| 9 | changes what a page shows (a new line, an edited entry in `lib/next-election.ts`, a removed entry) | The page's `dateModified` and sitemap date move to that day. In `lib/next-election.ts`, bump `since` on an edited entry, and add a deleted entry to `LINES_REMOVED`. | #132 next-election line went live while state pages still said 2026-09-30 |
 
 ## Checks a change cannot grade
 

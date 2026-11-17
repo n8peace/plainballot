@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { allContests } from '@/lib/ballot/data';
-import { ELECTION_DATE, longDate, raceCount, stateDescription, stateFaq, stateJsonLd, statePageUrl, stateSections, stateUpdated } from '@/lib/ballot/state-races';
+import { ELECTION_DATE, longDate, raceCount, stateDescription, stateFaq, stateJsonLd, statePageUrl, statePageChanged, stateSections } from '@/lib/ballot/state-races';
 import { STATES, stateFromSlug } from '@/lib/states';
 import { electionDay, nextElection, nextElectionFaq, scope, sourceHost } from '@/lib/next-election';
 import '../../paper.css';
@@ -14,7 +14,7 @@ const load = cache(async (slug: string) => {
   if (!code) return null;
   const contests = await allContests();
   const sections = stateSections(contests, code);
-  return sections.length ? { code, sections, updated: stateUpdated(contests, code) } : null;
+  return sections.length ? { code, sections, updated: statePageChanged(contests, code) } : null;
 });
 
 export async function generateMetadata({ params }: PageProps<'/races/[state]'>): Promise<Metadata> {
