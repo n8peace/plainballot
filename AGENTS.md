@@ -24,6 +24,7 @@ Every pull request gets an automated bias review ([scripts/bias-check.ts](script
 | `npm run check:issues` | Dial wording matches the research repo's copy |
 | `npm run eval` | Does the AI put voters on the right side of each dial? (calls a model) |
 | `npm run bias-check -- <diff>` | Run the bias review on a diff file |
+| `npm run verify` | Pulls a ballot in a real browser the way a voter would, on desktop and phone width. Add `-- --url https://plainballot.com` to check the live site after a deploy |
 
 ## Where things live
 
@@ -35,9 +36,11 @@ Every pull request gets an automated bias review ([scripts/bias-check.ts](script
 
 Keep changes small and match the surrounding style. Add a test for anything that touches matching.
 
+Before any commit a voter will see, run `npm run verify` (tests passing is not proof), and check the diff against [REVIEW.md](REVIEW.md), the list of past misses. Every commit and pull request says how it was checked: `Verified: ...`, or `Verified: none` and why.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
-# This is NOT the Next.js you know
+## This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 

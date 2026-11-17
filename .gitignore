@@ -44,8 +44,11 @@ next-env.d.ts
 # research scratch
 .devtools
 
-# local-only notes and tools (not published)
-.claude/
+# local-only notes and tools (not published), except the shared verify skill
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/verify/
 mockup/
 docs/market-research.md
 docs/cost-estimate.md
