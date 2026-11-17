@@ -24,3 +24,51 @@ jobs:
       - run: npm test
       - name: Dial wording matches the research data
         run: npm run check:issues
+
+  # A change can't grade itself. This job runs main's tests against the change, lists any
+  # check files the change edits, and looks for a "Verified:" line. It only logs for now
+  # (never fails), until the false alarms are known.
+  rules-from-main:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      PR_BODY: ${{ github.event.pull_request.body }}
+      BASE: origin/${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Check files this change edits
+        run: |
+          edited=$(git diff --name-only "$BASE"...HEAD -- tests .github/workflows scripts/bias-check.ts scripts/check-issues.ts scripts/verify.ts REVIEW.md eslint.config.mjs seolint.config.mjs tsconfig.json AGENTS.md package.json 'vitest.config.*' 'vite.config.*' || true)
+          {
+            echo "## Rules from main (logging only)"
+            if [ -n "$edited" ]; then
+              echo "This change edits its own checks. They count as checked only after a separate review:"
+              echo "$edited" | sed 's/^/- /'
+            else
+              echo "No check files edited."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Main's tests against this change
+        run: |
+          rm -rf tests vitest.config.* vite.config.* && git checkout "$BASE" -- tests
+          git checkout "$BASE" -- 'vitest.config.*' 'vite.config.*' 2>/dev/null || true
+          if npx vitest run > main-tests.log 2>&1; then
+            echo "Main's tests: pass" >> "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "Main's tests: FAIL (would block)"; echo '```'; tail -40 main-tests.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Says how it was verified
+        run: |
+          if printf '%s\n' "$PR_BODY" | grep -Eq '^Verified: *[^< ]'; then
+            echo "Verified line: present" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Verified line: missing from the pull request description (would block)" >> "$GITHUB_STEP_SUMMARY"
+          fi

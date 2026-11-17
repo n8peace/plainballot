@@ -8,6 +8,9 @@ Research changes go to [open-election-data](https://github.com/n8peace/open-elec
 
 - [ ] `npm test`, `npm run typecheck` and `npm run lint` pass.
 - [ ] Matching stays deterministic, with no AI in the matching path.
+- [ ] Checked against [REVIEW.md](../REVIEW.md) for any rule the diff triggers.
+
+Verified: <!-- what you ran or looked at in the real site, e.g. "npm run verify, all pass", or "none" and why -->
 
 
 An automatic bias review will comment on this pull request. If it flags something you think is wrong, reply there and explain why.
