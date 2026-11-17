@@ -23,6 +23,13 @@ export const CITABLE_PAGES: CitablePage[] = [
     updated: '2026-11-10',
   },
   {
+    path: '/compare',
+    sources: ['app/compare'],
+    title: 'How Plain Ballot differs from other voter guides',
+    description: 'Three good voter guides, what each one does well in its own words, and the few things Plain Ballot does differently.',
+    updated: '2026-11-17',
+  },
+  {
     path: '/releases',
     sources: ['app/releases'],
     title: 'Plain Ballot release log',

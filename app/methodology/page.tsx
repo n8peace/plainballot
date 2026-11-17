@@ -54,7 +54,7 @@ export default function Methodology() {
 
       <h2>Check our work</h2>
       <p>This site’s code is public at <a href={GITHUB_URL}>{GITHUB_URL.replace('https://', '')}</a>. The research, including every position, quote and source and the dial wording, is free open data at <a href={DATA_REPO_URL}>{DATA_REPO_URL.replace('https://', '')}</a>. Corrections are welcome, and every change is public.</p>
-      <p>The rules we hold to: <Link href="/what-we-never-do">What we never do</Link>. What changed and when: <Link href="/releases">Release log</Link>.</p>
+      <p>The rules we hold to: <Link href="/what-we-never-do">What we never do</Link>. What changed and when: <Link href="/releases">Release log</Link>. How it compares to other guides: <Link href="/compare">How Plain Ballot is different</Link>.</p>
     </div>
   );
 }
