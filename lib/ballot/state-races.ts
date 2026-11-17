@@ -1,6 +1,7 @@
 import type { RawContest } from './data';
 import { SITE_URL, raceShareUrl } from '../share';
 import { STATES, stateSlug } from '../states';
+import { nextElectionFaq, todayEastern } from '../next-election';
 
 export const ELECTION_DATE = process.env.ELECTION_DATE || '2026-11-03';
 
@@ -81,11 +82,11 @@ export function stateFaq(code: string, sections: RaceSection[]) {
   };
 }
 
-/** Structured data for a state page: the page, its place under Plain Ballot, and its one question. */
-export function stateJsonLd(code: string, sections: RaceSection[], updated: string | undefined) {
+/** Structured data for a state page: the page, its place under Plain Ballot, and its questions. */
+export function stateJsonLd(code: string, sections: RaceSection[], updated: string | undefined, today = todayEastern()) {
   const name = STATES[code];
   const url = statePageUrl(code);
-  const faq = stateFaq(code, sections);
+  const faqs = [stateFaq(code, sections), nextElectionFaq(code, today)].filter((f) => f !== null);
   const page = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -107,7 +108,7 @@ export function stateJsonLd(code: string, sections: RaceSection[], updated: stri
   const faqPage = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [{ '@type': 'Question', name: faq.q, acceptedAnswer: { '@type': 'Answer', text: faq.a } }],
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   };
   return [page, faqPage] as const;
 }
