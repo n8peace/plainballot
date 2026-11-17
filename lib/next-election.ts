@@ -15,6 +15,9 @@ export type NextElection = {
   snippet: string;
   /** YYYY-MM-DD, the day the snippet was last matched on the page. */
   checked: string;
+  /** YYYY-MM-DD, the day this line went on the page or last changed. Bump it whenever the date, name
+   *  or source changes: it sets the state page's dateModified and sitemap date. */
+  since: string;
 };
 
 export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
@@ -24,6 +27,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://www.sos.alabama.gov/sites/default/files/election-data/Alabama%20Election%20Chart%202026-2036%208.7.2026.pdf',
     snippet: '2028 Primary - 3/7/2028; 2028 Runoff - 4/4/2028; 2028 General - 11/7/2028',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   ca: {
     date: '2028-03-07',
@@ -31,6 +35,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://www.sos.ca.gov/elections/political-parties/political-bodies-attempting-qualify',
     snippet: 'March 7, 2028, Primary Election',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   dc: {
     date: '2027-04-06',
@@ -38,6 +43,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://dcboe.org/elections/at-large_member_of_the_council_special_election',
     snippet: 'April 6, 2027 Special Election At-Large Member of the D.C. Council Special Election',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   fl: {
     date: '2028-03-21',
@@ -45,6 +51,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://dos.fl.gov/elections/for-voters/quick-facts-presidential-preference-primary/',
     snippet: 'next Presidential Preference Primary Election (PPP) is on March 21, 2028.',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   il: {
     date: '2028-03-21',
@@ -52,6 +59,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://www.elections.il.gov/agencyforms/1%20SCHEDULE%20OF%20FUTURE%20ELECTIONS/Schedule%20of%20Elections%20-%20Revised.pdf',
     snippet: 'March 21, 2028',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   ky: {
     date: '2027-05-18',
@@ -59,6 +67,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://elect.ky.gov/Pages/default.aspx',
     snippet: 'May 18, 2027 - Primary Election Day',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   mn: {
     date: '2028-03-07',
@@ -66,6 +75,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://www.sos.mn.gov/elections-voting/how-elections-work/presidential-primary/',
     snippet: 'The next presidential primary will be on March 7, 2028.',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   nv: {
     date: '2028-02-01',
@@ -73,6 +83,7 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/33790',
     snippet: 'February 1, 2028 Presidential Preference Primary Election',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
   vt: {
     date: '2028-03-07',
@@ -80,8 +91,13 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     sourceUrl: 'https://sos.vermont.gov/elections/election-info-resources/candidates/presidential-candidates',
     snippet: 'Major Party Primary- March 7, 2028',
     checked: '2026-11-17',
+    since: '2026-11-17',
   },
 };
+
+/** Lines taken off a state page, and the day they came off (state code → YYYY-MM-DD). When an entry
+ *  is deleted from NEXT_ELECTIONS because its page no longer says the date, add it here. */
+export const LINES_REMOVED: Partial<Record<string, string>> = {};
 
 /** Today as YYYY-MM-DD in Eastern time. Midnight Eastern is about when the last polls close (Hawaii and
  *  Alaska), so an election stays "next" until voting has ended everywhere, and no later. */
@@ -119,4 +135,15 @@ export function nextElectionFaq(code: string, today = todayEastern()): { q: stri
     q: `When is my next election in ${name}?`,
     a: `The next ${scope(code)} election on ${name}’s official calendar is the ${e.name} on ${electionDay(e.date)}, according to ${sourceHost(e.sourceUrl)}. ${code === 'dc' ? 'A special election can be added before then.' : 'A special election can be added before then, and local elections can come sooner, so check your county or city elections office too.'} Official candidate lists are posted after filing closes, and Plain Ballot will quote the candidates then.`,
   };
+}
+
+/** The day the next-election line on a state page last changed: the day it went up or was edited,
+ *  the day after the election once it has passed (the line drops off), or the day it was removed. */
+export function nextElectionChanged(code: string, today = todayEastern()): string | undefined {
+  const e = NEXT_ELECTIONS[code];
+  if (!e) return LINES_REMOVED[code];
+  if (e.date >= today) return e.since;
+  const after = new Date(`${e.date}T12:00:00Z`);
+  after.setUTCDate(after.getUTCDate() + 1);
+  return after.toISOString().slice(0, 10);
 }

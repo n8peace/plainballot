@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { NEXT_ELECTIONS, electionDay, nextElection, nextElectionFaq, sourceHost, todayEastern } from '../lib/next-election';
-import { stateJsonLd } from '../lib/ballot/state-races';
+import { LINES_REMOVED, NEXT_ELECTIONS, electionDay, nextElection, nextElectionChanged, nextElectionFaq, sourceHost, todayEastern } from '../lib/next-election';
+import { statePageChanged, stateJsonLd } from '../lib/ballot/state-races';
 
 const SAMPLE = {
   date: '2028-03-07',
@@ -8,11 +8,15 @@ const SAMPLE = {
   sourceUrl: 'https://www.sos.ca.gov/elections/upcoming-elections',
   snippet: 'March 7, 2028 Presidential Primary Election',
   checked: '2026-11-17',
+  since: '2026-11-17',
 };
 const saved = { ...NEXT_ELECTIONS };
+const savedRemoved = { ...LINES_REMOVED };
 afterEach(() => {
   for (const k of Object.keys(NEXT_ELECTIONS)) delete NEXT_ELECTIONS[k];
   Object.assign(NEXT_ELECTIONS, saved);
+  for (const k of Object.keys(LINES_REMOVED)) delete LINES_REMOVED[k];
+  Object.assign(LINES_REMOVED, savedRemoved);
 });
 
 describe('next election', () => {
@@ -62,10 +66,33 @@ describe('next election', () => {
     expect(entities[1].name).toBe('When is my next election in Texas?');
   });
 
+  it('dates the page by when the line went up, came off at the election, or was removed', () => {
+    NEXT_ELECTIONS.ca = SAMPLE;
+    expect(nextElectionChanged('ca', '2026-11-20')).toBe('2026-11-17');
+    expect(nextElectionChanged('ca', '2028-03-07')).toBe('2026-11-17');
+    expect(nextElectionChanged('ca', '2028-03-08')).toBe('2028-03-08');
+    delete NEXT_ELECTIONS.ca;
+    expect(nextElectionChanged('ca', '2026-11-20')).toBeUndefined();
+    LINES_REMOVED.ca = '2027-01-04';
+    expect(nextElectionChanged('ca', '2027-01-05')).toBe('2027-01-04');
+  });
+
+  it('a state page is as new as its newest research or its next-election line', () => {
+    const contests = [{ division: 'ca/sd-1', checkedAt: '2026-09-30' }] as never;
+    NEXT_ELECTIONS.ca = SAMPLE;
+    expect(statePageChanged(contests, 'ca', '2026-11-20')).toBe('2026-11-17');
+    NEXT_ELECTIONS.ca = { ...SAMPLE, since: '2026-09-01' };
+    expect(statePageChanged(contests, 'ca', '2026-11-20')).toBe('2026-09-30');
+    delete NEXT_ELECTIONS.ca;
+    expect(statePageChanged(contests, 'ca', '2026-11-20')).toBe('2026-09-30');
+  });
+
   it('every listed state has a well-formed entry from an official page', () => {
     for (const [code, e] of Object.entries(NEXT_ELECTIONS)) {
       expect(e!.date, code).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(e!.checked, code).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(e!.since, code).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(e!.since <= e!.checked, `${code}: since after checked`).toBe(true);
       expect(e!.snippet.length, code).toBeGreaterThanOrEqual(10);
       expect(new URL(e!.sourceUrl).protocol, code).toBe('https:');
       expect(sourceHost(e!.sourceUrl), code).not.toMatch(/ballotpedia|wikipedia|ncsl|vote411|ballotready/);
