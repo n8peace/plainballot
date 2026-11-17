@@ -33,6 +33,17 @@ async function getJson(url: string): Promise<unknown | null> {
   return res.json();
 }
 
+/** The day the research data was last published (YYYY-MM-DD), or undefined if it can't be read. */
+export async function dataUpdated(): Promise<string | undefined> {
+  if (LOCAL_DIR) return undefined;
+  try {
+    const d = (await getJson(`${ELECTION_DATA_URL}/index.json`)) as { generatedAt?: string } | null;
+    return /^\d{4}-\d{2}-\d{2}/.test(d?.generatedAt ?? '') ? d!.generatedAt!.slice(0, 10) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** The contests researched for one district, e.g. "ca/cd-10". */
 export function contestsForDivision(division: string): Promise<RawContest[]> {
   if (LOCAL_DIR) return localAll().then((all) => all.filter((c) => c.division === division));

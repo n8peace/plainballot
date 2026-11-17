@@ -40,6 +40,7 @@ describe('search basics', () => {
   });
 
   it('the build fails on SEO errors (seolint runs after next build)', () => {
-    expect(JSON.parse(readFileSync('package.json', 'utf8')).scripts.build).toBe('next build && seolint');
+    // The build may first fetch full git history (for page dates); it must still end with seolint.
+    expect(JSON.parse(readFileSync('package.json', 'utf8')).scripts.build).toMatch(/(^|; )next build && seolint$/);
   });
 });
