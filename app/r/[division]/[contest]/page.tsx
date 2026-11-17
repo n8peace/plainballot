@@ -4,17 +4,14 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { RaceStory } from '@/components/Paper';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { loadSharedRace, raceJsonLd, raceSummary } from '@/lib/ballot/race-share';
+import { loadSharedRace, raceJsonLd, raceState, raceSummary } from '@/lib/ballot/race-share';
+import { ELECTION_DATE, longDate } from '@/lib/ballot/state-races';
+import { STATES, stateSlug } from '@/lib/states';
 import type { Prefs } from '@/lib/types';
 import '../../../paper.css';
 
 const getRace = cache(loadSharedRace);
 const EMPTY_PREFS: Prefs = { sel: [], pos: {}, imp: {} };
-const ELECTION_DATE = process.env.ELECTION_DATE || '2026-11-03';
-
-function longDate(date: string): string {
-  return new Date(`${date}T12:00:00`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-}
 
 export async function generateMetadata({ params }: PageProps<'/r/[division]/[contest]'>): Promise<Metadata> {
   const { division, contest } = await params;
@@ -35,6 +32,7 @@ export default async function SharedRace({ params }: PageProps<'/r/[division]/[c
   const { division, contest } = await params;
   const race = await getRace(division, contest);
   if (!race) notFound();
+  const state = raceState(race.division);
 
   return (
     <div className="paper" id="top">
@@ -46,7 +44,7 @@ export default async function SharedRace({ params }: PageProps<'/r/[division]/[c
       </header>
       <main className="pp-edition">
         <div className="pp-edition-head">
-          <p className="pp-meta">General Election · {longDate(ELECTION_DATE)}</p>
+          <p className="pp-meta">{state && <><Link href={`/races/${stateSlug(state)}`}>{STATES[state]}</Link> · </>}General Election · {longDate(ELECTION_DATE)}</p>
           <p className="pp-meta">Every position below is quoted exactly from its source.</p>
         </div>
         <RaceStory contest={race.contest} prefs={EMPTY_PREFS} showParty={false} showAllQuotes shareable={false} />

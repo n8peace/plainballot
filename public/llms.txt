@@ -18,6 +18,7 @@ Matching is deterministic arithmetic in the browser, not AI. Candidate positions
 - [How it works](https://plainballot.com/methodology): where the data comes from, how every quote is checked, and the matching method
 - [What we never do](https://plainballot.com/what-we-never-do): no endorsements, never how to vote, no guessing from party, no claim without a checked quote
 - [Release log](https://plainballot.com/releases): every change voters can see, with the date and why
+- [Races by state](https://plainballot.com/races): every researched race in each state (for example https://plainballot.com/races/texas), each linking to its race page with exact, sourced quotes for every choice
 
 ## Source and data
 
