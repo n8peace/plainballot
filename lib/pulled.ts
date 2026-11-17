@@ -1,5 +1,6 @@
 // Counts ballots pulled up, one analytics event per address lookup. The event carries only the
-// state and whether this browser already pulled one this election; never the address or district.
+// state, whether this browser already pulled one this election, and whether it pulled one in an
+// earlier election (so we can see who comes back); never the address or district.
 import { track } from '@vercel/analytics';
 import type { Ballot } from './types';
 
@@ -10,7 +11,7 @@ export function pulledEvent(ballot: Ballot, lastCycle: string | null) {
   const state = ballotState(ballot);
   if (!state) return null;
   const cycle = ballot.electionDate.slice(0, 7);
-  return { cycle, event: { state, first: lastCycle === cycle ? 'no' : 'yes' } };
+  return { cycle, event: { state, first: lastCycle === cycle ? 'no' : 'yes', returning: lastCycle && lastCycle !== cycle ? 'yes' : 'no' } };
 }
 
 /** The ballot's 2-letter state ("CA"), or null when no districts were found. */

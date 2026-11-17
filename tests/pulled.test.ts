@@ -9,12 +9,16 @@ const sacramento = ballot([{ key: 'ca/state', label: 'California' }, { key: 'ca/
 
 describe('pulledEvent', () => {
   it('sends only the state and whether this browser pulled one this election', () => {
-    expect(pulledEvent(sacramento, null)).toEqual({ cycle: '2026-11', event: { state: 'CA', first: 'yes' } });
-    expect(pulledEvent(sacramento, '2026-11')!.event).toEqual({ state: 'CA', first: 'no' });
+    expect(pulledEvent(sacramento, null)).toEqual({ cycle: '2026-11', event: { state: 'CA', first: 'yes', returning: 'no' } });
+    expect(pulledEvent(sacramento, '2026-11')!.event).toEqual({ state: 'CA', first: 'no', returning: 'no' });
   });
 
   it('counts a new election as a first pull', () => {
     expect(pulledEvent(sacramento, '2024-11')!.event.first).toBe('yes');
+  });
+
+  it('marks a browser that pulled one in an earlier election as returning', () => {
+    expect(pulledEvent(sacramento, '2024-11')!.event.returning).toBe('yes');
   });
 
   it('counts nothing when the address was not found', () => {
