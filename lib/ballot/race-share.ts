@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import type { Contest } from '../types';
 import type { RawContest } from './data';
-import { CONTEST_ID_RE, decodeDivision, raceShareUrl } from '../share';
+import { CONTEST_ID_RE, SITE_URL, decodeDivision, raceShareUrl } from '../share';
 import { contestsForDivisions } from './positions';
 
 export function findContest(contests: Contest[], contestId: string): Contest | null {
@@ -25,4 +25,27 @@ export function raceEntries(contests: RawContest[]): MetadataRoute.Sitemap {
       return []; // a malformed id or division never makes a broken link
     }
   });
+}
+
+/** The name, description and link a race page shows; the page title, share tags and JSON-LD all use these. */
+export function raceSummary(race: { division: string; contest: Contest }) {
+  const district = race.contest.sub.split(' · ')[0];
+  const name = `${race.contest.office}, ${district}`;
+  return { name, description: `See every choice and its sourced positions for ${name}.`, url: raceShareUrl(race.division, race.contest.id) };
+}
+
+/** Plain WebPage tags for a race page: only what the page itself shows, dated by its research check. */
+export function raceJsonLd(race: { division: string; contest: Contest }) {
+  const { name, description, url } = raceSummary(race);
+  const date = race.contest.checkedAt && /^\d{4}-\d{2}-\d{2}$/.test(race.contest.checkedAt) ? race.contest.checkedAt : undefined;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name,
+    description,
+    url,
+    inLanguage: 'en-US',
+    ...(date ? { dateModified: date } : {}),
+    isPartOf: { '@type': 'WebSite', name: 'Plain Ballot', url: SITE_URL },
+  };
 }

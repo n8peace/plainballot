@@ -66,6 +66,7 @@
           "researched": { "type": "boolean" },
           "reviewedByPerson": { "type": "boolean", "description": "A person checked this research in addition to the agents." },
           "sources": { "type": "string" },
+          "checkedAt": { "type": "string", "format": "date", "description": "Day the research for this contest was last checked (YYYY-MM-DD)." },
           "record": { "type": "object", "description": "Retention contests only: the judge's record on the one issue we can measure, plus facts to weigh.", "properties": { "issue": { "type": "string" }, "stance": { "$ref": "#/components/schemas/Stance" }, "facts": { "type": "array", "items": { "type": "object", "properties": { "value": { "type": "string" }, "label": { "type": "string" } } } } } },
           "choices": { "type": "array", "items": { "$ref": "#/components/schemas/Choice" } }
         }
