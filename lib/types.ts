@@ -54,6 +54,8 @@ export interface Contest {
   /** A person checked this research in addition to the agents. */
   reviewedByPerson?: boolean;
   sources?: string;
+  /** Day the research for this contest was last checked (YYYY-MM-DD). */
+  checkedAt?: string;
   /** Retention only: the judge's record on the one issue we can measure, plus facts to weigh. */
   record?: { issue: IssueId; stance: Stance; facts: Fact[] };
 }

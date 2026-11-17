@@ -126,6 +126,7 @@ export function fileToContest(f: PositionsFile): Contest {
     researched: true,
     reviewedByPerson: f.reviewed,
     sources: f.sources,
+    checkedAt: f.checkedAt,
     choices: f.choices.map((ch) => ({
       id: slug(ch.name),
       name: ch.name,
