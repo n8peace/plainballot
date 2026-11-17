@@ -31,7 +31,7 @@ Any FAIL exits 1. Do not commit until it passes. Then look at the two screenshot
 npm run verify -- --url https://plainballot.com
 ```
 
-Run it once. Never in a loop.
+Run it once. Never in a loop. One run makes about four ballot lookups, and the live site allows only a few per IP in a few minutes, so a second run right after the first gets "Too many lookups" (429). That is the site protecting itself, not a bug. Every page it opens carries `?team=1`, so its visits never count as voters.
 
 ## Then
 
