@@ -19,6 +19,14 @@ describe('race page structured data', () => {
       inLanguage: 'en-US',
       dateModified: '2026-09-25',
       isPartOf: { '@type': 'WebSite', name: 'Plain Ballot', url: 'https://plainballot.com' },
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Plain Ballot', item: 'https://plainballot.com' },
+          { '@type': 'ListItem', position: 2, name: 'California', item: 'https://plainballot.com/races/california' },
+          { '@type': 'ListItem', position: 3, name: 'Attorney General, California', item: 'https://plainballot.com/r/ca~state/attorney-general-ca' },
+        ],
+      },
     });
   });
 

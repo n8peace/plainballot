@@ -322,3 +322,15 @@
 .bh-also button { all: unset; cursor: pointer; display: inline-flex; align-items: center; min-height: 44px; font-size: clamp(13px, 1.9cqw, 15px); text-decoration: underline; text-decoration-color: var(--b-rule); text-underline-offset: 4px; }
 .bh-also button:hover { text-decoration-color: currentColor; }
 .bh-also button:focus-visible { outline: 2px solid var(--b-ink); outline-offset: 2px; }
+
+/* Races by state: plain lists of race links. */
+.pp-state-section { padding: 32px 0; border-top: 1px solid var(--rule-strong); }
+.pp-state-section .pp-kicker { margin-bottom: 16px; }
+.pp-state-list { list-style: none; margin: 0; padding: 0; }
+.pp-state-list li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 24px; padding: 12px 0; border-top: 1px solid var(--rule); }
+.pp-state-list li:first-child { border-top: 0; }
+.pp-state-list a { font-family: var(--serif); font-size: 20px; font-weight: 500; line-height: 1.3; color: var(--ink); text-underline-offset: 4px; text-decoration-color: var(--rule); }
+.pp-state-list a:hover { text-decoration-color: currentColor; }
+.pp-state-choices { font-family: var(--sans); font-size: 14px; color: var(--ink-2); }
+.pp-state-index { border-top: 1px solid var(--rule-strong); }
+.pp-edition-head .pp-meta + .pp-headline { margin-top: 16px; }

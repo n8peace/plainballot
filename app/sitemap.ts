@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { allContests, dataUpdated, type RawContest } from '@/lib/ballot/data';
 import { raceEntries } from '@/lib/ballot/race-share';
+import { statePageUrl, statesCovered, stateUpdated } from '@/lib/ballot/state-races';
 import { citablePage, pageUpdated } from '@/lib/citable';
 import { lastChanged, newest } from '@/lib/page-dates';
 import { SITE_URL } from '@/lib/share';
@@ -21,6 +22,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/releases`, lastModified: pageUpdated(citablePage('/releases')), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/privacy`, lastModified: lastChanged(['app/privacy']), changeFrequency: 'monthly', priority: 0.3 },
     { url: `${SITE_URL}/terms`, lastModified: lastChanged(['app/terms']), changeFrequency: 'monthly', priority: 0.3 },
+    ...(contests.length ? [{ url: `${SITE_URL}/races`, lastModified: newest(...statesCovered(contests).map((c) => stateUpdated(contests, c))), changeFrequency: 'monthly' as const, priority: 0.6 }] : []),
+    ...statesCovered(contests).map((code) => ({ url: statePageUrl(code), lastModified: stateUpdated(contests, code), changeFrequency: 'monthly' as const, priority: 0.6 })),
     ...raceEntries(contests),
   ];
 }

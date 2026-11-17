@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import type { Contest } from '../types';
 import type { RawContest } from './data';
 import { CONTEST_ID_RE, SITE_URL, decodeDivision, raceShareUrl } from '../share';
+import { STATES, stateSlug } from '../states';
 import { contestsForDivisions } from './positions';
 
 export function findContest(contests: Contest[], contestId: string): Contest | null {
@@ -37,6 +38,7 @@ export function raceSummary(race: { division: string; contest: Contest }) {
 /** Plain WebPage tags for a race page: only what the page itself shows, dated by its research check. */
 export function raceJsonLd(race: { division: string; contest: Contest }) {
   const { name, description, url } = raceSummary(race);
+  const code = race.division.split('/')[0];
   const date = race.contest.checkedAt && /^\d{4}-\d{2}-\d{2}$/.test(race.contest.checkedAt) ? race.contest.checkedAt : undefined;
   return {
     '@context': 'https://schema.org',
@@ -47,5 +49,23 @@ export function raceJsonLd(race: { division: string; contest: Contest }) {
     inLanguage: 'en-US',
     ...(date ? { dateModified: date } : {}),
     isPartOf: { '@type': 'WebSite', name: 'Plain Ballot', url: SITE_URL },
+    ...(code in STATES
+      ? {
+          breadcrumb: {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Plain Ballot', item: SITE_URL },
+              { '@type': 'ListItem', position: 2, name: STATES[code], item: `${SITE_URL}/races/${stateSlug(code)}` },
+              { '@type': 'ListItem', position: 3, name, item: url },
+            ],
+          },
+        }
+      : {}),
   };
+}
+
+/** The state a race belongs to ("tx" for "tx/cd-1"), when it is one of the 50 states or D.C. */
+export function raceState(division: string): string | null {
+  const code = division.split('/')[0];
+  return code in STATES ? code : null;
 }
