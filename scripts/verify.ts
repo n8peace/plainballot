@@ -138,13 +138,18 @@ function watchPage(page: Page, base: string) {
     if (message.type() === 'error') consoleErrors.push(message.text());
   });
   page.on('requestfailed', (request) => {
-    if (new URL(request.url()).origin === origin) failedRequests.push(`${request.method()} ${request.url()}`);
+    // The address box cancels its own lookup when the voter keeps typing or submits. A
+    // cancelled request is the page working, not failing.
+    const aborted = /ERR_ABORTED|NS_BINDING_ABORTED|cancelled/i.test(request.failure()?.errorText ?? '');
+    if (aborted && request.method() === 'GET' && new URL(request.url()).pathname === '/api/address') return;
+    if (new URL(request.url()).origin === origin) failedRequests.push(`${request.method()} ${request.url()} (${request.failure()?.errorText ?? 'failed'})`);
   });
   return { consoleErrors, failedRequests };
 }
 
 async function loadHome(page: Page, base: string): Promise<string> {
-  const response = await page.goto(base, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT });
+  // ?team=1 marks this browser as ours, so these visits and ballot pulls never count as voters.
+  const response = await page.goto(`${base}/?team=1`, { waitUntil: 'domcontentloaded', timeout: STEP_TIMEOUT });
   await page.waitForLoadState('networkidle', { timeout: STEP_TIMEOUT });
   if (response?.status() !== 200) throw new Error(`home returned ${response?.status() ?? 'no response'}`);
   return `HTTP ${response.status()}`;
