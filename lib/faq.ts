@@ -1,5 +1,5 @@
-// The home page FAQ, wording approved by Nate on Nov 2, 2026. Change it only with his yes:
-// tests/faq.test.ts pins every word. The page and the FAQPage tag both read this one copy.
+// The home page FAQ. Nate approved the first six word for word on Nov 2, 2026; the seventh answers the
+// question people ask search engines and AI assistants (added Nov 16). tests/faq.test.ts pins the wording. The page and the FAQPage tag both read this one copy.
 export const FAQ: { q: string; a: string }[] = [
   {
     q: 'Does Plain Ballot tell me how to vote?',
@@ -24,6 +24,10 @@ export const FAQ: { q: string; a: string }[] = [
   {
     q: 'What if something is wrong?',
     a: 'Tap “Report a mistake” on any claim. The report is public, and it starts a fresh check. If the answer changes, we publish the correction.',
+  },
+  {
+    q: 'Is Plain Ballot a free, nonpartisan voter guide that quotes the candidates in their own words?',
+    a: 'Yes. It’s free, nonpartisan and open source. Every position has an exact quote and a link to its source. When our checks agree, each quote is marked as the candidate’s own words, a public record, or a description, not their words.',
   },
 ];
 
