@@ -66,3 +66,13 @@ if (pullsByWeek !== pullsTotal) console.log(`CHECK FAILED: ballot pulls ${pullsB
 else console.log(`Check: ballot pulls agree two ways (${pullsTotal}).`);
 console.log(`Plain Ballot: PMF ${score}/100, ${stage}. ${signals.map((s) => `${s.name} ${s.points} (${s.note})`).join(', ')}. Paid installs: none (no ads).`);
 console.log(`Agents (not people): ${agentCalls} tool calls, ${agentPulls} ballots pulled in the last 4 weeks.`);
+
+// The score for our checks (REVIEW.md): changes undone on main in the last 7 days. Each one is a
+// miss the checks let through, and should become a test or a REVIEW.md line.
+try {
+  const reverts = execFileSync('git', ['log', 'origin/main', '--since=7 days ago', '-i', '--grep=^revert', '--grep=roll back', '--grep=rollback', '--oneline'], { encoding: 'utf8' }).trim();
+  const n = reverts ? reverts.split('\n').length : 0;
+  console.log(`Checks: ${n} revert${n === 1 ? '' : 's'} or rollback${n === 1 ? '' : 's'} on main in the last 7 days.${n ? `\n${reverts}` : ''}`);
+} catch {
+  console.log('Checks: could not read git history for reverts.');
+}
