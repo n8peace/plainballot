@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { FAQ, faqJsonLd } from '../lib/faq';
 
-// Nate approved these six questions word for word on Nov 2, 2026. A wording change needs his yes.
+// Nate approved the first six word for word on Nov 2, 2026. The seventh was added Nov 16 for search and AI answers.
 const APPROVED = [
   'Does Plain Ballot tell me how to vote?',
   'What does a blank mean?',
@@ -10,10 +10,11 @@ const APPROVED = [
   'Do you store my address?',
   'What races are covered?',
   'What if something is wrong?',
+  'Is Plain Ballot a free, nonpartisan voter guide that quotes the candidates in their own words?',
 ];
 
 describe('home page FAQ', () => {
-  it('has the six approved questions, in order', () => {
+  it('has the seven questions, in order', () => {
     expect(FAQ.map((f) => f.q)).toEqual(APPROVED);
   });
 
@@ -24,6 +25,7 @@ describe('home page FAQ', () => {
     expect(text(1)).toContain('It isn’t a vote for or against anything.');
     expect(text(1)).toContain('we never fill them in from party or endorsements');
     expect(text(3)).toMatch(/^No\. Your address is used only to find your ballot\./);
+    expect(text(6)).toContain('When our checks agree');
     expect(text(4)).toBe('Every race in California, plus U.S. House and Senate races in all 50 states.');
   });
 
