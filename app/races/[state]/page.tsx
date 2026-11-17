@@ -6,6 +6,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { allContests } from '@/lib/ballot/data';
 import { ELECTION_DATE, longDate, raceCount, stateDescription, stateFaq, stateJsonLd, statePageUrl, stateSections, stateUpdated } from '@/lib/ballot/state-races';
 import { STATES, stateFromSlug } from '@/lib/states';
+import { electionDay, nextElection, nextElectionFaq, scope, sourceHost } from '@/lib/next-election';
 import '../../paper.css';
 
 const load = cache(async (slug: string) => {
@@ -30,6 +31,8 @@ export default async function StateRaces({ params }: PageProps<'/races/[state]'>
   if (!page) notFound();
   const name = STATES[page.code];
   const faq = stateFaq(page.code, page.sections);
+  const next = nextElection(page.code);
+  const nextFaq = nextElectionFaq(page.code);
 
   return (
     <div className="paper" id="top">
@@ -44,6 +47,11 @@ export default async function StateRaces({ params }: PageProps<'/races/[state]'>
           <p className="pp-meta"><Link href="/races">Races by state</Link> · General Election · {longDate(ELECTION_DATE)}</p>
           <h1 className="pp-headline sm">{name}</h1>
           <p className="pp-deck sm">{raceCount(page.sections)}. Every position on these pages is quoted exactly from its source.</p>
+          {next && (
+            <p className="pp-meta pp-next">
+              Next {scope(page.code)} election on the official calendar: {next.name}, {electionDay(next.date)} (<a href={next.sourceUrl}>{sourceHost(next.sourceUrl)}</a>)
+            </p>
+          )}
         </div>
         {page.sections.map((s) => (
           <section key={s.title} className="pp-state-section">
@@ -65,6 +73,12 @@ export default async function StateRaces({ params }: PageProps<'/races/[state]'>
               <summary>{faq.q}</summary>
               <p>{faq.a}</p>
             </details>
+            {nextFaq && (
+              <details open id="next-election">
+                <summary>{nextFaq.q}</summary>
+                <p>{nextFaq.a}</p>
+              </details>
+            )}
           </div>
         </section>
         <p className="pp-race-return"><Link href="/">See every race on your ballot</Link></p>
