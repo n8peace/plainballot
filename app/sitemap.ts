@@ -1,23 +1,12 @@
 import type { MetadataRoute } from 'next';
 import { allContests, dataUpdated, type RawContest } from '@/lib/ballot/data';
+import { raceEntries } from '@/lib/ballot/race-share';
 import { citablePage, pageUpdated } from '@/lib/citable';
 import { lastChanged, newest } from '@/lib/page-dates';
-import { SITE_URL, raceShareUrl } from '@/lib/share';
+import { SITE_URL } from '@/lib/share';
 
 // Built once per deploy, while git history is on hand. Every date is read from git history or the data feed, never typed by hand.
 export const dynamic = 'force-static';
-
-/** One line per researched race or measure, dated by the day its research was checked. */
-export function raceEntries(contests: RawContest[]): MetadataRoute.Sitemap {
-  return contests.flatMap((c) => {
-    try {
-      const checked = typeof c.checkedAt === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(c.checkedAt) ? c.checkedAt : undefined;
-      return [{ url: raceShareUrl(String(c.division), String(c.id)), lastModified: checked, changeFrequency: 'monthly' as const, priority: 0.5 }];
-    } catch {
-      return []; // a malformed id or division never makes a broken link
-    }
-  });
-}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const home = newest(await dataUpdated(), lastChanged(['app/page.tsx', 'components/Paper.tsx', 'lib/faq.ts']));

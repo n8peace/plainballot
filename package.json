@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "echo DIAG git=$(command -v git) dotgit=$(test -d .git && echo yes || echo no) shallow=$(git rev-parse --is-shallow-repository 2>&1 | head -1) commits=$(git rev-list --count HEAD 2>&1 | head -1) remotes=$(git remote 2>&1 | wc -l); git fetch --unshallow --quiet 2>&1 | sed 's#//[^@/]*@#//***@#g' | head -3; echo DIAG2 shallow=$(git rev-parse --is-shallow-repository 2>&1 | head -1); next build && seolint",
+    "build": "git fetch --unshallow --quiet https://github.com/n8peace/plainballot.git HEAD 2>/dev/null; next build && seolint",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",

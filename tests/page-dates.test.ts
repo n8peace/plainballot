@@ -36,3 +36,18 @@ describe('page dates come from history, not typing', () => {
     expect(pageUpdated(page) >= RELEASES[0].date).toBe(true);
   });
 });
+
+describe('race pages in the sitemap', () => {
+  it('lists each researched race at its share link, dated by its research check', async () => {
+    const { raceEntries } = await import('../lib/ballot/race-share');
+    const rows = raceEntries([
+      { id: 'governor-ca', division: 'ca/state', checkedAt: '2026-09-25' },
+      { id: 'measure-a-city-of-simi-valley', division: 'ca/place-simi-valley', checkedAt: 'soon' },
+      { id: 'Bad Id', division: 'ca/state', checkedAt: '2026-09-25' },
+    ]);
+    expect(rows).toEqual([
+      { url: 'https://plainballot.com/r/ca~state/governor-ca', lastModified: '2026-09-25', changeFrequency: 'monthly', priority: 0.5 },
+      { url: 'https://plainballot.com/r/ca~place-simi-valley/measure-a-city-of-simi-valley', lastModified: undefined, changeFrequency: 'monthly', priority: 0.5 },
+    ]);
+  });
+});
