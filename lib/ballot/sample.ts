@@ -39,7 +39,7 @@ export const SAMPLE_BALLOT: Ballot = {
     {
       id: 'us-house-7', kind: 'candidate', office: 'U.S. House', sub: 'District 7 · Vote for one', researched: true,
       issues: ['tax', 'wages', 'trade', 'debt', 'housing', 'schools', 'safety', 'immigration', 'guns', 'abortion', 'gender', 'cannabis', 'health', 'energy', 'voting'],
-      sources: 'Congressional roll-call votes 2023–26 · 2026 candidate questionnaire · campaign platforms.',
+      sources: 'Congressional roll-call votes 2023 to 2026 · 2026 candidate questionnaire · campaign platforms.',
       choices: [
         choice('Dana Whitfield', 'Democratic', {
           tax: [2, 'Voted for the 2025 child-care package, paid for by a surtax on incomes over $1M.', 'Families shouldn’t pay more for child care so that incomes over a million dollars can pay less. This package asks the very top to cover it.', 'House floor statement, March 2025'],
@@ -96,7 +96,7 @@ export const SAMPLE_BALLOT: Ballot = {
     {
       id: 'state-senate-14', kind: 'candidate', office: 'State Senate', sub: 'District 14 · Vote for one', researched: true,
       issues: ['tax', 'wages', 'housing', 'schools', 'safety', 'sentencing', 'immigration', 'guns', 'abortion', 'gender', 'cannabis', 'health', 'energy', 'voting'],
-      sources: 'State legislature votes 2023–25 · 2026 candidate questionnaire.',
+      sources: 'State legislature votes 2023 to 2025 · 2026 candidate questionnaire.',
       choices: [
         choice('Priya Raman', 'Democratic', {
           tax: [1, 'Voted for the 2025 teacher raise, funded by a franchise-tax increase.'],
@@ -135,7 +135,7 @@ export const SAMPLE_BALLOT: Ballot = {
       id: 'supreme-court-4', kind: 'candidate', office: 'Supreme Court', sub: 'State Supreme Court, Place 4 · Vote for one', researched: true,
       issues: ['judicial'],
       summary: 'Judges can’t promise how they’ll rule. We match only on opinions they’ve already written.',
-      sources: 'Published opinions, State Supreme Court and 3rd Court of Appeals, 2018–26.',
+      sources: 'Published opinions, State Supreme Court and 3rd Court of Appeals, 2018 to 2026.',
       choices: [
         choice('Ellen Park', 'Republican', { judicial: [-2, 'In 41 majority opinions, relied on the original meaning of the text in all but two.'] }),
         choice('Marco Díaz', 'Democratic', { judicial: [1, 'As an appeals judge, often wrote that laws should be read in light of their purpose.'] }),
@@ -144,7 +144,7 @@ export const SAMPLE_BALLOT: Ballot = {
     {
       id: 'district-court-reyes', kind: 'retention', office: 'District Court', sub: 'Retain Judge Alma Reyes? · Yes or No', researched: true,
       issues: ['sentencing'], choices: [],
-      sources: 'County sentencing data 2019–26 · State Bar judicial evaluation 2026 · Court of Appeals records · Judicial Conduct Commission.',
+      sources: 'County sentencing data 2019 to 2026 · State Bar judicial evaluation 2026 · Court of Appeals records · Judicial Conduct Commission.',
       record: {
         issue: 'sentencing',
         stance: { pos: -1, text: 'Her drug-case sentences average 18% shorter than the county’s, and she sends 1 in 4 eligible defendants to diversion.' },
@@ -158,7 +158,7 @@ export const SAMPLE_BALLOT: Ballot = {
     {
       id: 'county-commissioner-3', kind: 'candidate', office: 'County Commissioner', sub: 'Precinct 3 · Vote for one', researched: true,
       issues: ['tax', 'housing', 'safety', 'transit', 'immigration'],
-      sources: 'Commissioners Court minutes 2024–26 · local news coverage.',
+      sources: 'Commissioners Court minutes 2024 to 2026 · local news coverage.',
       choices: [
         choice('Lena Morrow', 'Democratic', {
           tax: [1, 'Voted for the 2026 budget that added 40 library and parks jobs.'],
@@ -179,7 +179,7 @@ export const SAMPLE_BALLOT: Ballot = {
     {
       id: 'school-board-2', kind: 'candidate', office: 'School Board', sub: 'Trustee, Place 2 · Nonpartisan · Vote for one', researched: true,
       issues: ['schools', 'tax'],
-      sources: 'Board meeting votes 2022–26 · League of Women Voters questionnaire.',
+      sources: 'Board meeting votes 2022 to 2026 · League of Women Voters questionnaire.',
       choices: [
         choice('Ada Nwosu', undefined, { schools: [2, 'Opposes the district joining the state voucher program.'], tax: [1, 'Campaigned for the 2024 bond to repair school buildings.'] }),
         choice('Dev Malhotra', undefined, { schools: [1, 'Would keep money in district schools, with more magnet programs.'], tax: [0, 'Supports new bonds only after an independent audit.'] }),
