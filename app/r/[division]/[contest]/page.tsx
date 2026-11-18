@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { RaceStory } from '@/components/Paper';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { contestsForDivision } from '@/lib/ballot/data';
 import { loadSharedRace, raceJsonLd, raceState, raceSummary } from '@/lib/ballot/race-share';
 import { ELECTION_DATE, longDate } from '@/lib/ballot/state-races';
 import { STATES, stateSlug } from '@/lib/states';
+import { termsFor } from '@/lib/terms';
 import type { Prefs } from '@/lib/types';
 import '../../../paper.css';
 
@@ -33,6 +35,8 @@ export default async function SharedRace({ params }: PageProps<'/r/[division]/[c
   const race = await getRace(division, contest);
   if (!race) notFound();
   const state = raceState(race.division);
+  const raw = (await contestsForDivision(race.division)).find((c) => c.id === contest);
+  const terms = raw ? termsFor(raw) : [];
 
   return (
     <div className="paper" id="top">
@@ -48,6 +52,11 @@ export default async function SharedRace({ params }: PageProps<'/r/[division]/[c
           <p className="pp-meta">Every position below is quoted exactly from its source.</p>
         </div>
         <RaceStory contest={race.contest} prefs={EMPTY_PREFS} showParty={false} showAllQuotes shareable={false} />
+        {terms.length > 0 && (
+          <p className="pp-meta pp-terms">
+            {terms.map((t, i) => <span key={t.slug}>{i > 0 && ' · '}<Link href={`/what-is/${t.slug}`}>{t.q}</Link></span>)}
+          </p>
+        )}
         <p className="pp-race-return"><Link href="/">See every race on your ballot</Link></p>
       </main>
     </div>

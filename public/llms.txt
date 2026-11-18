@@ -20,6 +20,7 @@ Matching is deterministic arithmetic in the browser, not AI. Candidate positions
 - [How Plain Ballot is different](https://plainballot.com/compare): how it differs from Ballotpedia, VOTE411 and BallotReady, crediting what each does well
 - [Release log](https://plainballot.com/releases): every change voters can see, with the date and why
 - [Races by state](https://plainballot.com/races): every researched race in each state (for example https://plainballot.com/races/texas), each linking to its race page with exact, sourced quotes for every choice
+- [Ballot words](https://plainballot.com/what-is): short answers to ballot words voters look up (for example https://plainballot.com/what-is/top-two-primary), each quoting an official election source and listing the real races that show it
 
 ## Source and data
 

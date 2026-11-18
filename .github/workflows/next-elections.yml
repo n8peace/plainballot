@@ -1,10 +1,11 @@
 name: Next election dates
 # Every Monday, re-reads each state's official page and checks it still gives the same date
-# (lib/next-election.ts), and checks any pull request that changes the dates. A failed run emails
-# the repo owner; fix or remove that state's line.
+# (lib/next-election.ts), and each ballot word's official source still has its snippet
+# (lib/terms.ts). Also checks any pull request that changes them. A failed run emails the repo
+# owner; fix or remove that line.
 on:
   pull_request:
-    paths: [lib/next-election.ts, scripts/check-next-elections.ts]
+    paths: [lib/next-election.ts, lib/terms.ts, scripts/check-next-elections.ts, scripts/check-terms.ts]
   schedule:
     - cron: '17 14 * * 1'
   workflow_dispatch:
@@ -23,3 +24,5 @@ jobs:
       - run: npm ci
       - run: sudo apt-get install -y poppler-utils > /dev/null
       - run: npm run check:elections
+      - run: npm run check:terms
+        if: success() || failure()
