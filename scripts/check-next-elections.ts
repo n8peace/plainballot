@@ -39,7 +39,7 @@ function htmlText(html: string): string {
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
 }
 
-async function pageText(url: string): Promise<string> {
+export async function pageText(url: string): Promise<string> {
   const res = await fetch(url, { headers: { 'user-agent': 'PlainBallotCheck/1.0 (+https://plainballot.com)' }, signal: AbortSignal.timeout(20_000) });
   if (res.status === 403 || res.status === 429) throw new Error(`bot check: HTTP ${res.status}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);

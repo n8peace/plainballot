@@ -14,6 +14,7 @@
     "bias-check": "node --env-file-if-exists=.env.local --import tsx scripts/bias-check.ts",
     "check:issues": "node --import tsx scripts/check-issues.ts",
     "check:elections": "node --import tsx scripts/check-next-elections.ts",
+    "check:terms": "node --import tsx scripts/check-terms.ts",
     "indexnow": "node --import tsx scripts/indexnow.ts",
     "pmf": "node --import tsx scripts/pmf.ts"
   },
