@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { allContests } from '@/lib/ballot/data';
 import { SITE_URL } from '@/lib/share';
-import { TERMS, termExamples } from '@/lib/terms';
+import { TERMS, termExamples, termsHubChanged } from '@/lib/terms';
 import '../paper.css';
 
 const title = 'Ballot words · Plain Ballot';
@@ -28,6 +28,7 @@ export default async function BallotWords() {
     description,
     url: `${SITE_URL}/what-is`,
     inLanguage: 'en-US',
+    dateModified: termsHubChanged(terms, contests),
     isPartOf: { '@type': 'WebSite', name: 'Plain Ballot', url: SITE_URL },
     hasPart: terms.map((t) => ({ '@type': 'WebPage', name: t.q, url: `${SITE_URL}/what-is/${t.slug}` })),
   };

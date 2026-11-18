@@ -120,6 +120,11 @@ export function termChanged(t: Term, contests: RawContest[]): string {
   return newest(t.since, ...checks)!;
 }
 
+/** The hub's date: the newest change to any term page it lists. */
+export function termsHubChanged(terms: Term[], contests: RawContest[]): string | undefined {
+  return newest(...terms.map((t) => termChanged(t, contests)));
+}
+
 /** The terms a race shows, for links on its page. */
 export function termsFor(c: RawContest): Term[] {
   return TERMS.filter((t) => t.shows(c));
