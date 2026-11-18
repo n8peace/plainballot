@@ -5,7 +5,8 @@ import { statePageChanged, statePageUrl, statesCovered } from '@/lib/ballot/stat
 import { citablePage, pageUpdated } from '@/lib/citable';
 import { lastChanged, newest } from '@/lib/page-dates';
 import { SITE_URL } from '@/lib/share';
-import { TERMS, termChanged, termExamples, termUrl } from '@/lib/terms';
+import { TERMS, termChanged, termExamples, termUrl, termsHubChanged } from '@/lib/terms';
+import { PAGE_2027, changed2027 } from '@/lib/elections-2027';
 
 // Built once per deploy, while git history is on hand. Every date is read from git history or the data feed, never typed by hand.
 export const dynamic = 'force-static';
@@ -27,8 +28,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/terms`, lastModified: lastChanged(['app/terms']), changeFrequency: 'monthly', priority: 0.3 },
     ...(contests.length ? [{ url: `${SITE_URL}/races`, lastModified: newest(...statesCovered(contests).map((c) => statePageChanged(contests, c))), changeFrequency: 'monthly' as const, priority: 0.6 }] : []),
     ...statesCovered(contests).map((code) => ({ url: statePageUrl(code), lastModified: statePageChanged(contests, code), changeFrequency: 'monthly' as const, priority: 0.6 })),
-    ...(terms.length ? [{ url: `${SITE_URL}/what-is`, lastModified: newest(lastChanged(['app/what-is/page.tsx']), ...terms.map((t) => t.since)), changeFrequency: 'monthly' as const, priority: 0.5 }] : []),
+    ...(terms.length ? [{ url: `${SITE_URL}/what-is`, lastModified: newest(lastChanged(['app/what-is/page.tsx']), termsHubChanged(terms, contests)), changeFrequency: 'monthly' as const, priority: 0.5 }] : []),
     ...terms.map((t) => ({ url: termUrl(t.slug), lastModified: termChanged(t, contests), changeFrequency: 'monthly' as const, priority: 0.5 })),
+    { url: PAGE_2027, lastModified: newest(lastChanged(['app/elections/2027/page.tsx']), changed2027()), changeFrequency: 'weekly', priority: 0.6 },
     ...raceEntries(contests),
   ];
 }

@@ -15,6 +15,7 @@
     "check:issues": "node --import tsx scripts/check-issues.ts",
     "check:elections": "node --import tsx scripts/check-next-elections.ts",
     "check:terms": "node --import tsx scripts/check-terms.ts",
+    "check:2027": "node --import tsx scripts/check-2027.ts",
     "indexnow": "node --import tsx scripts/indexnow.ts",
     "pmf": "node --import tsx scripts/pmf.ts"
   },

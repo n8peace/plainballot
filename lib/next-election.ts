@@ -13,6 +13,9 @@ export type NextElection = {
   sourceUrl: string;
   /** Exact words from that page, including the date. */
   snippet: string;
+  /** For a calendar grid that prints the year only as a column heading: that heading, which must
+   *  also be on the page (see lib/elections-2027.ts). */
+  yearHeading?: string;
   /** YYYY-MM-DD, the day the snippet was last matched on the page. */
   checked: string;
   /** YYYY-MM-DD, the day this line went on the page or last changed. Bump it whenever the date, name
@@ -77,11 +80,28 @@ export const NEXT_ELECTIONS: Partial<Record<string, NextElection>> = {
     checked: '2026-11-17',
     since: '2026-11-17',
   },
+  ms: {
+    date: '2027-08-03',
+    name: 'Primary Election',
+    sourceUrl: 'https://www.sos.ms.gov/sites/default/files/publications/Election%20Calendar_2026.pdf',
+    snippet: 'August 3............................................................Primary Election',
+    yearHeading: '2027 Election',
+    checked: '2026-11-17',
+    since: '2026-11-17',
+  },
   nv: {
     date: '2028-02-01',
     name: 'Presidential Preference Primary Election',
     sourceUrl: 'https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/33790',
     snippet: 'February 1, 2028 Presidential Preference Primary Election',
+    checked: '2026-11-17',
+    since: '2026-11-17',
+  },
+  pa: {
+    date: '2027-05-18',
+    name: 'Municipal Primary',
+    sourceUrl: 'https://www.pa.gov/content/dam/copapwp-pagov/en/dos/programs/voting-and-elections/running-for-office/2027/2027-election-calendar.pdf',
+    snippet: 'Tuesday, May 18, 2027 Municipal Primary',
     checked: '2026-11-17',
     since: '2026-11-17',
   },

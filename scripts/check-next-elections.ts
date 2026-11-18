@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { NEXT_ELECTIONS } from '../lib/next-election';
 
-type Entry = { state: string; date: string | null; sourceUrl: string | null; snippet: string | null };
+type Entry = { state: string; date: string | null; sourceUrl: string | null; snippet: string | null; yearHeading?: string };
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -22,6 +22,14 @@ export function dateForms(date: string): RegExp[] {
     new RegExp(`\\b0?${m}/0?${d}/(${y}|${String(y).slice(2)})\\b`),
     new RegExp(`\\b${date}\\b`),
   ];
+}
+
+/** The month and day alone ("August 3", "Aug. 3", "8/3"), for a calendar grid that prints the year
+ *  only as a column heading. */
+export function dayForms(date: string): RegExp[] {
+  const [, m, d] = date.split('-').map(Number);
+  const month = MONTHS[m - 1];
+  return [new RegExp(`\\b${month.slice(0, 3)}[a-z]*\\.?\\s+0?${d}(st|nd|rd|th)?\\b(?!,?\\s*\\d{4})`, 'i'), new RegExp(`\\b0?${m}/0?${d}\\b(?!/)`)];
 }
 
 /** Lowercase, plain quotes and dashes, single spaces: so formatting never decides a match. */
@@ -39,7 +47,14 @@ function htmlText(html: string): string {
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
 }
 
-export async function pageText(url: string): Promise<string> {
+// One fetch per page per run, however many entries cite it.
+const pages = new Map<string, Promise<string>>();
+export function pageText(url: string): Promise<string> {
+  if (!pages.has(url)) pages.set(url, fetchText(url));
+  return pages.get(url)!;
+}
+
+async function fetchText(url: string): Promise<string> {
   const res = await fetch(url, { headers: { 'user-agent': 'PlainBallotCheck/1.0 (+https://plainballot.com)' }, signal: AbortSignal.timeout(20_000) });
   if (res.status === 403 || res.status === 429) throw new Error(`bot check: HTTP ${res.status}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -63,13 +78,16 @@ export async function pageText(url: string): Promise<string> {
 
 export async function checkEntry(e: Entry): Promise<string | null> {
   if (!e.date || !e.sourceUrl || !e.snippet) return 'no date, source or snippet';
-  if (!dateForms(e.date).some((re) => re.test(e.snippet!))) return `snippet does not name ${e.date}`;
+  // A grid that prints the year only as a heading: the snippet names the day, the page the year.
+  const forms = e.yearHeading ? dayForms(e.date) : dateForms(e.date);
+  if (!forms.some((re) => re.test(e.snippet!))) return `snippet does not name ${e.date}`;
   let text: string;
   try {
     text = await pageText(e.sourceUrl);
   } catch (err) {
     return `could not read the source (${(err as Error).message})`;
   }
+  if (e.yearHeading && !normalize(text).includes(normalize(e.yearHeading))) return `year heading "${e.yearHeading}" not found on the page`;
   return normalize(text).includes(normalize(e.snippet)) ? null : 'snippet not found word for word on the page';
 }
 

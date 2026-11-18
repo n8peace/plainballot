@@ -7,6 +7,7 @@ import { allContests } from '@/lib/ballot/data';
 import { ELECTION_DATE, longDate, raceCount, stateDescription, stateFaq, stateJsonLd, statePageUrl, statePageChanged, stateSections } from '@/lib/ballot/state-races';
 import { STATES, stateFromSlug } from '@/lib/states';
 import { electionDay, nextElection, nextElectionFaq, scope, sourceHost } from '@/lib/next-election';
+import { anchor2027, has2027 } from '@/lib/elections-2027';
 import '../../paper.css';
 
 const load = cache(async (slug: string) => {
@@ -80,6 +81,9 @@ export default async function StateRaces({ params }: PageProps<'/races/[state]'>
               </details>
             )}
           </div>
+          {has2027(page.code) && (
+            <p className="pp-meta"><Link href={`/elections/2027#${anchor2027(page.code)}`}>Elections in {name} in 2027</Link></p>
+          )}
         </section>
         <p className="pp-race-return"><Link href="/">See every race on your ballot</Link></p>
       </main>
