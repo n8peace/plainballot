@@ -1,5 +1,5 @@
 import { issueById, NEITHER, type IssueId } from './issues';
-import type { Ballot } from './types';
+import { VOICE_LABEL, type Ballot } from './types';
 
 // What Plain Ballot asks of AI agents that use its data. The MCP server sends RULES once as
 // its instructions, but many apps drop those, so every ballot answer also carries USE_NOTE.
@@ -44,6 +44,8 @@ export function forAgents(b: Ballot) {
           strength: s!.pos === 0 ? null : Math.abs(s!.pos) === 2 ? 'strong' : 'lean',
           summary: s!.text,
           quote: s!.quote ?? null,
+          // Whose words the quote is, as the site labels it; null when not recorded.
+          quoteIs: s!.voice ? VOICE_LABEL[s!.voice] : null,
           source: s!.sourceUrl ?? null,
           agreement: s!.agreement ?? null,
         }])),
