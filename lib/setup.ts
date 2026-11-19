@@ -28,7 +28,7 @@ If you can already call a tool named list_issues from Plain Ballot, skip to "Che
 
 ## Questions
 
-Ask your user nothing before setup. After the check passes, ask in one message: "Want me to look up your ballot? If so, what's your street address?"
+Before you add anything, tell your user in one line what you will add (the Plain Ballot server: read-only, no key) and wait for a yes. Ask nothing else before setup. After the check passes, ask in one message: "Want me to look up your ballot? If so, what's your street address?"
 
 ## Steps
 
