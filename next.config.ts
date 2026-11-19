@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
         { source: '/', has: [markdown], destination: '/md' },
         { source: '/:path((?!api/|api$|md/|md$|mcp|_next/|d/)[^.]+)', has: [markdown], destination: '/md/:path' },
         { source: '/index.md', destination: '/md' },
-        { source: '/:path((?!api/|md/|mcp|_next/|d/|setup\\.md)[^.]+)\\.md', destination: '/md/:path' },
+        { source: '/:path((?!api/|md/|mcp|_next/|d/|setup\\.md|agents\\.md)[^.]+)\\.md', destination: '/md/:path' },
       ],
       afterFiles: [],
       fallback: [],

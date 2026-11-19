@@ -24,6 +24,8 @@ describe('setup guide', () => {
     expect(SETUP_MD).toMatch(/^1\. Claude Code/m);
     expect(SETUP_MD).toContain(`Pass: it returns ${ISSUES.length} issues.`);
     expect(SETUP_MD).toMatch(/Already set up\?/);
+    // Adding a server changes a setting in the voter's app, so it is said back first.
+    expect(SETUP_MD).toMatch(/wait for a yes/);
   });
 
   it('gives Cursor a link whose config is just our server URL', () => {

@@ -45,6 +45,16 @@ describe('agent rules', () => {
     expect(USE_NOTE).toMatch(/from your own search, tell the voter which ones did not come from Plain Ballot/i);
   });
 
+  it('say whose words each quote is, in the same words as the site', () => {
+    const withVoice = { ...ballot, contests: [{ id: 'x', office: 'Governor', kind: 'candidate', issues: ['housing'], choices: [
+      { id: 'a', name: 'A', stances: { housing: { pos: 1, text: 't', quote: 'q', sourceUrl: 'https://a.gov', voice: 'reported' } } },
+      { id: 'b', name: 'B', stances: { housing: { pos: 1, text: 't', quote: 'q', sourceUrl: 'https://b.gov' } } },
+    ] }] } as unknown as Ballot;
+    const [a, b] = forAgents(withVoice).contests[0].choices;
+    expect(a.positions.housing.quoteIs).toBe('A description, not their words');
+    expect(b.positions.housing.quoteIs).toBeNull();
+  });
+
   it('put the note on every ballot answer, since many apps drop server instructions', () => {
     expect(forAgents(ballot).note).toBe(USE_NOTE);
   });
