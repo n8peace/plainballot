@@ -3,7 +3,8 @@
 //
 // Ballots pulled: ballots looked up on plainballot.com, by people (one "Ballot pulled" event per
 // lookup) plus by AI agents (one "Agent ballot pulled" event per lookup), counted by Pacific day.
-// Browsers marked as ours (?team=1) send nothing, so Nate and test runs are left out from Nov 17.
+// Browsers marked as ours (?team=1) send nothing, so the team's own visits and test runs are left out from Nov 17.
+// visitorsWhoPulled is Vercel's visitor count, which resets daily: someone who pulls on two days counts twice.
 // Counts only: no addresses, names or anything else about a person.
 import { pacificDayBefore, pacificMidnight } from '../lib/pacific-day';
 import { event, query, rows, span, sum } from './web-analytics';
@@ -20,7 +21,7 @@ const visitors = (since: Date, filter?: string) =>
 function window(since: Date) {
   const people = count('Ballot pulled', since);
   const agents = count('Agent ballot pulled', since);
-  return { ballotsPulled: people + agents, byPeople: people, byAgents: agents, peopleWhoPulled: visitors(since, event('Ballot pulled')), siteVisitors: visitors(since) };
+  return { ballotsPulled: people + agents, byPeople: people, byAgents: agents, visitorsWhoPulled: visitors(since, event('Ballot pulled')), siteVisitors: visitors(since) };
 }
 
 const out = {

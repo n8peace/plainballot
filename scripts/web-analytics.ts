@@ -14,5 +14,5 @@ export function query(kind: 'visits' | 'events', op: 'aggregate' | 'count', para
 export const rows = (r: { data: Row[] | Row }) => (Array.isArray(r.data) ? r.data : [r.data]);
 export const sum = (r: Row[], key: 'visitors' | 'count') => r.reduce((a, x) => a + (x[key] ?? 0), 0);
 export const event = (name: string, extra = '') => `eventName eq '${name}'${extra}`;
-/** A query window; `until` is exclusive, so the last millisecond before it is the inclusive end. */
+/** A query window. The API's `until` is inclusive; a Date `until` here is treated as exclusive (sent as the millisecond before). A string is sent as is. */
 export const span = (since: Date | string, until: Date | string) => ({ since: typeof since === 'string' ? since : since.toISOString(), until: typeof until === 'string' ? until : new Date(until.getTime() - 1).toISOString() });
