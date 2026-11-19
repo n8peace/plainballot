@@ -1,4 +1,4 @@
-// Statewide (or, for D.C., districtwide) elections in 2027, from each state's own election office.
+// Statewide (or, for D.C., districtwide) elections in 2027, from official government pages.
 // Same rules as lib/next-election.ts: a date is listed only when an official page prints it, the
 // snippet is that page's exact words, and npm run check:2027 rechecks them every Monday. Offices
 // are listed only as the official page lists them. Candidate names never appear here.
@@ -66,7 +66,7 @@ export const ELECTIONS_2027: Election2027[] = [
     sourceUrl: 'https://www.co.dodge.wi.gov/government/county-clerk/elections-voting',
     snippet: 'April 6, 2027 : Spring general election',
     lawUrl: 'https://docs.legis.wisconsin.gov/statutes/statutes/5/i/02',
-    lawSnippet: 'means the election held on the first Tuesday in April to elect judicial, educational and municipal officers',
+    lawSnippet: '“Spring election” means the election held on the first Tuesday in April',
     offices: [],
     checked: '2026-11-19', since: '2026-11-19',
   },

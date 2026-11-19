@@ -20,7 +20,7 @@ describe('2027 elections', () => {
       const forms = x.yearHeading ? dayForms(x.date) : dateForms(x.date);
       expect(forms.some((re) => re.test(x.snippet)), `${x.state} ${x.date}`).toBe(true);
       if (x.yearHeading) expect(x.yearHeading).toContain('2027');
-      if (x.lawUrl) {
+      if (x.lawUrl || x.lawSnippet) {
         expect(x.lawSnippet, `${x.state} law snippet`).toBeTruthy();
         expect(x.lawUrl).toMatch(/^https:\/\//);
       }

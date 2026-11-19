@@ -85,7 +85,7 @@ export default function Elections2027() {
             </details>
           </div>
         </section>
-        <p className="pp-meta">A state is listed only when its election office prints the date. Each date is rechecked against its source every week.</p>
+        <p className="pp-meta">A state is listed only when an official government page prints the date. Each date is rechecked against its source every week.</p>
         <p className="pp-race-return"><Link href="/">See every race on your ballot</Link></p>
       </main>
     </div>
