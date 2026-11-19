@@ -11,7 +11,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { generateText, Output } from 'ai';
 import { z } from 'zod';
 
-const MODELS = (process.env.BIAS_MODELS || 'openai/gpt-5.6-terra,google/gemini-3.8-flash,anthropic/claude-haiku-4.5').split(',');
+const MODELS = (process.env.BIAS_MODELS || 'openai/gpt-5.6-terra,google/gemini-3.8-flash,anthropic/claude-haiku-5.5').split(',');
 const MAX_DIFF_CHARS = 120_000;
 const RANK = { low: 0, medium: 1, high: 2 } as const;
 type Severity = keyof typeof RANK;
