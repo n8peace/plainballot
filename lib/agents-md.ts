@@ -32,7 +32,7 @@ The ballot it holds is for the November 3, 2026 election. That election has pass
 
 Plain Ballot has no recordings. You read the words aloud, exactly as written:
 
-- **A measure.** Read its name ("Proposition 1"), then its title as the ballot data gives it, then Plain Ballot's one-sentence description. Read all three in full. The description is Plain Ballot's own plain wording, not the official ballot text. Say that. If the voter wants the official text, see "Read the official voter guide" under Do.
+- **A measure.** Read its office field ("Proposition 1"), then its detail field, then its summary if it has one. Read each in full. The summary is Plain Ballot's own one-sentence description, not the official ballot text. Say that. If the voter wants the official text, see "Read the official voter guide" under Do.
 - **A race.** Read the office, then each choice's name, then their positions, as in "Say it".
 - Never shorten, summarize or reword a measure's title or description, or a quote. If it is too long for the moment, offer to stop, not to shorten it.
 
@@ -44,10 +44,10 @@ Only what works today. Every tool only reads; none changes anything for anyone. 
 |---|---|---|
 | Set up Plain Ballot in the voter's app | Follow ${SETUP_URL} | say back: say in one line what will be added (the Plain Ballot server, read-only, no key) and wait for a yes |
 | List the ${ISSUES.length} issues and their two sides | MCP tool list_issues | go |
-| Find the voter's ballot | MCP tool get_ballot (${SITE_URL}/openapi.json describes the rest) | say back: read the full street address back and wait for a yes |
+| Find the voter's ballot | MCP tool get_ballot. (An app without MCP can use the plain lookup described at ${SITE_URL}/openapi.json; its answer has a different shape from the one this page describes.) | say back: read the full street address back and wait for a yes |
 | Read a race or a measure | From the get_ballot answer | go |
 | Score fit on the voter's priorities | MCP tool score_fit | say back: read each priority back as the voter said it, and wait for a yes |
-| Read the official voter guide (statewide measures and races) | Send the link: https://voterguide.sos.ca.gov (California's official statewide voter guide; local races and measures are in the county's own guide; it may show a newer election) | screen |
+| Read the official voter guide | California: send https://voterguide.sos.ca.gov (statewide races and measures; local ones are in the county's own guide; it may show a newer election). Any other state: send https://vote.gov, which leads to that state's own election office | screen |
 | Register, check registration, find where to vote, or vote | Send the link: https://vote.gov | screen |
 
 ## Never
