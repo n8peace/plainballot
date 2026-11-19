@@ -23,6 +23,20 @@ Matching is deterministic arithmetic in the browser, not AI. Candidate positions
 - [Ballot words](https://plainballot.com/what-is): short answers to ballot words voters look up (for example https://plainballot.com/what-is/top-two-primary), each quoting an official election source and listing the real races that show it
 - [Which states vote in 2027?](https://plainballot.com/elections/2027): every 2027 election that covers a whole state or D.C., from official election calendars, with the offices on the ballot when the source lists them, each linked to its source and rechecked weekly
 
+## Markdown versions
+
+Every page above has a plain Markdown version with the same words, links and sources as the page. Ask for it with the header `Accept: text/markdown`, or add `.md` to the address.
+
+- [Home](https://plainballot.com/index.md)
+- [How it works](https://plainballot.com/methodology.md)
+- [What we never do](https://plainballot.com/what-we-never-do.md)
+- [How Plain Ballot is different](https://plainballot.com/compare.md)
+- [Release log](https://plainballot.com/releases.md)
+- [Races by state](https://plainballot.com/races.md), and each state (for example https://plainballot.com/races/texas.md)
+- Each race page (for example https://plainballot.com/r/ca~state/attorney-general-ca.md)
+- [Ballot words](https://plainballot.com/what-is.md), and each word (for example https://plainballot.com/what-is/top-two-primary.md)
+- [Which states vote in 2027?](https://plainballot.com/elections/2027.md)
+
 ## Source and data
 
 - [Source code (AGPL-3.0)](https://github.com/n8peace/plainballot)
