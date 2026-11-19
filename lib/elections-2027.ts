@@ -55,11 +55,13 @@ export const ELECTIONS_2027: Election2027[] = [
     ...ON,
   },
   {
+    // The state's own page (elections.wi.gov) turns automated readers away, so the weekly check
+    // could never confirm it. A county clerk's page prints the same statewide date and can be read.
     state: 'wi', date: '2027-04-06', name: 'Spring Election',
-    sourceUrl: 'https://elections.wi.gov/event/2027-spring-election',
-    snippet: 'Tuesday, April 6, 2027',
+    sourceUrl: 'https://www.co.dodge.wi.gov/government/county-clerk/elections-voting',
+    snippet: 'April 6, 2027 : Spring general election',
     offices: [],
-    ...ON,
+    checked: '2026-11-19', since: '2026-11-19',
   },
   {
     state: 'ky', date: '2027-05-18', name: 'Primary Election',
