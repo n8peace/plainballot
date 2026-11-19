@@ -17,7 +17,8 @@
     "check:terms": "node --import tsx scripts/check-terms.ts",
     "check:2027": "node --import tsx scripts/check-2027.ts",
     "indexnow": "node --import tsx scripts/indexnow.ts",
-    "pmf": "node --import tsx scripts/pmf.ts"
+    "pmf": "node --import tsx scripts/pmf.ts",
+    "daily": "node --import tsx scripts/daily-number.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.4.0",
