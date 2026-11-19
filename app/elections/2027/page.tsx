@@ -5,7 +5,7 @@ import { longDate } from '@/lib/ballot/state-races';
 import { PAGE_2027, anchor2027, changed2027, count2027, faq2027, states2027 } from '@/lib/elections-2027';
 import { electionDay, sourceHost } from '@/lib/next-election';
 import { SITE_URL } from '@/lib/share';
-import { STATES, stateSlug } from '@/lib/states';
+import { STATES } from '@/lib/states';
 import '../../paper.css';
 
 const title = 'Which states vote in 2027? · Plain Ballot';
@@ -73,7 +73,6 @@ export default function Elections2027() {
                 </li>
               ))}
             </ul>
-            <p className="pp-meta"><Link href={`/races/${stateSlug(s.code)}`}>{STATES[s.code]} races from 2026</Link></p>
           </section>
         ))}
         <section className="pp-faq" aria-labelledby="faq-2027">
