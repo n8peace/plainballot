@@ -3,7 +3,8 @@ name: Next election dates
 # (lib/next-election.ts), each ballot word's official source still has its snippet
 # (lib/terms.ts), and each 2027 date and office list still matches (lib/elections-2027.ts).
 # Also checks any pull request that changes them. A failed run emails the repo owner; fix or
-# remove that line.
+# remove that line. A scheduled run that passes checks in with Spooky, so a failed or missed
+# week raises an alarm (and Spooky can start the fix job) with no one watching.
 on:
   pull_request:
     paths: [lib/next-election.ts, lib/terms.ts, lib/elections-2027.ts, scripts/check-next-elections.ts, scripts/check-terms.ts, scripts/check-2027.ts]
@@ -29,3 +30,8 @@ jobs:
         if: success() || failure()
       - run: npm run check:2027
         if: success() || failure()
+      - name: Check in with Spooky
+        if: success() && github.event_name == 'schedule'
+        env:
+          PING: ${{ secrets.SPOOKY_PING_NEXT_ELECTIONS }}
+        run: '[ -z "$PING" ] || curl -fsS -m 10 --retry 3 -o /dev/null "$PING" || true'
