@@ -68,6 +68,7 @@ export default function Elections2027() {
                     {e.offices.length ? `On the ballot: ${e.offices.join(', ')}` : /runoff/i.test(e.name) ? 'Only races that need a runoff' : 'The source does not list the offices'}
                     {' · '}Source: <a href={e.sourceUrl}>{sourceHost(e.sourceUrl)}</a>
                     {e.officesSourceUrl && e.officesSourceUrl !== e.sourceUrl && <>, <a href={e.officesSourceUrl}>{sourceHost(e.officesSourceUrl)}</a></>}
+                    {e.lawUrl && <>; state law: <a href={e.lawUrl}>{sourceHost(e.lawUrl)}</a></>}
                   </span>
                 </li>
               ))}
@@ -84,7 +85,7 @@ export default function Elections2027() {
             </details>
           </div>
         </section>
-        <p className="pp-meta">A state is listed only when its election office prints the date. Each date is rechecked against its source every week.</p>
+        <p className="pp-meta">A state is listed only when an official government page prints the date. Each date is rechecked against its source every week.</p>
         <p className="pp-race-return"><Link href="/">See every race on your ballot</Link></p>
       </main>
     </div>

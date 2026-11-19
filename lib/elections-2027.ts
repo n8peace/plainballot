@@ -1,4 +1,4 @@
-// Statewide (or, for D.C., districtwide) elections in 2027, from each state's own election office.
+// Statewide (or, for D.C., districtwide) elections in 2027, from official government pages.
 // Same rules as lib/next-election.ts: a date is listed only when an official page prints it, the
 // snippet is that page's exact words, and npm run check:2027 rechecks them every Monday. Offices
 // are listed only as the official page lists them. Candidate names never appear here.
@@ -26,6 +26,10 @@ export type Election2027 = {
    *  office above must also appear on that page, in the same words. In a calendar grid, the match
    *  of each office to the 2027 column was read by hand on `checked`. */
   officesSnippets?: string[];
+  /** When the date comes from a local office's calendar: the state law that makes it a statewide
+   *  election, and that law's exact words, which name the election and its day. */
+  lawUrl?: string;
+  lawSnippet?: string;
   /** YYYY-MM-DD, the day the snippets were last matched. */
   checked: string;
   /** YYYY-MM-DD, the day this entry went up or last changed. Bump it on any change. */
@@ -55,11 +59,16 @@ export const ELECTIONS_2027: Election2027[] = [
     ...ON,
   },
   {
+    // The state's own page (elections.wi.gov) turns automated readers away, so the weekly check
+    // could never confirm it. A county clerk's calendar prints the date, and state law sets the
+    // spring election statewide on the first Tuesday in April (April 6 in 2027).
     state: 'wi', date: '2027-04-06', name: 'Spring Election',
-    sourceUrl: 'https://elections.wi.gov/event/2027-spring-election',
-    snippet: 'Tuesday, April 6, 2027',
+    sourceUrl: 'https://www.co.dodge.wi.gov/government/county-clerk/elections-voting',
+    snippet: 'April 6, 2027 : Spring general election',
+    lawUrl: 'https://docs.legis.wisconsin.gov/statutes/statutes/5/i/02',
+    lawSnippet: '“Spring election” means the election held on the first Tuesday in April',
     offices: [],
-    ...ON,
+    checked: '2026-11-19', since: '2026-11-19',
   },
   {
     state: 'ky', date: '2027-05-18', name: 'Primary Election',
