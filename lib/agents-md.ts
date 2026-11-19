@@ -30,7 +30,10 @@ The ballot it holds is for the November 3, 2026 election. That election has pass
 
 ## Listen
 
-Plain Ballot has no recordings. You read the words aloud, exactly as written:
+Plain Ballot has no recordings. You read the words aloud, exactly as written.
+
+Before you read a ballot, check three fields in the get_ballot answer. If sample is true, it is a made-up example, not the voter's ballot: say so and do not read it as theirs. If partial is true, read the notice field in full and say which races are not covered. Any other notice, read in full first.
+
 
 - **A measure.** Read its office field ("Proposition 1"), then its detail field, then its summary if it has one. Read each in full. The summary is Plain Ballot's own one-sentence description, not the official ballot text. Say that. If the voter wants the official text, see "Read the official voter guide" under Do.
 - **A race.** Read the office, then each choice's name, then their positions, as in "Say it".
