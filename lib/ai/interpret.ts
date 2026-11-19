@@ -6,7 +6,7 @@ import { ISSUE_IDS, NEITHER, sideGuide, toPosition, type Importance, type IssueI
 // never uses a model. Every result carries the exact phrase it came from so the
 // voter can check it, and phrases that don't appear in their text are dropped.
 
-export const INTERPRET_MODEL = process.env.INTERPRET_MODEL || 'anthropic/claude-haiku-4.5';
+export const INTERPRET_MODEL = process.env.INTERPRET_MODEL || 'anthropic/claude-haiku-5.5';
 export const MAX_INPUT_CHARS = 1500;
 
 const INSTRUCTIONS = `You turn a voter's own description of their priorities into settings on a fixed set of issue dials.
