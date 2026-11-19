@@ -4,9 +4,8 @@
 // from 2026-11-17 on. Agent lookups are reported on their own line, never as people.
 import { execFileSync } from 'node:child_process';
 import { pmfScore, scoreSignals, type PmfInputs } from '../lib/pmf';
+import { event, query, rows, span, sum } from './web-analytics';
 
-const PROJECT = 'prj_PyT57qWFSdbFBtAk1HfxcHQur381';
-const TEAM = 'n8peaces-projects';
 // An election is the natural cycle. "Come back" = browsers that pulled a ballot last election
 // and pulled one again in the next. Add the next election here when its ballots go live.
 const LAST_ELECTION = { since: '2026-10-01', until: '2026-11-10' };
@@ -14,15 +13,6 @@ const NEXT_ELECTION_SINCE = '2026-11-11';
 // Ballot pulls were first counted on this day; a window that starts earlier can't say who pulled one.
 const PULLS_COUNTED_SINCE = new Date('2026-10-27T00:00:00Z');
 
-type Row = { visitors: number; count?: number; timestamp?: string };
-function query(kind: 'visits' | 'events', op: 'aggregate' | 'count', params: Record<string, string>): { data: Row[] | Row } {
-  const qs = new URLSearchParams({ projectId: PROJECT, slug: TEAM, ...params });
-  const out = execFileSync('vercel', ['api', `/v1/query/web-analytics/${kind}/${op}?${qs}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-  return JSON.parse(out.slice(out.indexOf('{')));
-}
-const rows = (r: { data: Row[] | Row }) => (Array.isArray(r.data) ? r.data : [r.data]);
-const sum = (r: Row[], key: 'visitors' | 'count') => r.reduce((a, x) => a + (x[key] ?? 0), 0);
-const event = (name: string, extra = '') => `eventName eq '${name}'${extra}`;
 const day = (d: Date) => d.toISOString().slice(0, 10);
 
 // The last 4 full weeks, Monday to Sunday, in UTC.
@@ -30,7 +20,6 @@ const now = new Date();
 const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - ((now.getUTCDay() + 6) % 7)));
 const start = new Date(end.getTime() - 28 * 864e5);
 const lastWeek = new Date(end.getTime() - 7 * 864e5);
-const span = (since: Date | string, until: Date | string) => ({ since: typeof since === 'string' ? since : since.toISOString(), until: typeof until === 'string' ? until : new Date(until.getTime() - 1).toISOString() });
 
 const weekly = rows(query('visits', 'aggregate', { by: 'week', ...span(start, end) })).map((r) => r.visitors);
 const fromShares = sum(rows(query('events', 'aggregate', { by: 'eventName', filter: event('Visit from post'), ...span(start, end) })), 'visitors');
