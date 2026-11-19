@@ -24,6 +24,8 @@ async function main() {
       for (const snippet of [...(e.officesSnippets ?? []), ...e.offices]) problems.push(await checkTerm({ sourceUrl: src, snippet }).then((p) => p && `offices "${snippet}": ${p}`));
       if (!e.officesSnippets?.length) problems.push('offices listed with no snippet tying them to 2027');
     }
+    if (e.lawUrl) problems.push(await checkTerm({ sourceUrl: e.lawUrl, snippet: e.lawSnippet ?? '' }).then((p) => p && `law: ${p}`));
+    if (e.lawUrl && !e.lawSnippet) problems.push('law listed with no snippet');
     const real = problems.filter((p): p is string => !!p);
     // A page behind a bot wall is reported, not failed, until its hand check goes stale.
     const botOnly = real.length > 0 && real.every((p) => p.includes('could not read the source (bot check'));

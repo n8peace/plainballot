@@ -26,6 +26,10 @@ export type Election2027 = {
    *  office above must also appear on that page, in the same words. In a calendar grid, the match
    *  of each office to the 2027 column was read by hand on `checked`. */
   officesSnippets?: string[];
+  /** When the date comes from a local office's calendar: the state law that makes it a statewide
+   *  election, and that law's exact words, which name the election and its day. */
+  lawUrl?: string;
+  lawSnippet?: string;
   /** YYYY-MM-DD, the day the snippets were last matched. */
   checked: string;
   /** YYYY-MM-DD, the day this entry went up or last changed. Bump it on any change. */
@@ -56,10 +60,13 @@ export const ELECTIONS_2027: Election2027[] = [
   },
   {
     // The state's own page (elections.wi.gov) turns automated readers away, so the weekly check
-    // could never confirm it. A county clerk's page prints the same statewide date and can be read.
+    // could never confirm it. A county clerk's calendar prints the date, and state law sets the
+    // spring election statewide on the first Tuesday in April (April 6 in 2027).
     state: 'wi', date: '2027-04-06', name: 'Spring Election',
     sourceUrl: 'https://www.co.dodge.wi.gov/government/county-clerk/elections-voting',
     snippet: 'April 6, 2027 : Spring general election',
+    lawUrl: 'https://docs.legis.wisconsin.gov/statutes/statutes/5/i/02',
+    lawSnippet: 'means the election held on the first Tuesday in April to elect judicial, educational and municipal officers',
     offices: [],
     checked: '2026-11-19', since: '2026-11-19',
   },
