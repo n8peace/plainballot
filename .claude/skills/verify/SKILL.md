@@ -42,3 +42,5 @@ Run it once. Never in a loop. One run makes about four ballot lookups, and the l
 ## Random UI testers (fuzzers)
 
 UI fuzzers run against a production build, never a dev server. Build with `npm run build`, serve with `npm run start`, and point the tool only at the site's own pages. A dev server's error screen has file links that open an editor on the computer running it: on Nov 20 a fuzzer clicked them and opened 14 Terminal windows. For now a fuzzer only reports; a real bug it finds gets fixed like any other bug.
+
+Never force-push, even to fix a slip on your own pull request branch. Push a new commit that fixes it, and say so in the pull request.
