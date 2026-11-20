@@ -38,3 +38,9 @@ Run it once. Never in a loop. One run makes about four ballot lookups, and the l
 - Check the diff against [REVIEW.md](../../../REVIEW.md) and test any rule it triggers by hand in the browser.
 - Write how it was checked in the commit and the pull request: `Verified: npm run verify, all pass; REVIEW.md rule 2 checked at 360 px`.
 - If a broken thing reached a voter, first make this script (or a test) fail on that exact case, then fix it, then add a REVIEW.md line if it is the second time.
+
+## Random UI testers (fuzzers)
+
+UI fuzzers run against a production build, never a dev server. Build with `npm run build`, serve with `npm run start`, and point the tool only at the site's own pages. A dev server's error screen has file links that open an editor on the computer running it: on Nov 20 a fuzzer clicked them and opened 14 Terminal windows. For now a fuzzer only reports; a real bug it finds gets fixed like any other bug.
+
+Never force-push, even to fix a slip on your own pull request branch. Push a new commit that fixes it, and say so in the pull request.
