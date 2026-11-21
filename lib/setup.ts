@@ -42,7 +42,7 @@ Do the one step that matches the app you are running in, then go to "Check it wo
 6. Claude on the web or desktop: you can't add it yourself. Tell your user: open Settings, then Connectors, then "Add custom connector". Name: Plain Ballot. URL: ${MCP_URL}
 7. ChatGPT: you can't add it yourself. Tell your user: open Settings, then Apps, and create a connector with the URL ${MCP_URL} (it may need developer mode turned on).
 8. Any other app that supports MCP: add a remote server named plainballot with the URL ${MCP_URL}. No authentication.
-9. No MCP support: skip setup. Use the plain JSON lookup instead: GET ${SITE_URL}/api/ballot?address=<street address>. It is described at ${SITE_URL}/openapi.json.
+9. No MCP support: skip setup. Use the plain JSON lookup instead: POST ${SITE_URL}/api/ballot with the JSON body \`{"address":"<street address>"}\`. GET still works for existing agents. It is described at ${SITE_URL}/openapi.json.
 
 Some apps load new tools only after a restart or a new chat. If so, tell your user to do that, then run the check.
 

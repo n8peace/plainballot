@@ -5,5 +5,6 @@ initBotId({
   protect: [
     { path: '/api/interpret', method: 'POST' },
     { path: '/api/ballot', method: 'GET' },
+    { path: '/api/ballot', method: 'POST' },
   ],
 });

@@ -11,6 +11,8 @@
       "get": {
         "operationId": "getBallot",
         "summary": "Get the ballot for a street address",
+        "description": "Deprecated. POST is preferred because it keeps the address out of the URL.",
+        "deprecated": true,
         "parameters": [
           {
             "name": "address",
@@ -20,6 +22,41 @@
             "schema": { "type": "string", "minLength": 5, "maxLength": 200 }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "The ballot. Not cached; ask again for fresh data.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Ballot" } } }
+          },
+          "400": { "description": "Address missing or the wrong length.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "404": { "description": "Address not found.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "429": { "description": "Rate limited (about 30 lookups per few minutes per IP). Wait a minute and retry once.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "502": { "description": "Lookup failed. Retry in a minute.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "503": { "description": "The Census address service is not responding. Retry in a few minutes.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        }
+      },
+      "post": {
+        "operationId": "postBallot",
+        "summary": "Get the ballot for a street address",
+        "description": "Preferred because the address stays in the JSON body instead of the URL.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["address"],
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 200,
+                    "description": "Street address with ZIP code. Example: 1315 10th St, Sacramento, CA 95814. The value sample returns a fictional ballot. Addresses are not stored."
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "The ballot. Not cached; ask again for fresh data.",

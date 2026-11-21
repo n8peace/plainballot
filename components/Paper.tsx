@@ -73,7 +73,11 @@ export function Paper({ sample }: { sample: Ballot }) {
     setError(null);
     setCanRetry(false);
     try {
-      const res = await fetch(`/api/ballot?address=${encodeURIComponent(addr)}`);
+      const res = await fetch('/api/ballot', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ address: addr }),
+      });
       const data = await res.json();
       if (!res.ok) {
         setCanRetry(res.status === 429 || res.status >= 500);

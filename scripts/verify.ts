@@ -161,7 +161,7 @@ async function pullBallot(page: Page, address: string): Promise<BallotResponse> 
   const input = page.getByPlaceholder('Start typing your street address').first();
   await input.fill(address, { timeout: STEP_TIMEOUT });
   const responsePromise = page.waitForResponse(
-    (response) => response.url().includes('/api/ballot?address='),
+    (response) => response.url().endsWith('/api/ballot') && response.request().method() === 'POST',
     { timeout: BALLOT_TIMEOUT },
   );
   await page.getByRole('button', { name: /See my ballot|Find my ballot/ }).first().click();

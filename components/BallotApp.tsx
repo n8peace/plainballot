@@ -128,7 +128,11 @@ export function BallotApp({ initialBallot, friend = null }: { initialBallot: Bal
     setLooking(true);
     setLookupError('');
     try {
-      const res = await fetch(`/api/ballot?address=${encodeURIComponent(addr)}`);
+      const res = await fetch('/api/ballot', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ address: addr }),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Ballot lookup failed.');
       setBallot(data);
