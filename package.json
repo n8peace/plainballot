@@ -23,7 +23,7 @@
   "dependencies": {
     "@modelcontextprotocol/server": "^2.4.0",
     "@vercel/analytics": "^2.0.1",
-    "ai": "^7.0.173",
+    "ai": "^7.0.181",
     "botid": "^1.5.13",
     "mcp-handler": "^2.4.0",
     "next": "16.4.6",
@@ -42,7 +42,7 @@
     "seolint": "1.1.1",
     "tsx": "^4.23.15",
     "typescript": "^5",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   },
   "license": "AGPL-3.0",
   "description": "Plain Ballot: a free, nonpartisan voter guide that matches every race on your ballot to your priorities, built on the open Open Election Data.",
